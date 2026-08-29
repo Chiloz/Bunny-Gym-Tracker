@@ -1,0 +1,16 @@
+# Netlify Configuration File
+# This file automatically configures Netlify to build and deploy your React + Vite application.
+
+[build]
+  # The command Netlify runs to build the application
+  command = "npm run build"
+  
+  # The directory where the compiled production assets are outputted
+  publish = "dist"
+
+# Handles single-page application (SPA) routing redirects.
+# Redirects all traffic to index.html so your client-side React code can handle any deep links.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

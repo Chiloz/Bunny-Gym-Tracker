@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- Background Circle -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+  
+  <!-- Bunny Ears -->
+  <path d="M 180 180 C 140 60, 190 20, 215 90 C 235 150, 210 200, 200 230 Z" fill="#ffffff" filter="url(#shadow)" />
+  <path d="M 188 160 C 160 80, 195 50, 210 100 C 220 140, 205 180, 200 195 Z" fill="#f472b6" />
+  
+  <path d="M 332 180 C 372 60, 322 20, 297 90 C 277 150, 302 200, 312 230 Z" fill="#ffffff" filter="url(#shadow)" />
+  <path d="M 324 160 C 352 80, 317 50, 302 100 C 292 140, 307 180, 312 195 Z" fill="#f472b6" />
+
+  <!-- Bunny Head -->
+  <ellipse cx="256" cy="300" rx="130" ry="110" fill="#ffffff" filter="url(#shadow)" />
+
+  <!-- Cheeks -->
+  <circle cx="180" cy="320" r="22" fill="#fbcfe8" opacity="0.8" />
+  <circle cx="332" cy="320" r="22" fill="#fbcfe8" opacity="0.8" />
+
+  <!-- Eyes -->
+  <ellipse cx="205" cy="280" rx="12" ry="18" fill="#1e293b" />
+  <circle cx="202" cy="274" r="5" fill="#ffffff" />
+  <ellipse cx="307" cy="280" rx="12" ry="18" fill="#1e293b" />
+  <circle cx="304" cy="274" r="5" fill="#ffffff" />
+
+  <!-- Nose & Mouth -->
+  <polygon points="256,302 246,290 266,290" fill="#f472b6" />
+  <path d="M 246 308 Q 256 320 256 308 Q 256 320 266 308" stroke="#1e293b" stroke-width="4" stroke-linecap="round" fill="none" />
+
+  <!-- Dumbbell held at bottom -->
+  <g transform="translate(0, 50)">
+    <rect x="176" y="380" width="160" height="14" rx="7" fill="#64748b" />
+    <rect x="150" y="360" width="30" height="54" rx="10" fill="#334155" />
+    <rect x="332" y="360" width="30" height="54" rx="10" fill="#334155" />
+    <rect x="138" y="368" width="16" height="38" rx="6" fill="#1e293b" />
+    <rect x="358" y="368" width="16" height="38" rx="6" fill="#1e293b" />
+  </g>
+</svg>

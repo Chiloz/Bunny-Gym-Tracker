@@ -1,0 +1,6 @@
+{
+  "name": "Bunny's Gym Record",
+  "description": "A Progressive Web Application for tracking gym attendance, streaks, weight logs, and penalty box challenges.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

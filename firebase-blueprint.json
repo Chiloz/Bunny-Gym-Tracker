@@ -1,0 +1,76 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with streak, role, and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["bunny", "penguin"] },
+        "streak": { "type": "number" },
+        "longestStreak": { "type": "number" },
+        "freezeCount": { "type": "number" },
+        "joinedAt": { "type": "string" }
+      },
+      "required": ["uid", "name", "role"]
+    },
+    "WorkoutLog": {
+      "title": "WorkoutLog",
+      "description": "Daily workout attendance log",
+      "type": "object",
+      "properties": {
+        "dateStr": { "type": "string" },
+        "status": { "type": "string", "enum": ["attended", "skipped", "protected_skip"] },
+        "loggedAt": { "type": "string" },
+        "proofUrl": { "type": "string" },
+        "note": { "type": "string" }
+      },
+      "required": ["dateStr", "status"]
+    },
+    "Penalty": {
+      "title": "Penalty",
+      "description": "Manual lockout challenge penalty issued by Penguin Admin",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "taskDescription": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "submitted", "cleared", "rejected"] },
+        "createdAt": { "type": "string" },
+        "clearedAt": { "type": "string" }
+      },
+      "required": ["uid", "taskDescription", "status", "createdAt"]
+    },
+    "CheerItem": {
+      "title": "CheerItem",
+      "description": "Motivational audio or video cheer uploaded by Penguin",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "fileUrl": { "type": "string" },
+        "fileType": { "type": "string", "enum": ["audio", "video"] },
+        "uploadedAt": { "type": "string" }
+      },
+      "required": ["title", "fileUrl", "fileType", "uploadedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document"
+    },
+    "/users/{userId}/workouts/{dateStr}": {
+      "schema": "WorkoutLog",
+      "description": "Individual workout logs per date"
+    },
+    "/penalties/{penaltyId}": {
+      "schema": "Penalty",
+      "description": "Penalty lockout tasks"
+    },
+    "/cheer_vault/{cheerId}": {
+      "schema": "CheerItem",
+      "description": "Cheer vault items"
+    }
+  }
+}
