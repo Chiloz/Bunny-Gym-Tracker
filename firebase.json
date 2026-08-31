@@ -2,12 +2,6 @@
   "hosting": {
     "site": "bunny-gym-tracker",
     "public": "dist",
-    ...
-  }
-}
-{
-  "hosting": {
-    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
