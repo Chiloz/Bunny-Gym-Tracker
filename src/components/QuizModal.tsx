@@ -105,17 +105,17 @@ export default function QuizModal({ isOpen, onClose, onConfirm, quizConfig }: Qu
             {/* Actions */}
             <div className="flex flex-col space-y-3 mt-auto">
               {step === 1 && (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <button
                     onClick={handleYes}
-                    className="py-3.5 px-5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold rounded-2xl transition-all shadow-md shadow-emerald-200 cursor-pointer text-center"
+                    className="py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-black text-xs sm:text-sm rounded-2xl transition-all shadow-md cursor-pointer text-center border border-emerald-700 whitespace-nowrap"
                     id="quiz-q1-yes"
                   >
                     Yes, I Smashed It!
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="py-3.5 px-5 bg-gray-100 hover:bg-gray-200 active:scale-[0.98] text-gray-700 font-bold rounded-2xl transition-all cursor-pointer text-center"
+                    className="py-3.5 px-4 bg-stone-100 hover:bg-stone-200 active:scale-[0.98] text-stone-900 font-black text-xs sm:text-sm rounded-2xl transition-all cursor-pointer text-center border border-stone-300"
                     id="quiz-q1-no"
                   >
                     No
@@ -124,17 +124,17 @@ export default function QuizModal({ isOpen, onClose, onConfirm, quizConfig }: Qu
               )}
 
               {step === 2 && (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <button
                     onClick={handleProceed}
-                    className="py-3.5 px-5 bg-teal-600 hover:bg-teal-700 active:scale-[0.98] text-white font-bold rounded-2xl transition-all shadow-md shadow-teal-200 cursor-pointer text-center"
+                    className="py-3.5 px-4 bg-teal-600 hover:bg-teal-700 active:scale-[0.98] text-white font-black text-xs sm:text-sm rounded-2xl transition-all shadow-md cursor-pointer text-center border border-teal-700 whitespace-nowrap"
                     id="quiz-q2-proceed"
                   >
-                    Proceed honestly
+                    Proceed Honestly
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="py-3.5 px-5 bg-gray-100 hover:bg-gray-200 active:scale-[0.98] text-gray-700 font-bold rounded-2xl transition-all cursor-pointer text-center"
+                    className="py-3.5 px-4 bg-stone-100 hover:bg-stone-200 active:scale-[0.98] text-stone-900 font-black text-xs sm:text-sm rounded-2xl transition-all cursor-pointer text-center border border-stone-300"
                     id="quiz-q2-cancel"
                   >
                     Cancel
@@ -146,14 +146,14 @@ export default function QuizModal({ isOpen, onClose, onConfirm, quizConfig }: Qu
                 <div className="flex flex-col space-y-3">
                   <button
                     onClick={handleConfirm}
-                    className="py-4 px-6 bg-rose-600 hover:bg-rose-700 active:scale-[0.98] text-white font-extrabold text-lg rounded-2xl transition-all shadow-lg shadow-rose-200 cursor-pointer text-center animate-pulse"
+                    className="py-4 px-6 bg-rose-600 hover:bg-rose-700 active:scale-[0.98] text-white font-black text-sm sm:text-base rounded-2xl transition-all shadow-lg cursor-pointer text-center border border-rose-800 animate-pulse tracking-wide"
                     id="quiz-q3-confirm"
                   >
                     CONFIRM & LOCK GREEN
                   </button>
                   <button
                     onClick={() => setStep(2)}
-                    className="py-3 px-5 bg-gray-100 hover:bg-gray-200 active:scale-[0.98] text-gray-700 font-bold rounded-2xl transition-all cursor-pointer text-center"
+                    className="py-3 px-5 bg-stone-100 hover:bg-stone-200 active:scale-[0.98] text-stone-900 font-black text-xs sm:text-sm rounded-2xl transition-all cursor-pointer text-center border border-stone-300"
                     id="quiz-q3-back"
                   >
                     Go Back
