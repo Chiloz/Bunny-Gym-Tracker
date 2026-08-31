@@ -754,11 +754,13 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
     sunrise: 'bg-gradient-to-br from-amber-950 via-slate-900 to-yellow-950 text-amber-50',
     gold: 'bg-gradient-to-br from-yellow-950 via-amber-900 to-slate-950 text-amber-100',
     pink_floral: 'bg-gradient-to-br from-pink-50 via-rose-50/60 to-pink-100/50 text-slate-850',
-    autumn: 'bg-gradient-to-br from-amber-50/90 via-orange-50/50 to-stone-100 text-stone-900',
+    autumn: 'bg-gradient-to-br from-amber-100/80 via-orange-50/60 to-amber-50/90 text-stone-900',
   };
 
+  const isAutumnActive = currentTheme === 'autumn' || (isFallSeason && !isSunday);
+
   return (
-    <div className={`min-h-screen relative flex flex-col font-sans transition-colors duration-500 ${themeClassMap[currentTheme] || 'bg-emerald-50'}`} id="bunny-dashboard">
+    <div className={`min-h-screen relative flex flex-col font-sans transition-colors duration-500 ${isAutumnActive ? 'bg-gradient-to-b from-amber-50/90 via-orange-50/40 to-amber-100/50 text-stone-900' : themeClassMap[currentTheme] || 'bg-emerald-50'}`} id="bunny-dashboard">
       
       {/* Greeting Modal Popup on Login */}
       <GreetingModal 
@@ -767,7 +769,7 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
       />
 
       {/* Fall / Autumn Tree with Smoothly Dropping Leaves Background */}
-      {(currentTheme === 'autumn' || isFallSeason) && !isSunday && (
+      {isAutumnActive && (
         <FallAutumnTreeBackground />
       )}
 
@@ -801,17 +803,34 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
       )}
 
       {/* Elegant sticky header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-emerald-100 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 sticky top-0 z-30 shadow-sm" id="app-header">
+      <header className={`backdrop-blur-md px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 sticky top-0 z-30 shadow-sm transition-all duration-300 ${
+        isAutumnActive 
+          ? 'bg-amber-50/90 border-b border-amber-200/80 shadow-amber-900/5' 
+          : 'bg-white/80 border-b border-emerald-100'
+      }`} id="app-header">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-200 overflow-hidden shrink-0 border border-emerald-400">
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg overflow-hidden shrink-0 border ${
+            isAutumnActive 
+              ? 'bg-amber-500 shadow-amber-300/50 border-amber-400' 
+              : 'bg-emerald-500 shadow-emerald-200 border-emerald-400'
+          }`}>
             <img src="/icon.svg" alt="Bunny Gym Icon" className="w-full h-full object-cover" />
           </div>
           <div>
-            <h1 className="text-lg font-bold tracking-tight text-emerald-900 flex items-center gap-1.5">
+            <h1 className={`text-lg font-bold tracking-tight flex items-center gap-1.5 ${
+              isAutumnActive ? 'text-amber-950' : 'text-emerald-900'
+            }`}>
               <span>Bunny’s Gym Record</span>
               <span className="text-base" title="Bunny">🐰</span>
+              {isAutumnActive && (
+                <span className="ml-1 text-[10px] font-mono font-bold bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded-full border border-amber-300/60 flex items-center gap-0.5">
+                  🍁 Autumn Edition
+                </span>
+              )}
             </h1>
-            <p className="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Montana, USA | UTC-7</p>
+            <p className={`text-[10px] font-semibold uppercase tracking-widest ${
+              isAutumnActive ? 'text-amber-700' : 'text-emerald-600'
+            }`}>Montana, USA | UTC-7</p>
           </div>
         </div>
         
@@ -873,8 +892,12 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-semibold text-sm cursor-pointer shrink-0 md:w-full text-left ${
                   isActive 
-                    ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' 
-                    : 'bg-white hover:bg-emerald-50 text-slate-500 border border-emerald-100/40'
+                    ? isAutumnActive
+                      ? 'bg-gradient-to-r from-amber-600 to-orange-500 text-white shadow-lg shadow-orange-200'
+                      : 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' 
+                    : isAutumnActive
+                      ? 'bg-white/90 hover:bg-amber-50 text-stone-600 border border-amber-200/60'
+                      : 'bg-white hover:bg-emerald-50 text-slate-500 border border-emerald-100/40'
                 }`}
               >
                 {isActive && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse hidden md:inline-block" />}
@@ -884,16 +907,24 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
             );
           })}
           
-          <div className="hidden md:block mt-auto p-4 bg-emerald-900 rounded-3xl text-white overflow-hidden relative shadow-inner">
+          <div className={`hidden md:block mt-auto p-4 rounded-3xl text-white overflow-hidden relative shadow-inner ${
+            isAutumnActive ? 'bg-gradient-to-br from-amber-950 to-stone-900 border border-amber-800/40' : 'bg-emerald-900'
+          }`}>
             <p className="text-[9px] opacity-65 font-bold uppercase tracking-widest mb-1 font-mono">Penguin Broadcaster</p>
             <p className="text-xs italic leading-relaxed">"{dailyTip || 'Keep grinding. No excuses!'}"</p>
-            <div className="absolute -right-4 -bottom-4 w-12 h-12 bg-emerald-700/50 rounded-full blur-xl"></div>
+            <div className={`absolute -right-4 -bottom-4 w-12 h-12 rounded-full blur-xl ${
+              isAutumnActive ? 'bg-orange-600/40' : 'bg-emerald-700/50'
+            }`}></div>
           </div>
         </nav>
 
         {/* Central Card Column: Middle (col-span-6) */}
         <section className="col-span-12 md:col-span-6 flex flex-col gap-6">
-          <div className="bg-white rounded-[32px] p-6 shadow-sm border border-emerald-100 flex-1 flex flex-col justify-between min-h-[480px]">
+          <div className={`rounded-[32px] p-6 shadow-sm flex-1 flex flex-col justify-between min-h-[480px] transition-all duration-300 ${
+            isAutumnActive 
+              ? 'bg-white/95 border border-amber-200/90 shadow-amber-900/5' 
+              : 'bg-white border border-emerald-100'
+          }`}>
             
             {activeTab === 'calendar' && (
               <div className="flex-1 flex flex-col justify-between space-y-6">
