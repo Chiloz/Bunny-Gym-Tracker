@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Palette, Lock, CheckCircle2, Sparkles, Shield, Leaf, Heart, Trophy, Crown, Sun, Diamond } from 'lucide-react';
+import { Palette, Lock, CheckCircle2, Sparkles, Shield, Leaf, Heart, Trophy, Crown, Sun, Diamond, Coffee } from 'lucide-react';
 import { AppTheme, UserProfile } from '../types';
 
 interface ThemesVaultProps {
@@ -29,6 +29,22 @@ interface ThemeVisualTheme {
 }
 
 const THEME_STYLES: Record<AppTheme, ThemeVisualTheme> = {
+  pumpkin_spice: {
+    cardBgActive: 'bg-gradient-to-br from-[#ffedd5] via-[#fed7aa]/95 to-[#fdba74]/90',
+    cardBgUnlocked: 'bg-gradient-to-br from-[#fff7ed]/95 via-[#ffedd5]/90 to-[#fed7aa]/80',
+    cardBgLocked: 'bg-stone-100/90',
+    borderActive: 'border-2 border-[#ea580c] shadow-lg shadow-[#7c2d12]/20 ring-4 ring-[#fb923c]/50',
+    borderUnlocked: 'border-2 border-[#f97316] hover:border-[#ea580c] shadow-sm',
+    badgeActive: 'bg-[#7c2d12] text-[#ffedd5] font-black',
+    badgeUnlocked: 'bg-[#fed7aa] text-[#7c2d12] font-black border border-[#ea580c]',
+    badgeLocked: 'bg-stone-200 text-stone-700 font-black',
+    titleColor: 'text-[#431407]',
+    descColor: 'text-[#7c2d12]',
+    equipBtnBg: 'bg-gradient-to-r from-[#9a3412] to-[#ea580c] hover:from-[#7c2d12] hover:to-[#c2410c] text-white font-black shadow-md border border-[#431407]/50',
+    equippedBtnBg: 'bg-gradient-to-r from-[#7c2d12] to-[#9a3412] text-[#ffedd5] font-black border-2 border-[#431407] shadow-md ring-2 ring-[#fb923c]',
+    iconBg: 'bg-gradient-to-tr from-[#c2410c] to-[#ea580c]',
+    accentIcon: Coffee
+  },
   autumn: {
     cardBgActive: 'bg-gradient-to-br from-amber-100 via-orange-100/90 to-amber-200/95',
     cardBgUnlocked: 'bg-gradient-to-br from-amber-50/90 via-orange-50/80 to-amber-100/70',
@@ -142,6 +158,87 @@ const THEME_STYLES: Record<AppTheme, ThemeVisualTheme> = {
     accentIcon: Crown
   }
 };
+
+/* 0. Starbucks Pumpkin Spice Latte Illustrated Preview */
+function MiniPumpkinSpicePreview() {
+  return (
+    <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-[#ffedd5] via-[#fed7aa] to-[#fdba74] overflow-hidden border-2 border-[#ea580c]/60 flex items-center justify-center shadow-inner">
+      {/* Terracotta warmth & glow */}
+      <div className="absolute inset-0 bg-radial from-[#fb923c]/40 via-[#ea580c]/20 to-transparent blur-md pointer-events-none" />
+      
+      {/* SVG Illustration of Starbucks Iced Pumpkin Spice Latte */}
+      <svg viewBox="0 0 200 130" className="w-full h-full max-h-24 drop-shadow-xs">
+        {/* Left Pumpkin */}
+        <g transform="translate(18, 55) scale(0.45)">
+          <path d="M 90 20 Q 80 -10 60 -18 Q 75 -8 85 20 Z" fill="#3f4f1d" />
+          <ellipse cx="90" cy="80" rx="75" ry="60" fill="#ea580c" />
+          <ellipse cx="50" cy="80" rx="42" ry="54" fill="#f97316" />
+          <ellipse cx="130" cy="80" rx="42" ry="54" fill="#f97316" />
+        </g>
+
+        {/* Stacked Frosted Cookies (Right) */}
+        <g transform="translate(145, 65) scale(0.55)">
+          <ellipse cx="40" cy="30" rx="36" ry="16" fill="#9a3412" />
+          <ellipse cx="40" cy="24" rx="30" ry="12" fill="#fffbeb" />
+          <ellipse cx="40" cy="14" rx="32" ry="14" fill="#9a3412" />
+          <ellipse cx="40" cy="9" rx="26" ry="10" fill="#fffbeb" />
+          {/* Cinnamon Specks */}
+          <circle cx="36" cy="8" r="1.2" fill="#78350f" />
+          <circle cx="44" cy="9" r="1.2" fill="#78350f" />
+        </g>
+
+        {/* Mini Right Pumpkin */}
+        <g transform="translate(130, 75) scale(0.35)">
+          <ellipse cx="60" cy="60" rx="55" ry="42" fill="#c2410c" />
+          <ellipse cx="35" cy="60" rx="30" ry="36" fill="#ea580c" />
+          <ellipse cx="85" cy="60" rx="30" ry="36" fill="#ea580c" />
+        </g>
+
+        {/* Starbucks Iced PSL Cup (Center) */}
+        <g transform="translate(75, 12) scale(0.28)">
+          {/* Shadow */}
+          <ellipse cx="90" cy="385" rx="70" ry="15" fill="#451a03" opacity="0.4" />
+          
+          {/* Cup Body Liquid */}
+          <path d="M 20 40 L 36 370 Q 38 385 90 385 Q 142 385 144 370 L 160 40 Z" fill="#92400e" />
+          
+          {/* Ice Cubes */}
+          <rect x="45" y="100" width="35" height="30" rx="6" fill="#ffffff" opacity="0.35" />
+          <rect x="95" y="120" width="35" height="30" rx="6" fill="#ffffff" opacity="0.35" />
+          <rect x="55" y="180" width="35" height="30" rx="6" fill="#ffffff" opacity="0.3" />
+
+          {/* Starbucks Siren Emblem Circle */}
+          <circle cx="90" cy="180" r="36" fill="#ffffff" opacity="0.25" stroke="#ffffff" strokeWidth="2" />
+          <path d="M 90 156 L 92 163 L 99 163 L 94 167 L 96 174 L 90 170 L 84 174 L 86 167 L 81 163 L 88 163 Z" fill="#ffffff" opacity="0.95" />
+          <circle cx="90" cy="180" r="14" fill="#ffffff" opacity="0.9" />
+
+          {/* Thick Sweet Cream Cold Foam */}
+          <path d="M 18 40 Q 90 52 162 40 L 164 12 Q 90 20 16 12 Z" fill="#fffbeb" />
+          <ellipse cx="90" cy="14" rx="74" ry="14" fill="#fffbeb" stroke="#ffffff" strokeWidth="2" />
+          {/* Cinnamon Topping */}
+          <ellipse cx="90" cy="13" rx="65" ry="10" fill="#78350f" opacity="0.65" />
+          <circle cx="70" cy="12" r="1.5" fill="#451a03" />
+          <circle cx="90" cy="13" r="2" fill="#451a03" />
+          <circle cx="110" cy="12" r="1.5" fill="#451a03" />
+
+          {/* Glass Highlight */}
+          <path d="M 28 40 L 42 365 Q 45 375 58 375 L 48 40 Z" fill="#ffffff" opacity="0.4" />
+        </g>
+
+        {/* Floating Cinnamon Stars */}
+        <circle cx="32" cy="35" r="1.8" fill="#9a3412" />
+        <circle cx="168" cy="32" r="1.8" fill="#c2410c" />
+        <circle cx="58" cy="98" r="1.5" fill="#78350f" />
+        <circle cx="120" cy="105" r="1.5" fill="#ea580c" />
+      </svg>
+
+      {/* Badge */}
+      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-[#7c2d12] text-[#ffedd5] px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs border border-[#ea580c]/50">
+        ☕ Starbucks PSL Edition
+      </span>
+    </div>
+  );
+}
 
 /* 1. Autumn Foliage Illustrated Tree Preview */
 function MiniAutumnTreePreview() {
@@ -310,6 +407,13 @@ function MiniGoldEmperorPreview() {
 
 export const THEME_CONFIGS = [
   {
+    id: 'pumpkin_spice' as AppTheme,
+    name: 'Starbucks Pumpkin Spice Latte ☕🎃',
+    minStreak: 0,
+    description: "Bunny's Favorite Tradition! Iced Pumpkin Spice Latte with cinnamon cold foam, spiced cookies & warm terracotta aesthetic.",
+    previewComponent: MiniPumpkinSpicePreview
+  },
+  {
     id: 'autumn' as AppTheme,
     name: 'September Fall Foliage 🍁',
     minStreak: 0,
@@ -441,7 +545,7 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           {THEME_CONFIGS.map((theme) => {
-            const isUnlocked = currentStreak >= theme.minStreak || theme.id === 'emerald' || theme.id === 'pink_floral' || theme.id === 'autumn';
+            const isUnlocked = currentStreak >= theme.minStreak || theme.id === 'emerald' || theme.id === 'pink_floral' || theme.id === 'autumn' || theme.id === 'pumpkin_spice';
             const isActive = activeTheme === theme.id;
             const style = THEME_STYLES[theme.id];
             const PreviewComp = theme.previewComponent;

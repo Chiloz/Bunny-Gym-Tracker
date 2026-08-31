@@ -25,6 +25,7 @@ import { getRandomPenaltyTask } from '../lib/penalties';
 // Component Imports
 import BouncingBunnies from '../components/BouncingBunnies';
 import FallAutumnTreeBackground from '../components/FallAutumnTreeBackground';
+import PumpkinSpiceBackground from '../components/PumpkinSpiceBackground';
 import QuizModal from '../components/QuizModal';
 import EgoDeflaterModal from '../components/EgoDeflaterModal';
 import PenaltyBox from '../components/PenaltyBox';
@@ -119,12 +120,19 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
   const montanaToday = getMontanaDate();
   const isSunday = getMontanaDayOfWeek(montanaToday) === 'Sunday' || new Date().getDay() === 0;
   const isFallSeason = isSeptemberOrFall(montanaToday);
-  // In September / Fall season, default active theme to 'autumn' unless explicitly chosen otherwise
-  const currentTheme = isSunday 
-    ? 'pink_floral' 
-    : (activeTheme === 'emerald' && isFallSeason)
-      ? 'autumn'
-      : activeTheme;
+  
+  // Theme selection: respect explicit user choice, otherwise default to pumpkin_spice or autumn in fall season, pink_floral on Sunday
+  const currentTheme = (activeTheme && activeTheme !== 'emerald')
+    ? activeTheme
+    : isSunday 
+      ? 'pink_floral' 
+      : isFallSeason
+        ? 'pumpkin_spice'
+        : (activeTheme || 'emerald');
+
+  const isPslActive = currentTheme === 'pumpkin_spice';
+  const isAutumnActive = currentTheme === 'autumn';
+  const isAutumnOrPsl = isPslActive || isAutumnActive;
 
   useEffect(() => {
     if (!profile.uid) return;
@@ -505,16 +513,26 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
       <div className="space-y-4">
         {/* Month indicator banner */}
         <div className={`flex items-center justify-between text-xs sm:text-sm font-bold px-1 pb-2 border-b ${
-          isAutumnActive ? 'border-amber-300/80 text-stone-950' : 'border-emerald-200/80 text-slate-900'
+          isPslActive 
+            ? 'border-[#fed7aa] text-stone-950'
+            : isAutumnActive 
+              ? 'border-amber-300/80 text-stone-950' 
+              : 'border-emerald-200/80 text-slate-900'
         }`}>
           <span className="font-black tracking-wide flex items-center gap-1.5 text-sm sm:text-base">
             <span>📅 {currentMonthName} {year}</span>
-            {month === 8 && <span className="text-amber-950 font-mono text-[11px] bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-400 font-extrabold shadow-xs">🍁 Fall Season</span>}
+            {isPslActive ? (
+              <span className="text-[#7c2d12] font-mono text-[11px] bg-[#ffedd5] px-2 py-0.5 rounded-full border border-[#ea580c]/50 font-extrabold shadow-xs">☕ Starbucks PSL</span>
+            ) : month === 8 ? (
+              <span className="text-amber-950 font-mono text-[11px] bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-400 font-extrabold shadow-xs">🍁 Fall Season</span>
+            ) : null}
           </span>
           <span className={`text-[11px] sm:text-xs font-mono font-extrabold px-2.5 py-1 rounded-full border ${
-            isAutumnActive 
-              ? 'text-amber-950 bg-amber-200/90 border-amber-400 shadow-xs' 
-              : 'text-emerald-900 bg-emerald-100 border-emerald-300'
+            isPslActive
+              ? 'text-[#7c2d12] bg-[#ffedd5] border-[#ea580c]/50 shadow-xs'
+              : isAutumnActive 
+                ? 'text-amber-950 bg-amber-200/90 border-amber-400 shadow-xs' 
+                : 'text-emerald-900 bg-emerald-100 border-emerald-300'
           }`}>
             🔒 2-Day Lock Active
           </span>
@@ -522,7 +540,7 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
         {/* Header weekdays */}
         <div className={`grid grid-cols-7 text-center text-xs font-black font-mono tracking-wider ${
-          isAutumnActive ? 'text-stone-950' : 'text-emerald-950'
+          isPslActive ? 'text-[#431407]' : isAutumnActive ? 'text-stone-950' : 'text-emerald-950'
         }`}>
           {weekdays.map((wd, i) => (
             <div key={i} className="py-0.5">{wd}</div>
@@ -552,7 +570,12 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
             if (log) {
               if (log.status === 'attended') {
-                if (isAutumnActive) {
+                if (isPslActive) {
+                  bgClass = "bg-gradient-to-br from-[#ffedd5] to-[#fed7aa] text-[#431407] font-black shadow-sm";
+                  borderClass = isLocked ? "border-2 border-[#7c2d12]" : "border-2 border-[#ea580c] shadow-[#fed7aa]/60";
+                  badgeText = isLocked ? "🔒 Smashed" : "Smashed";
+                  badgeClass = "text-[#431407] font-black";
+                } else if (isAutumnActive) {
                   bgClass = "bg-gradient-to-br from-amber-200/95 to-orange-200/95 text-amber-950 font-black shadow-sm";
                   borderClass = isLocked ? "border-2 border-amber-800" : "border-2 border-orange-600 shadow-orange-300/60";
                   badgeText = isLocked ? "🔒 Smashed" : "Smashed";
@@ -585,10 +608,10 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
               }
             } else if (isFuture) {
               if (isTarget) {
-                bgClass = isAutumnActive 
+                bgClass = (isPslActive || isAutumnActive)
                   ? "bg-amber-50/70 text-stone-600 cursor-not-allowed" 
                   : "bg-emerald-50/50 text-emerald-900/60 cursor-not-allowed";
-                borderClass = isAutumnActive 
+                borderClass = (isPslActive || isAutumnActive)
                   ? "border border-amber-400 border-dashed" 
                   : "border border-emerald-300 border-dashed";
               } else {
@@ -599,10 +622,12 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
               }
             } else if (isToday) {
               if (isTarget) {
-                bgClass = isAutumnActive
-                  ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white font-black shadow-lg shadow-orange-400/60 animate-pulse"
-                  : "bg-emerald-600 text-white font-black shadow-lg shadow-emerald-300 animate-pulse";
-                borderClass = isAutumnActive ? "border-2 border-amber-800" : "border-2 border-emerald-700";
+                bgClass = isPslActive
+                  ? "bg-gradient-to-r from-[#ea580c] to-[#c2410c] text-white font-black shadow-lg shadow-orange-400/60 animate-pulse"
+                  : isAutumnActive
+                    ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white font-black shadow-lg shadow-orange-400/60 animate-pulse"
+                    : "bg-emerald-600 text-white font-black shadow-lg shadow-emerald-300 animate-pulse";
+                borderClass = isPslActive ? "border-2 border-[#7c2d12]" : isAutumnActive ? "border-2 border-amber-800" : "border-2 border-emerald-700";
                 clickHandler = () => {
                   setCheckInTargetDate(dateStr);
                   setIsQuizOpen(true);
@@ -633,20 +658,26 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
               } else {
                 // Past day within 2-day grace window (yesterday or 2 days ago)
                 if (isTarget) {
-                  bgClass = isAutumnActive
-                    ? "bg-amber-100/90 hover:bg-amber-200 text-amber-950 font-black cursor-pointer shadow-xs"
-                    : "bg-emerald-100/80 hover:bg-emerald-200 text-emerald-950 font-black cursor-pointer shadow-xs";
-                  borderClass = isAutumnActive
-                    ? "border-2 border-amber-500 hover:border-orange-600 border-dashed shadow-sm"
-                    : "border-2 border-emerald-400 hover:border-emerald-600 border-dashed shadow-xs";
+                  bgClass = isPslActive
+                    ? "bg-[#ffedd5] hover:bg-[#fed7aa] text-[#431407] font-black cursor-pointer shadow-xs"
+                    : isAutumnActive
+                      ? "bg-amber-100/90 hover:bg-amber-200 text-amber-950 font-black cursor-pointer shadow-xs"
+                      : "bg-emerald-100/80 hover:bg-emerald-200 text-emerald-950 font-black cursor-pointer shadow-xs";
+                  borderClass = isPslActive
+                    ? "border-2 border-[#ea580c] hover:border-[#c2410c] border-dashed shadow-sm"
+                    : isAutumnActive
+                      ? "border-2 border-amber-500 hover:border-orange-600 border-dashed shadow-sm"
+                      : "border-2 border-emerald-400 hover:border-emerald-600 border-dashed shadow-xs";
                   clickHandler = () => {
                     setCheckInTargetDate(dateStr);
                     setIsQuizOpen(true);
                   };
                   badgeText = daysDiff === 1 ? "Log (1d)" : "Log (2d)";
-                  badgeClass = isAutumnActive
-                    ? "text-amber-950 font-black bg-amber-300 px-1 py-0.5 rounded border border-amber-500"
-                    : "text-emerald-950 font-black bg-emerald-200 px-1 py-0.5 rounded border border-emerald-400";
+                  badgeClass = isPslActive
+                    ? "text-[#431407] font-black bg-[#fed7aa] px-1 py-0.5 rounded border border-[#ea580c]"
+                    : isAutumnActive
+                      ? "text-amber-950 font-black bg-amber-300 px-1 py-0.5 rounded border border-amber-500"
+                      : "text-emerald-950 font-black bg-emerald-200 px-1 py-0.5 rounded border border-emerald-400";
                 } else {
                   bgClass = "bg-amber-100/80 text-amber-950 font-black";
                   borderClass = "border border-amber-400";
@@ -717,12 +748,14 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
     
     return (
       <div className={`rounded-[32px] p-6 shadow-md flex flex-col h-60 transition-all ${
-        isAutumnActive 
-          ? 'bg-white/50 backdrop-blur-xs border border-white/70 shadow-lg shadow-amber-950/5' 
-          : 'bg-white/75 backdrop-blur-xs border border-emerald-100/80 shadow-sm'
+        isPslActive
+          ? 'bg-white/95 sm:bg-[#fffbf5]/95 backdrop-blur-md border-2 border-[#fed7aa] shadow-lg shadow-orange-950/5'
+          : isAutumnActive 
+            ? 'bg-white/95 sm:bg-white/90 backdrop-blur-md border-2 border-amber-300 shadow-lg shadow-amber-950/5' 
+            : 'bg-white/95 backdrop-blur-md border-2 border-emerald-100/80 shadow-sm'
       }`}>
         <h4 className={`text-xs font-black uppercase mb-4 tracking-widest ${
-          isAutumnActive ? 'text-stone-950 font-mono' : 'text-slate-800'
+          isPslActive ? 'text-[#431407] font-mono' : isAutumnActive ? 'text-stone-950 font-mono' : 'text-slate-900'
         }`}>Weight Analytics (Sunday Only)</h4>
         
         <div className="flex-1 flex items-end gap-3.5 px-2">
@@ -735,13 +768,21 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
             return (
               <div key={log.id} className="flex-1 flex flex-col items-center gap-1 h-full justify-end relative group">
                 <span className={`text-[11px] font-black transition-transform group-hover:scale-110 ${
-                  isAutumnActive ? 'text-stone-950' : 'text-emerald-950'
+                  isPslActive ? 'text-[#431407]' : isAutumnActive ? 'text-stone-950' : 'text-emerald-950'
                 }`}>
                   {wVal} <span className="text-[9px] font-bold">lb</span>
                 </span>
                 <div 
                   className={`w-full rounded-t-xl transition-all duration-500 ease-out ${
-                    isAutumnActive
+                    isPslActive
+                      ? idx === displayData.length - 1
+                        ? 'bg-gradient-to-t from-[#c2410c] to-[#ea580c] shadow-md shadow-orange-300'
+                        : idx === displayData.length - 2
+                        ? 'bg-[#ea580c]'
+                        : idx === displayData.length - 3
+                        ? 'bg-[#f97316]'
+                        : 'bg-[#fdba74]'
+                      : isAutumnActive
                       ? idx === displayData.length - 1
                         ? 'bg-gradient-to-t from-orange-600 to-amber-500 shadow-md shadow-orange-300'
                         : idx === displayData.length - 2
@@ -765,7 +806,7 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
         </div>
 
         <div className={`mt-2 pt-2 border-t flex justify-between px-2 text-[10px] sm:text-xs font-black font-mono ${
-          isAutumnActive ? 'border-amber-200 text-stone-950' : 'border-slate-200 text-slate-900'
+          isPslActive ? 'border-[#fed7aa] text-[#431407]' : isAutumnActive ? 'border-amber-200 text-stone-950' : 'border-slate-200 text-slate-900'
         }`}>
           {displayData.map((log) => {
             const isReal = !log.id.startsWith('mock');
@@ -793,19 +834,18 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
   }
 
   const themeClassMap: Record<AppTheme, string> = {
-    emerald: 'bg-emerald-50 text-slate-800',
+    pumpkin_spice: 'bg-gradient-to-br from-[#fff7ed] via-[#ffedd5]/80 to-[#fed7aa]/60 text-stone-950',
+    emerald: 'bg-emerald-50 text-slate-900',
     silver: 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 text-slate-100',
     crystal: 'bg-gradient-to-br from-slate-950 via-cyan-950 to-slate-900 text-cyan-50',
     sunrise: 'bg-gradient-to-br from-amber-950 via-slate-900 to-yellow-950 text-amber-50',
     gold: 'bg-gradient-to-br from-yellow-950 via-amber-900 to-slate-950 text-amber-100',
-    pink_floral: 'bg-gradient-to-br from-pink-50 via-rose-50/60 to-pink-100/50 text-slate-850',
+    pink_floral: 'bg-gradient-to-br from-pink-50 via-rose-50/60 to-pink-100/50 text-slate-900',
     autumn: 'bg-gradient-to-br from-amber-100/80 via-orange-50/60 to-amber-50/90 text-stone-900',
   };
 
-  const isAutumnActive = currentTheme === 'autumn' || (isFallSeason && !isSunday);
-
   return (
-    <div className={`min-h-screen relative flex flex-col font-sans transition-colors duration-500 ${isAutumnActive ? 'bg-gradient-to-b from-amber-50/90 via-orange-50/40 to-amber-100/50 text-stone-900' : themeClassMap[currentTheme] || 'bg-emerald-50'}`} id="bunny-dashboard">
+    <div className={`min-h-screen relative flex flex-col font-sans transition-colors duration-500 ${isPslActive ? 'bg-gradient-to-b from-[#fff7ed] via-[#ffedd5]/60 to-[#fed7aa]/40 text-stone-950' : isAutumnActive ? 'bg-gradient-to-b from-amber-50/90 via-orange-50/40 to-amber-100/50 text-stone-900' : themeClassMap[currentTheme] || 'bg-emerald-50'}`} id="bunny-dashboard">
       
       {/* Greeting Modal Popup on Login */}
       <GreetingModal 
@@ -813,10 +853,12 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
         onClose={() => setShowGreetingModal(false)} 
       />
 
-      {/* Fall / Autumn Tree with Smoothly Dropping Leaves Background */}
-      {isAutumnActive && (
+      {/* Starbucks Pumpkin Spice Latte or Fall / Autumn Tree Background */}
+      {isPslActive ? (
+        <PumpkinSpiceBackground />
+      ) : isAutumnActive ? (
         <FallAutumnTreeBackground />
-      )}
+      ) : null}
 
       {/* Top Preview Banner when viewed from Admin */}
       {isPreviewMode && (
@@ -849,24 +891,33 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
       {/* Elegant sticky liquid header */}
       <header className={`px-4 sm:px-6 py-3.5 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 sticky top-0 z-30 shadow-sm transition-all duration-300 ${
-        isAutumnActive 
-          ? 'bg-white/55 backdrop-blur-xs border-b border-white/60 shadow-amber-900/5' 
-          : 'bg-white/80 backdrop-blur-xs border-b border-emerald-100'
+        isPslActive
+          ? 'bg-[#fffbf5]/95 sm:bg-[#fffbf5]/90 backdrop-blur-md border-b border-[#fed7aa] shadow-amber-950/5'
+          : isAutumnActive 
+            ? 'bg-white/95 sm:bg-white/90 backdrop-blur-md border-b border-amber-200/90 shadow-amber-900/5' 
+            : 'bg-white/95 backdrop-blur-md border-b border-emerald-100'
       }`} id="app-header">
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg overflow-hidden shrink-0 border ${
-            isAutumnActive 
-              ? 'bg-amber-500 shadow-amber-300/50 border-amber-400' 
-              : 'bg-emerald-500 shadow-emerald-200 border-emerald-400'
+            isPslActive
+              ? 'bg-gradient-to-br from-[#ea580c] to-[#c2410c] shadow-[#fed7aa] border-[#ea580c]'
+              : isAutumnActive 
+                ? 'bg-amber-500 shadow-amber-300/50 border-amber-400' 
+                : 'bg-emerald-500 shadow-emerald-200 border-emerald-400'
           }`}>
             <img src="/icon.svg" alt="Bunny Gym Icon" className="w-full h-full object-cover" />
           </div>
           <div>
             <h1 className={`text-lg font-black tracking-tight flex items-center gap-1.5 ${
-              isAutumnActive ? 'text-stone-950' : 'text-emerald-950'
+              isPslActive ? 'text-[#431407]' : isAutumnActive ? 'text-stone-950' : 'text-emerald-950'
             }`}>
               <span>Bunny’s Gym Record</span>
               <span className="text-base" title="Bunny">🐰</span>
+              {isPslActive && (
+                <span className="ml-1 text-[11px] font-mono font-black bg-[#ffedd5] text-[#7c2d12] px-2.5 py-0.5 rounded-full border border-[#ea580c]/50 flex items-center gap-0.5 shadow-xs">
+                  ☕ Starbucks PSL
+                </span>
+              )}
               {isAutumnActive && (
                 <span className="ml-1 text-[11px] font-mono font-black bg-amber-200 text-amber-950 px-2.5 py-0.5 rounded-full border border-amber-400 flex items-center gap-0.5 shadow-xs">
                   🍁 Autumn Edition
@@ -874,22 +925,22 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
               )}
             </h1>
             <p className={`text-[10px] font-extrabold uppercase tracking-widest ${
-              isAutumnActive ? 'text-stone-700' : 'text-emerald-700'
+              isPslActive ? 'text-[#7c2d12]' : isAutumnActive ? 'text-stone-700' : 'text-emerald-700'
             }`}>Montana, USA | UTC-7</p>
           </div>
         </div>
         
         <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-end">
-          <div className={`text-right border-r pr-4 sm:pr-6 ${isAutumnActive ? 'border-amber-300' : 'border-emerald-200'}`}>
-            <p className={`text-[10px] font-black uppercase tracking-wider ${isAutumnActive ? 'text-stone-800' : 'text-slate-700'}`}>Current Streak</p>
-            <p className={`text-lg sm:text-2xl font-black leading-none ${isAutumnActive ? 'text-stone-950' : 'text-emerald-700'}`}>
-              {profile.currentStreak || 0} <span className={`text-xs sm:text-sm font-bold ${isAutumnActive ? 'text-amber-800' : 'text-emerald-800'}`}>Days</span>
+          <div className={`text-right border-r pr-4 sm:pr-6 ${isPslActive ? 'border-[#fed7aa]' : isAutumnActive ? 'border-amber-300' : 'border-emerald-200'}`}>
+            <p className={`text-[10px] font-black uppercase tracking-wider ${isPslActive ? 'text-[#7c2d12]' : isAutumnActive ? 'text-stone-800' : 'text-slate-700'}`}>Current Streak</p>
+            <p className={`text-lg sm:text-2xl font-black leading-none ${isPslActive ? 'text-[#431407]' : isAutumnActive ? 'text-stone-950' : 'text-emerald-700'}`}>
+              {profile.currentStreak || 0} <span className={`text-xs sm:text-sm font-bold ${isPslActive ? 'text-[#9a3412]' : isAutumnActive ? 'text-amber-800' : 'text-emerald-800'}`}>Days</span>
             </p>
           </div>
           
-          <div className={`text-right border-r pr-4 sm:pr-6 ${isAutumnActive ? 'border-amber-300' : 'border-emerald-200'}`}>
-            <p className={`text-[10px] font-black uppercase tracking-wider ${isAutumnActive ? 'text-stone-800' : 'text-slate-700'}`}>Highest Record</p>
-            <p className={`text-lg sm:text-2xl font-black leading-none ${isAutumnActive ? 'text-stone-950' : 'text-slate-900'}`}>
+          <div className={`text-right border-r pr-4 sm:pr-6 ${isPslActive ? 'border-[#fed7aa]' : isAutumnActive ? 'border-amber-300' : 'border-emerald-200'}`}>
+            <p className={`text-[10px] font-black uppercase tracking-wider ${isPslActive ? 'text-[#7c2d12]' : isAutumnActive ? 'text-stone-800' : 'text-slate-700'}`}>Highest Record</p>
+            <p className={`text-lg sm:text-2xl font-black leading-none ${isPslActive ? 'text-[#431407]' : isAutumnActive ? 'text-stone-950' : 'text-slate-900'}`}>
               {profile.highestStreak || 0} <span className="text-xs sm:text-sm font-black text-amber-600">★</span>
             </p>
           </div>
@@ -897,25 +948,27 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className={`w-10 h-10 rounded-full border-2 overflow-hidden flex items-center justify-center shadow-sm ${
-                isAutumnActive ? 'border-amber-600 bg-amber-100' : 'border-emerald-500 bg-emerald-50'
+                isPslActive ? 'border-[#ea580c] bg-[#ffedd5]' : isAutumnActive ? 'border-amber-600 bg-amber-100' : 'border-emerald-500 bg-emerald-50'
               }`}>
                 {profile.photoUrl ? (
                   <img src={profile.photoUrl} alt="Bunny Profile" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 ) : (
-                  <UserIcon className={`w-5 h-5 ${isAutumnActive ? 'text-amber-800' : 'text-emerald-600'}`} />
+                  <UserIcon className={`w-5 h-5 ${isPslActive ? 'text-[#9a3412]' : isAutumnActive ? 'text-amber-800' : 'text-emerald-600'}`} />
                 )}
               </div>
               <span className={`absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full animate-pulse ${
-                isAutumnActive ? 'bg-amber-600' : 'bg-emerald-500'
+                isPslActive ? 'bg-[#ea580c]' : isAutumnActive ? 'bg-amber-600' : 'bg-emerald-500'
               }`} />
             </div>
 
             <button 
               onClick={handleLogoutClick}
               className={`p-2 rounded-xl transition-all cursor-pointer border ${
-                isAutumnActive 
-                  ? 'bg-white/80 hover:bg-amber-100 text-stone-800 hover:text-rose-600 border-amber-300' 
-                  : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 hover:text-red-500 border-neutral-200'
+                isPslActive
+                  ? 'bg-white hover:bg-[#ffedd5] text-[#431407] hover:text-rose-600 border-[#fed7aa]'
+                  : isAutumnActive 
+                    ? 'bg-white/80 hover:bg-amber-100 text-stone-800 hover:text-rose-600 border-amber-300' 
+                    : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 hover:text-red-500 border-neutral-200'
               }`}
               id="dashboard-logout-btn"
               title="Sign Out"
@@ -943,36 +996,56 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2.5 sm:gap-3 px-4 py-3 rounded-2xl transition-all cursor-pointer shrink-0 md:w-full text-left whitespace-nowrap border ${
+                className={`flex items-center gap-2 sm:gap-3 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl transition-all cursor-pointer shrink-0 md:w-full text-left whitespace-nowrap border-2 ${
                   isActive 
-                    ? isAutumnActive
-                      ? 'bg-gradient-to-r from-amber-800 to-orange-600 text-white shadow-md shadow-orange-950/25 border-amber-900/50'
-                      : 'bg-emerald-600 text-white shadow-md shadow-emerald-200 border-emerald-700' 
-                    : isAutumnActive
-                      ? 'bg-white/95 hover:bg-white text-stone-950 border-amber-300/90 shadow-xs'
-                      : 'bg-white hover:bg-emerald-50 text-slate-900 border-emerald-200 shadow-xs'
+                    ? isPslActive
+                      ? 'bg-gradient-to-r from-[#7c2d12] via-[#9a3412] to-[#c2410c] text-white shadow-md shadow-[#431407]/30 border-[#431407]'
+                      : isAutumnActive
+                        ? 'bg-gradient-to-r from-amber-800 to-orange-600 text-white shadow-md shadow-orange-950/25 border-amber-900'
+                        : 'bg-emerald-600 text-white shadow-md shadow-emerald-200 border-emerald-700' 
+                    : isPslActive
+                      ? 'bg-white hover:bg-[#fff7ed] text-[#431407] border-[#fdba74] shadow-sm'
+                      : isAutumnActive
+                        ? 'bg-white hover:bg-amber-50 text-stone-950 border-amber-300 shadow-sm'
+                        : 'bg-white hover:bg-emerald-50 text-slate-950 border-emerald-200 shadow-sm'
                 }`}
               >
                 {isActive && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse hidden md:inline-block shrink-0" />}
                 <tab.icon className={`w-4 h-4 shrink-0 ${
                   isActive 
                     ? 'text-white' 
-                    : isAutumnActive 
-                      ? 'text-amber-800' 
-                      : 'text-emerald-700'
+                    : isPslActive
+                      ? 'text-[#9a3412]'
+                      : isAutumnActive 
+                        ? 'text-amber-800' 
+                        : 'text-emerald-700'
                 }`} />
-                <span className="text-xs sm:text-sm font-black whitespace-nowrap">{tab.label}</span>
+                <span className={`text-xs sm:text-sm font-black whitespace-nowrap ${
+                  isActive 
+                    ? 'text-white' 
+                    : isPslActive 
+                      ? 'text-[#431407]' 
+                      : isAutumnActive 
+                        ? 'text-stone-950' 
+                        : 'text-slate-950'
+                }`}>
+                  {tab.label}
+                </span>
               </button>
             );
           })}
           
           <div className={`hidden md:block mt-auto p-4 rounded-3xl text-white overflow-hidden relative shadow-inner ${
-            isAutumnActive ? 'bg-stone-900/85 backdrop-blur-xs border border-amber-500/30' : 'bg-emerald-900'
+            isPslActive
+              ? 'bg-[#431407]/90 backdrop-blur-xs border border-[#ea580c]/40'
+              : isAutumnActive 
+                ? 'bg-stone-900/85 backdrop-blur-xs border border-amber-500/30' 
+                : 'bg-emerald-900'
           }`}>
             <p className="text-[10px] font-bold uppercase tracking-widest mb-1 font-mono text-amber-300">Penguin Broadcaster</p>
             <p className="text-xs italic leading-relaxed font-bold text-amber-100">"{dailyTip || 'Keep grinding. No excuses!'}"</p>
             <div className={`absolute -right-4 -bottom-4 w-12 h-12 rounded-full blur-xl ${
-              isAutumnActive ? 'bg-orange-600/40' : 'bg-emerald-700/50'
+              isPslActive ? 'bg-orange-600/40' : isAutumnActive ? 'bg-orange-600/40' : 'bg-emerald-700/50'
             }`}></div>
           </div>
         </nav>
@@ -980,9 +1053,11 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
         {/* Central Card Column: Middle (col-span-6) */}
         <section className="col-span-12 md:col-span-6 flex flex-col gap-6">
           <div className={`rounded-[32px] p-4 sm:p-6 shadow-md flex-1 flex flex-col justify-between min-h-[480px] transition-all duration-300 ${
-            isAutumnActive 
-              ? 'bg-white/50 backdrop-blur-xs border border-white/70 shadow-lg shadow-amber-950/5' 
-              : 'bg-white/80 backdrop-blur-xs border border-emerald-100'
+            isPslActive
+              ? 'bg-white/95 sm:bg-[#fffbf5]/95 backdrop-blur-md border-2 border-[#fed7aa] shadow-lg shadow-orange-950/5'
+              : isAutumnActive 
+                ? 'bg-white/95 sm:bg-white/90 backdrop-blur-md border-2 border-amber-300 shadow-lg shadow-amber-950/5' 
+                : 'bg-white/95 backdrop-blur-md border-2 border-emerald-100'
           }`}>
             
             {activeTab === 'calendar' && (
@@ -990,14 +1065,14 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                 <div>
                   <div className="flex justify-between items-center mb-6">
                     <h2 className={`text-base font-black flex items-center gap-2 ${
-                      isAutumnActive ? 'text-stone-950' : 'text-slate-900'
+                      isPslActive ? 'text-[#431407]' : isAutumnActive ? 'text-stone-950' : 'text-slate-900'
                     }`}>
-                      <CalendarIcon className={`w-5 h-5 ${isAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
-                      <span>Current Month <span className="text-stone-500 font-semibold">/ Calendar</span></span>
+                      <CalendarIcon className={`w-5 h-5 ${isPslActive ? 'text-[#ea580c]' : isAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
+                      <span>Current Month <span className="text-stone-700 font-bold">/ Calendar</span></span>
                     </h2>
                     <div className="flex gap-3 text-[11px] sm:text-xs font-black">
-                      <span className={`flex items-center gap-1.5 ${isAutumnActive ? 'text-amber-950' : 'text-emerald-800'}`}>
-                        <span className={`w-2 h-2 rounded-full ${isAutumnActive ? 'bg-orange-600' : 'bg-emerald-500'}`} /> Smashed
+                      <span className={`flex items-center gap-1.5 ${isPslActive ? 'text-[#7c2d12]' : isAutumnActive ? 'text-amber-950' : 'text-emerald-800'}`}>
+                        <span className={`w-2 h-2 rounded-full ${isPslActive ? 'bg-[#ea580c]' : isAutumnActive ? 'bg-orange-600' : 'bg-emerald-500'}`} /> Smashed
                       </span>
                       <span className="flex items-center gap-1.5 text-rose-700">
                         <span className="w-2 h-2 rounded-full bg-rose-600" /> Skipped

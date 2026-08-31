@@ -1,6 +1,6 @@
 export type UserRole = 'admin' | 'user';
 
-export type AppTheme = 'emerald' | 'silver' | 'crystal' | 'sunrise' | 'gold' | 'pink_floral' | 'autumn';
+export type AppTheme = 'emerald' | 'silver' | 'crystal' | 'sunrise' | 'gold' | 'pink_floral' | 'autumn' | 'pumpkin_spice';
 
 export interface GymLocation {
   lat: number;
