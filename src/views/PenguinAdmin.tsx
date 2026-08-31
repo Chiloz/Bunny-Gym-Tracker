@@ -20,11 +20,12 @@ import {
   UserProfile, WorkoutLog, WeightLog, QuizConfig, Penalty, CheerItem, SundayJogLog, GymProof 
 } from '../types';
 import { 
-  formatZambiaTime, isTargetWorkoutDay, getMontanaDayOfWeek 
+  formatZambiaTime, isTargetWorkoutDay, getMontanaDayOfWeek, getMontanaDate, isSeptemberOrFall 
 } from '../lib/time';
 import { WEIGHT_LOSS_PENALTIES, getRandomPenaltyTask } from '../lib/penalties';
 import BunnyDashboard from './BunnyDashboard';
 import CloudinaryConfigCard from '../components/CloudinaryConfigCard';
+import FallAutumnTreeBackground from '../components/FallAutumnTreeBackground';
 import { getCloudinaryConfig, uploadToCloudinary } from '../lib/cloudinary';
 
 interface PenguinAdminProps {
@@ -46,6 +47,13 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
   const [sundayJogs, setSundayJogs] = useState<SundayJogLog[]>([]);
   const [gymProofs, setGymProofs] = useState<GymProof[]>([]);
   const [cheerVault, setCheerVault] = useState<CheerItem[]>([]);
+
+  // Derived Autumn Theme state automatically synchronized from Bunny's active theme or Fall season
+  const montanaToday = useMemo(() => getMontanaDate(), []);
+  const isFallSeason = isSeptemberOrFall(montanaToday);
+  const isSunday = getMontanaDayOfWeek(montanaToday) === 'Sunday';
+  const bunnyActiveTheme = bunnyProfile?.activeTheme || (isFallSeason && !isSunday ? 'autumn' : 'emerald');
+  const isAdminAutumnActive = bunnyActiveTheme === 'autumn' || (isFallSeason && !isSunday);
 
   // Admin View as Bunny toggle
   const [viewingAsBunny, setViewingAsBunny] = useState(false);
@@ -817,12 +825,16 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
             let bg = "bg-slate-50 text-slate-400 border border-slate-100 hover:border-slate-300";
             if (log) {
               if (log.status === 'attended') {
-                bg = "bg-emerald-550 text-white border-transparent font-bold shadow-xs hover:bg-emerald-600";
+                bg = isAdminAutumnActive 
+                  ? "bg-orange-500 text-white border-transparent font-black shadow-xs hover:bg-orange-600"
+                  : "bg-emerald-550 text-white border-transparent font-bold shadow-xs hover:bg-emerald-600";
               } else {
                 bg = "bg-rose-500 text-white border-transparent font-bold shadow-xs hover:bg-rose-600";
               }
             } else if (isTarget) {
-              bg = "bg-slate-100 text-slate-500 border border-slate-200 border-dashed hover:border-slate-400";
+              bg = isAdminAutumnActive
+                ? "bg-amber-100/90 text-amber-950 border border-amber-300 border-dashed hover:border-amber-400 font-bold"
+                : "bg-slate-100 text-slate-500 border border-slate-200 border-dashed hover:border-slate-400";
             }
 
             return (
@@ -876,7 +888,11 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                       handleToggleWorkoutStatus(selectedDateModal, 'attended');
                       setSelectedDateModal(null);
                     }}
-                    className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-xs"
+                    className={`w-full py-2.5 px-4 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-xs ${
+                      isAdminAutumnActive 
+                        ? 'bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600' 
+                        : 'bg-emerald-600 hover:bg-emerald-700'
+                    }`}
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Mark as Attended 🟢</span>
@@ -1026,22 +1042,45 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/50 text-slate-850 flex flex-col font-sans" id="penguin-admin-view">
+    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-500 relative ${
+      isAdminAutumnActive 
+        ? 'bg-gradient-to-b from-amber-50/90 via-orange-50/40 to-amber-100/50 text-stone-900' 
+        : 'bg-slate-50/50 text-slate-850'
+    }`} id="penguin-admin-view">
+      
+      {/* Dynamic Animated Autumn Backdrop when active */}
+      {isAdminAutumnActive && <FallAutumnTreeBackground />}
       
       {/* Top Admin Navigation Header */}
-      <header className="bg-white/95 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+      <header className={`backdrop-blur-md border-b px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-sm relative ${
+        isAdminAutumnActive 
+          ? 'bg-white/85 border-amber-200/80 shadow-amber-900/5' 
+          : 'bg-white/95 border-slate-100'
+      }`}>
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white shadow-md">
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md ${
+            isAdminAutumnActive ? 'bg-gradient-to-br from-amber-700 to-orange-600' : 'bg-slate-900'
+          }`}>
             <span className="text-xl">🐧</span>
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h1 className="text-base font-bold tracking-tight text-slate-900">Penguin Control Center</h1>
-              <span className="px-2 py-0.5 bg-slate-100 text-slate-600 border border-slate-200 text-[9px] rounded-full font-mono font-bold uppercase tracking-wider">
-                Zambia Node
+              <h1 className={`text-base font-extrabold tracking-tight ${
+                isAdminAutumnActive ? 'text-stone-900' : 'text-slate-900'
+              }`}>
+                Penguin Control Center
+              </h1>
+              <span className={`px-2 py-0.5 border text-[9px] rounded-full font-mono font-bold uppercase tracking-wider ${
+                isAdminAutumnActive 
+                  ? 'bg-amber-100 text-amber-900 border-amber-300' 
+                  : 'bg-slate-100 text-slate-600 border-slate-200'
+              }`}>
+                Zambia Node {isAdminAutumnActive ? '🍁 (Synced)' : '🇿🇲'}
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">Monitoring sync contracts, active streaks & tax penalties</p>
+            <p className={`text-[11px] ${isAdminAutumnActive ? 'text-stone-600 font-medium' : 'text-slate-400'}`}>
+              Monitoring sync contracts, active streaks & tax penalties
+            </p>
           </div>
         </div>
 
@@ -1050,7 +1089,11 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
           {bunnyProfile && (
             <button
               onClick={() => setViewingAsBunny(true)}
-              className="py-2 px-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center space-x-1.5 cursor-pointer active:scale-95"
+              className={`py-2 px-3.5 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center space-x-1.5 cursor-pointer active:scale-95 ${
+                isAdminAutumnActive 
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600 shadow-orange-200/50' 
+                  : 'bg-emerald-600 hover:bg-emerald-700'
+              }`}
             >
               <span>👁️ View as Bunny</span>
             </button>
@@ -1058,13 +1101,25 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
 
           {/* Zambia Clock */}
           <div className="text-right hidden sm:block">
-            <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest block font-bold">ZAMBIA LOCAL TIME</span>
-            <span className="text-xs font-bold text-slate-700 font-mono">{zambiaTime}</span>
+            <span className={`text-[9px] font-mono uppercase tracking-widest block font-bold ${
+              isAdminAutumnActive ? 'text-stone-700' : 'text-slate-400'
+            }`}>
+              ZAMBIA LOCAL TIME
+            </span>
+            <span className={`text-xs font-bold font-mono ${
+              isAdminAutumnActive ? 'text-amber-950' : 'text-slate-700'
+            }`}>
+              {zambiaTime}
+            </span>
           </div>
 
           <button
             onClick={handleLogoutClick}
-            className="p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-rose-600 rounded-xl transition-all cursor-pointer flex items-center space-x-1.5 text-xs font-bold"
+            className={`p-2.5 border rounded-xl transition-all cursor-pointer flex items-center space-x-1.5 text-xs font-bold ${
+              isAdminAutumnActive 
+                ? 'bg-white/80 hover:bg-amber-100 text-stone-700 hover:text-rose-600 border-amber-300' 
+                : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-600 hover:text-rose-600'
+            }`}
             id="admin-logout-btn"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -1074,7 +1129,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
       </header>
 
       {/* Main Admin Content Body */}
-      <div className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-12 gap-6" id="penguin-admin-body">
+      <div className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-12 gap-6 relative z-10" id="penguin-admin-body">
         
         {/* Left Section Navigation Sidebar */}
         <nav className="col-span-12 md:col-span-3 lg:col-span-2 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0" id="admin-sidebar-nav">
@@ -1084,7 +1139,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
               label: 'Live Monitor', 
               icon: CalendarIcon, 
               badge: bunnyProfile?.currentStreak ? `${bunnyProfile.currentStreak}d` : null,
-              color: 'text-emerald-500'
+              color: isAdminAutumnActive ? 'text-amber-700' : 'text-emerald-500'
             },
             { 
               id: 'media', 
@@ -1123,20 +1178,26 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                 onClick={() => setAdminTab(tab.id as any)}
                 className={`flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 md:shrink border ${
                   isActive
-                    ? 'bg-slate-900 text-white border-slate-800 shadow-md translate-x-0.5'
-                    : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-100 hover:border-slate-200'
+                    ? isAdminAutumnActive
+                      ? 'bg-gradient-to-r from-amber-700 to-orange-600 text-white border-amber-800 shadow-md translate-x-0.5'
+                      : 'bg-slate-900 text-white border-slate-800 shadow-md translate-x-0.5'
+                    : isAdminAutumnActive
+                      ? 'bg-white/80 hover:bg-amber-100/80 text-stone-800 border-amber-200/80'
+                      : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-100 hover:border-slate-200'
                 }`}
                 id={`admin-nav-tab-${tab.id}`}
               >
                 <div className="flex items-center space-x-2.5">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-400' : tab.color}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : tab.color}`} />
                   <span>{tab.label}</span>
                 </div>
                 {tab.badge && (
                   <span className={`text-[9px] font-mono px-2 py-0.5 rounded-full font-extrabold ${
                     isActive 
-                      ? 'bg-slate-800 text-emerald-300 border border-slate-700' 
-                      : 'bg-slate-100 text-slate-600 border border-slate-200'
+                      ? 'bg-black/20 text-white border border-white/20' 
+                      : isAdminAutumnActive
+                        ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                        : 'bg-slate-100 text-slate-600 border border-slate-200'
                   }`}>
                     {tab.badge}
                   </span>
@@ -1154,54 +1215,94 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fadeIn">
               {/* Real-Time Monitor */}
               <div className="lg:col-span-6 space-y-6">
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm">
-                  <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-2">
-                      <CalendarIcon className="w-4 h-4 text-emerald-600" />
+                <section className={`rounded-[32px] p-6 shadow-sm ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <div className={`flex items-center justify-between mb-4 border-b pb-3 ${
+                    isAdminAutumnActive ? 'border-amber-200/80' : 'border-slate-100'
+                  }`}>
+                    <h3 className={`text-xs font-bold uppercase tracking-wider flex items-center space-x-2 ${
+                      isAdminAutumnActive ? 'text-stone-800' : 'text-slate-400'
+                    }`}>
+                      <CalendarIcon className={`w-4 h-4 ${isAdminAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
                       <span>Bunny Live Monitor</span>
                     </h3>
-                    <span className="text-[9px] bg-slate-100 text-slate-500 font-mono px-2 py-0.5 rounded-full font-bold">
+                    <span className={`text-[9px] font-mono px-2 py-0.5 rounded-full font-bold ${
+                      isAdminAutumnActive 
+                        ? 'bg-amber-100 text-amber-950 border border-amber-300' 
+                        : 'bg-slate-100 text-slate-500'
+                    }`}>
                       REAL-TIME
                     </span>
                   </div>
 
                   {bunnyProfile ? (
                     <div className="space-y-5">
-                      <div className="flex items-center space-x-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                        <div className="w-11 h-11 rounded-full overflow-hidden bg-white flex items-center justify-center border border-slate-200 shadow-sm">
+                      <div className={`flex items-center space-x-3 p-4 rounded-2xl border ${
+                        isAdminAutumnActive 
+                          ? 'bg-amber-50/70 border-amber-200/80' 
+                          : 'bg-slate-50 border-slate-100'
+                      }`}>
+                        <div className={`w-11 h-11 rounded-full overflow-hidden bg-white flex items-center justify-center border shadow-sm ${
+                          isAdminAutumnActive ? 'border-amber-400' : 'border-slate-200'
+                        }`}>
                           {bunnyProfile.photoUrl ? (
                             <img src={bunnyProfile.photoUrl} alt="Bunny avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                           ) : (
-                            <Users className="w-5 h-5 text-slate-400" />
+                            <Users className={`w-5 h-5 ${isAdminAutumnActive ? 'text-amber-700' : 'text-slate-400'}`} />
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h4 className="text-sm font-bold text-slate-800 truncate">{bunnyProfile.name}</h4>
-                          <p className="text-xs text-slate-400 truncate">{bunnyProfile.email}</p>
+                          <h4 className={`text-sm font-black truncate ${isAdminAutumnActive ? 'text-stone-900' : 'text-slate-800'}`}>
+                            {bunnyProfile.name}
+                          </h4>
+                          <p className={`text-xs truncate ${isAdminAutumnActive ? 'text-stone-600 font-medium' : 'text-slate-400'}`}>
+                            {bunnyProfile.email}
+                          </p>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
-                          <span className="text-[9px] font-mono text-slate-400 block font-bold">CURRENT STREAK</span>
-                          <span className="text-lg font-bold text-emerald-600">🔥 {bunnyProfile.currentStreak || 0}d</span>
+                        <div className={`p-3 rounded-2xl border text-center ${
+                          isAdminAutumnActive 
+                            ? 'bg-amber-50/70 border-amber-200/80' 
+                            : 'bg-slate-50 border-slate-100'
+                        }`}>
+                          <span className={`text-[9px] font-mono block font-bold ${isAdminAutumnActive ? 'text-stone-700' : 'text-slate-400'}`}>
+                            CURRENT STREAK
+                          </span>
+                          <span className={`text-lg font-black ${isAdminAutumnActive ? 'text-amber-950' : 'text-emerald-600'}`}>
+                            🔥 {bunnyProfile.currentStreak || 0}d
+                          </span>
                         </div>
-                        <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
-                          <span className="text-[9px] font-mono text-slate-400 block font-bold">HIGHEST STREAK</span>
-                          <span className="text-lg font-bold text-amber-600">👑 {bunnyProfile.highestStreak || 0}d</span>
+                        <div className={`p-3 rounded-2xl border text-center ${
+                          isAdminAutumnActive 
+                            ? 'bg-amber-50/70 border-amber-200/80' 
+                            : 'bg-slate-50 border-slate-100'
+                        }`}>
+                          <span className={`text-[9px] font-mono block font-bold ${isAdminAutumnActive ? 'text-stone-700' : 'text-slate-400'}`}>
+                            HIGHEST STREAK
+                          </span>
+                          <span className={`text-lg font-black ${isAdminAutumnActive ? 'text-stone-900' : 'text-amber-600'}`}>
+                            👑 {bunnyProfile.highestStreak || 0}d
+                          </span>
                         </div>
                       </div>
 
                       {/* Micro Calendar Grid */}
                       <div>
-                        <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block mb-2 font-bold">
+                        <span className={`text-[10px] font-mono uppercase tracking-widest block mb-2 font-bold ${
+                          isAdminAutumnActive ? 'text-stone-800' : 'text-slate-400'
+                        }`}>
                           This Month's Record
                         </span>
                         {renderBunnyCalendarGrid()}
                       </div>
                     </div>
                   ) : (
-                    <p className="text-xs text-slate-400 text-center py-8">
+                    <p className={`text-xs text-center py-8 ${isAdminAutumnActive ? 'text-stone-500 font-medium' : 'text-slate-400'}`}>
                       Bunny has not created her gym profile yet. Standing by...
                     </p>
                   )}
@@ -1210,34 +1311,45 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
 
               {/* Weight Analytics line chart */}
               <div className="lg:col-span-6 space-y-6">
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-2 mb-4">
-                    <Scale className="w-4 h-4 text-emerald-600" />
+                <section className={`rounded-[32px] p-6 shadow-sm ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <h3 className={`text-xs font-bold uppercase tracking-wider flex items-center space-x-2 mb-4 ${
+                    isAdminAutumnActive ? 'text-stone-800' : 'text-slate-400'
+                  }`}>
+                    <Scale className={`w-4 h-4 ${isAdminAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
                     <span>Weight Progress Logs</span>
                   </h3>
 
                   {chartData.length === 0 ? (
-                    <p className="text-xs text-slate-400 text-center py-12 italic">
+                    <p className={`text-xs text-center py-12 italic ${isAdminAutumnActive ? 'text-stone-500 font-medium' : 'text-slate-400'}`}>
                       No Weight logs registered by Bunny yet. Weight logging must happen on Sundays.
                     </p>
                   ) : (
                     <div className="h-64 w-full" id="admin-weight-chart-container">
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                          <XAxis dataKey="date" stroke="#94a3b8" fontSize={9} tickLine={false} />
-                          <YAxis stroke="#94a3b8" fontSize={9} tickLine={false} domain={['auto', 'auto']} />
+                          <CartesianGrid strokeDasharray="3 3" stroke={isAdminAutumnActive ? "#fed7aa" : "#f1f5f9"} />
+                          <XAxis dataKey="date" stroke={isAdminAutumnActive ? "#78716c" : "#94a3b8"} fontSize={9} tickLine={false} />
+                          <YAxis stroke={isAdminAutumnActive ? "#78716c" : "#94a3b8"} fontSize={9} tickLine={false} domain={['auto', 'auto']} />
                           <Tooltip 
-                            contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '12px', shadow: '0 1px 3px 0 rgba(0,0,0,0.05)' }}
-                            labelClassName="text-slate-400 font-mono text-[9px]"
-                            itemStyle={{ color: '#059669', fontWeight: 'bold', fontSize: '11px' }}
+                            contentStyle={{ 
+                              backgroundColor: '#ffffff', 
+                              borderColor: isAdminAutumnActive ? '#fde68a' : '#e2e8f0', 
+                              borderRadius: '12px', 
+                              boxShadow: '0 4px 12px 0 rgba(0,0,0,0.08)' 
+                            }}
+                            labelClassName={`${isAdminAutumnActive ? 'text-stone-700' : 'text-slate-400'} font-mono text-[9px]`}
+                            itemStyle={{ color: isAdminAutumnActive ? '#c2410c' : '#059669', fontWeight: 'bold', fontSize: '11px' }}
                           />
                           <Line 
                             type="monotone" 
                             dataKey="weight" 
-                            stroke="#059669" 
+                            stroke={isAdminAutumnActive ? "#ea580c" : "#059669"} 
                             strokeWidth={3} 
-                            dot={{ r: 4, stroke: '#34d399', strokeWidth: 2, fill: '#ffffff' }}
+                            dot={{ r: 4, stroke: isAdminAutumnActive ? '#f97316' : '#34d399', strokeWidth: 2, fill: '#ffffff' }}
                             activeDot={{ r: 6 }} 
                           />
                         </LineChart>
@@ -1252,15 +1364,23 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
           {/* TAB 2: MEDIA VAULT */}
           {adminTab === 'media' && (
             <div className="space-y-6 animate-fadeIn">
-              <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <section className={`rounded-[32px] p-6 shadow-sm space-y-4 ${
+                isAdminAutumnActive 
+                  ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                  : 'bg-white border border-slate-100'
+              }`}>
+                <div className={`flex items-center justify-between border-b pb-3 ${
+                  isAdminAutumnActive ? 'border-amber-200/80' : 'border-slate-100'
+                }`}>
                   <div className="flex items-center space-x-2">
-                    <Video className="w-5 h-5 text-emerald-600" />
-                    <h3 className="text-sm font-extrabold text-slate-900">
+                    <Video className={`w-5 h-5 ${isAdminAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
+                    <h3 className={`text-sm font-extrabold ${isAdminAutumnActive ? 'text-stone-900' : 'text-slate-900'}`}>
                       Bunny's Uploaded Media Gallery
                     </h3>
                   </div>
-                  <span className="text-[10px] bg-emerald-100 text-emerald-800 font-mono font-bold px-2.5 py-1 rounded-full uppercase">
+                  <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full uppercase ${
+                    isAdminAutumnActive ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-100 text-emerald-800'
+                  }`}>
                     {allUploadedMedia.length} Total Files
                   </span>
                 </div>
@@ -1272,7 +1392,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                     onClick={() => setMediaGalleryFilter('all')}
                     className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
                       mediaGalleryFilter === 'all'
-                        ? 'bg-slate-900 text-white shadow-xs'
+                        ? isAdminAutumnActive ? 'bg-gradient-to-r from-amber-700 to-orange-600 text-white shadow-xs' : 'bg-slate-900 text-white shadow-xs'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
@@ -1283,8 +1403,8 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                     onClick={() => setMediaGalleryFilter('cheer')}
                     className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
                       mediaGalleryFilter === 'cheer'
-                        ? 'bg-emerald-600 text-white shadow-xs'
-                        : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'
+                        ? isAdminAutumnActive ? 'bg-amber-600 text-white shadow-xs' : 'bg-emerald-600 text-white shadow-xs'
+                        : isAdminAutumnActive ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100' : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'
                     }`}
                   >
                     Cheer Vault ({allUploadedMedia.filter(m => m.source === 'cheer_vault').length})
@@ -1340,11 +1460,16 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                       const isAudio = item.fileType === 'audio' || item.url.includes('audio') || /\.(mp3|wav|ogg|m4a|aac)/i.test(item.url);
 
                       return (
-                        <div key={item.id} className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-3 shadow-2xs flex flex-col justify-between">
+                        <div key={item.id} className={`rounded-2xl p-4 space-y-3 shadow-2xs flex flex-col justify-between border ${
+                          isAdminAutumnActive 
+                            ? 'bg-amber-50/70 border-amber-200/90' 
+                            : 'bg-slate-50 border-slate-200/80'
+                        }`}>
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
                               <span className={`text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full ${
-                                item.source === 'cheer_vault' ? 'bg-emerald-100 text-emerald-900 border border-emerald-200' :
+                                item.source === 'cheer_vault' 
+                                  ? (isAdminAutumnActive ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-100 text-emerald-900 border border-emerald-200') :
                                 item.source === 'gym_proof' ? 'bg-amber-100 text-amber-900 border border-amber-200' :
                                 item.source === 'sunday_jog' ? 'bg-pink-100 text-pink-900 border border-pink-200' :
                                 'bg-rose-100 text-rose-900 border border-rose-200'
@@ -1357,7 +1482,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                             </div>
 
                             <div>
-                              <h4 className="text-xs font-bold text-slate-800 truncate">{item.title}</h4>
+                              <h4 className={`text-xs font-bold truncate ${isAdminAutumnActive ? 'text-stone-900' : 'text-slate-800'}`}>{item.title}</h4>
                               {item.fileName && <p className="text-[10px] text-slate-400 font-mono truncate">{item.fileName}</p>}
                             </div>
 
@@ -1373,7 +1498,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                                   id={`admin-media-video-${item.id}`}
                                 />
                               ) : isAudio ? (
-                                <div className="p-4 flex flex-col items-center justify-center text-emerald-400 space-y-2 w-full">
+                                <div className="p-4 flex flex-col items-center justify-center text-amber-400 space-y-2 w-full">
                                   <Music className="w-8 h-8" />
                                   <audio controls className="w-full max-w-[220px]">
                                     <source src={item.url} />
@@ -1426,9 +1551,17 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
               
               {/* Penalty Box Control */}
               <div className="lg:col-span-6 space-y-6">
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm">
-                  <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-2">
+                <section className={`rounded-[32px] p-6 shadow-sm ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <div className={`flex items-center justify-between mb-4 pb-2 border-b ${
+                    isAdminAutumnActive ? 'border-amber-200/80' : 'border-slate-100'
+                  }`}>
+                    <h3 className={`text-xs font-bold uppercase tracking-wider flex items-center space-x-2 ${
+                      isAdminAutumnActive ? 'text-stone-800' : 'text-slate-400'
+                    }`}>
                       <AlertOctagon className="w-4 h-4 text-rose-500 animate-pulse" />
                       <span>Penalty Box Control & Review</span>
                     </h3>
@@ -1442,7 +1575,11 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                   </div>
 
                   {manualPenaltySuccess && (
-                    <div className="p-3 mb-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-xl text-center">
+                    <div className={`p-3 mb-4 border text-xs font-bold rounded-xl text-center ${
+                      isAdminAutumnActive 
+                        ? 'bg-amber-50 border-amber-300 text-amber-950' 
+                        : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                    }`}>
                       {manualPenaltySuccess}
                     </div>
                   )}
@@ -1470,7 +1607,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                   {penaltyTab === 'active' ? (
                     penalties.filter(p => p.status !== 'cleared').length === 0 ? (
                       <div className="text-center py-8 space-y-2">
-                        <p className="text-xs text-slate-400 italic">
+                        <p className={`text-xs italic ${isAdminAutumnActive ? 'text-stone-600 font-medium' : 'text-slate-400'}`}>
                           Bunny has no running penalties! App is unlocked.
                         </p>
                         <button
@@ -1488,7 +1625,9 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                             penalty.returnStartUrl || penalty.returnMiddleUrl || penalty.returnEndUrl;
 
                           return (
-                            <div key={penalty.id} className="bg-slate-50 border border-slate-100 rounded-2xl p-4 space-y-4">
+                            <div key={penalty.id} className={`border rounded-2xl p-4 space-y-4 ${
+                              isAdminAutumnActive ? 'bg-amber-50/60 border-amber-200/80' : 'bg-slate-50 border-slate-100'
+                            }`}>
                               <div className="flex items-center justify-between">
                                 <span className="text-[10px] font-mono text-rose-600 font-bold uppercase bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full">
                                   {penalty.status}
@@ -1498,7 +1637,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                                 </span>
                               </div>
 
-                              <p className="text-xs text-slate-700 font-semibold leading-relaxed">
+                              <p className={`text-xs font-semibold leading-relaxed ${isAdminAutumnActive ? 'text-stone-900' : 'text-slate-700'}`}>
                                 Challenge: <span className="text-slate-500 font-sans italic font-normal">"{penalty.taskDescription}"</span>
                               </p>
 
@@ -1511,37 +1650,37 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
 
                                   <div className="grid grid-cols-2 gap-2 text-[10px]">
                                     {penalty.outwardStartUrl && (
-                                      <a href={penalty.outwardStartUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-emerald-300 rounded-xl flex items-center space-x-1.5 text-emerald-600 font-bold shadow-xs">
+                                      <a href={penalty.outwardStartUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-amber-400 rounded-xl flex items-center space-x-1.5 text-amber-700 font-bold shadow-xs">
                                         <Play className="w-3 h-3 shrink-0" />
                                         <span className="truncate">Outward Start</span>
                                       </a>
                                     )}
                                     {penalty.outwardMiddleUrl && (
-                                      <a href={penalty.outwardMiddleUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-emerald-300 rounded-xl flex items-center space-x-1.5 text-emerald-600 font-bold shadow-xs">
+                                      <a href={penalty.outwardMiddleUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-amber-400 rounded-xl flex items-center space-x-1.5 text-amber-700 font-bold shadow-xs">
                                         <Play className="w-3 h-3 shrink-0" />
                                         <span className="truncate">Outward Middle</span>
                                       </a>
                                     )}
                                     {penalty.outwardEndUrl && (
-                                      <a href={penalty.outwardEndUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-emerald-300 rounded-xl flex items-center space-x-1.5 text-emerald-600 font-bold shadow-xs">
+                                      <a href={penalty.outwardEndUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-amber-400 rounded-xl flex items-center space-x-1.5 text-amber-700 font-bold shadow-xs">
                                         <Play className="w-3 h-3 shrink-0" />
                                         <span className="truncate">Outward End</span>
                                       </a>
                                     )}
                                     {penalty.returnStartUrl && (
-                                      <a href={penalty.returnStartUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-emerald-300 rounded-xl flex items-center space-x-1.5 text-emerald-600 font-bold shadow-xs">
+                                      <a href={penalty.returnStartUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-amber-400 rounded-xl flex items-center space-x-1.5 text-amber-700 font-bold shadow-xs">
                                         <Play className="w-3 h-3 shrink-0" />
                                         <span className="truncate">Return Start</span>
                                       </a>
                                     )}
                                     {penalty.returnMiddleUrl && (
-                                      <a href={penalty.returnMiddleUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-emerald-300 rounded-xl flex items-center space-x-1.5 text-emerald-600 font-bold shadow-xs">
+                                      <a href={penalty.returnMiddleUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-amber-400 rounded-xl flex items-center space-x-1.5 text-amber-700 font-bold shadow-xs">
                                         <Play className="w-3 h-3 shrink-0" />
                                         <span className="truncate">Return Middle</span>
                                       </a>
                                     )}
                                     {penalty.returnEndUrl && (
-                                      <a href={penalty.returnEndUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-emerald-300 rounded-xl flex items-center space-x-1.5 text-emerald-600 font-bold shadow-xs">
+                                      <a href={penalty.returnEndUrl} target="_blank" rel="referrer noopener" className="p-2 bg-white border border-slate-100 hover:border-amber-400 rounded-xl flex items-center space-x-1.5 text-amber-700 font-bold shadow-xs">
                                         <Play className="w-3 h-3 shrink-0" />
                                         <span className="truncate">Return End</span>
                                       </a>
@@ -1554,7 +1693,11 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                               <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3">
                                 <button
                                   onClick={() => handlePenaltyApprove(penalty.id)}
-                                  className="py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold rounded-xl flex items-center justify-center space-x-1 transition-all active:scale-95 cursor-pointer shadow-xs"
+                                  className={`py-2 px-3 text-white text-[10px] font-bold rounded-xl flex items-center justify-center space-x-1 transition-all active:scale-95 cursor-pointer shadow-xs ${
+                                    isAdminAutumnActive 
+                                      ? 'bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600' 
+                                      : 'bg-emerald-600 hover:bg-emerald-700'
+                                  }`}
                                 >
                                   <CheckCircle2 className="w-3.5 h-3.5" />
                                   <span>Approve & Clear</span>
@@ -1615,14 +1758,20 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
               <div className="lg:col-span-6 space-y-6">
                 
                 {/* Sunday Jog 10s Video Reviewer */}
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-2 mb-4 pb-2 border-b border-slate-100">
+                <section className={`rounded-[32px] p-6 shadow-sm ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <h3 className={`text-xs font-bold uppercase tracking-wider flex items-center space-x-2 mb-4 pb-2 border-b ${
+                    isAdminAutumnActive ? 'border-amber-200/80 text-stone-800' : 'border-slate-100 text-slate-400'
+                  }`}>
                     <Video className="w-4 h-4 text-pink-500" />
                     <span>Sunday Jog 10s Video Clips</span>
                   </h3>
 
                   {sundayJogs.length === 0 ? (
-                    <p className="text-xs text-slate-400 text-center py-6 italic">
+                    <p className={`text-xs text-center py-6 italic ${isAdminAutumnActive ? 'text-stone-500 font-medium' : 'text-slate-400'}`}>
                       No Sunday jog videos uploaded yet.
                     </p>
                   ) : (
@@ -1705,14 +1854,20 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                 </section>
 
                 {/* Random Gym Verification Proofs */}
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-2 mb-4 pb-2 border-b border-slate-100">
+                <section className={`rounded-[32px] p-6 shadow-sm ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <h3 className={`text-xs font-bold uppercase tracking-wider flex items-center space-x-2 mb-4 pb-2 border-b ${
+                    isAdminAutumnActive ? 'border-amber-200/80 text-stone-800' : 'border-slate-100 text-slate-400'
+                  }`}>
                     <CheckCircle2 className="w-4 h-4 text-amber-500" />
                     <span>Random Gym Proof Submissions</span>
                   </h3>
 
                   {gymProofs.length === 0 ? (
-                    <p className="text-xs text-slate-400 text-center py-6 italic">
+                    <p className={`text-xs text-center py-6 italic ${isAdminAutumnActive ? 'text-stone-500 font-medium' : 'text-slate-400'}`}>
                       No random gym proof photos/videos uploaded yet.
                     </p>
                   ) : (
@@ -1748,11 +1903,17 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
               
               {/* Upload Form Column */}
               <div className="lg:col-span-6 space-y-6">
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <section className={`rounded-[32px] p-6 shadow-sm space-y-4 ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <div className={`flex items-center justify-between pb-3 border-b ${
+                    isAdminAutumnActive ? 'border-amber-200/80' : 'border-slate-100'
+                  }`}>
                     <div className="flex items-center space-x-2">
-                      <Award className="w-5 h-5 text-emerald-600" />
-                      <h3 className="text-sm font-extrabold text-slate-900">
+                      <Award className={`w-5 h-5 ${isAdminAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
+                      <h3 className={`text-sm font-extrabold ${isAdminAutumnActive ? 'text-stone-900' : 'text-slate-900'}`}>
                         Cheer Vault Broadcaster (Zambia Node 🇿🇲)
                       </h3>
                     </div>
@@ -1766,7 +1927,11 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                     )}
 
                     {cheerSuccess && (
-                      <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl font-bold text-center">
+                      <div className={`p-3 border text-xs rounded-xl font-bold text-center ${
+                        isAdminAutumnActive 
+                          ? 'bg-amber-50 border-amber-300 text-amber-950' 
+                          : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                      }`}>
                         ✨ Cheer broadcast pushed to Bunny successfully!
                       </div>
                     )}
@@ -1779,7 +1944,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                         value={cheerTitle}
                         onChange={(e) => setCheerTitle(e.target.value)}
                         placeholder="e.g. Keep going Bunny! Voice Note"
-                        className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-100 focus:border-emerald-300 rounded-xl text-xs text-slate-800 font-sans"
+                        className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-100 focus:border-amber-400 rounded-xl text-xs text-slate-800 font-sans"
                         id="admin-cheer-title-input"
                       />
                     </div>
@@ -1790,7 +1955,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                         onClick={() => setCheerType('audio')}
                         className={`p-3 border text-xs font-bold rounded-xl text-center flex items-center justify-center space-x-2 transition-all cursor-pointer ${
                           cheerType === 'audio' 
-                            ? 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-sm' 
+                            ? (isAdminAutumnActive ? 'bg-amber-100 border-amber-400 text-amber-950 shadow-sm' : 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-sm')
                             : 'bg-slate-50 border-slate-100 hover:border-slate-200 text-slate-500'
                         }`}
                       >
@@ -1803,7 +1968,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                         onClick={() => setCheerType('video')}
                         className={`p-3 border text-xs font-bold rounded-xl text-center flex items-center justify-center space-x-2 transition-all cursor-pointer ${
                           cheerType === 'video' 
-                            ? 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-sm' 
+                            ? (isAdminAutumnActive ? 'bg-amber-100 border-amber-400 text-amber-950 shadow-sm' : 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-sm')
                             : 'bg-slate-50 border-slate-100 hover:border-slate-200 text-slate-500'
                         }`}
                       >
@@ -1863,7 +2028,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                           value={cheerLinkUrl}
                           onChange={(e) => setCheerLinkUrl(e.target.value)}
                           placeholder="https://drive.google.com/file/d/... or YouTube / MP3 link"
-                          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-emerald-300 rounded-xl text-xs text-slate-800"
+                          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-amber-400 rounded-xl text-xs text-slate-800"
                           id="admin-cheer-link-input"
                         />
                       </div>
@@ -1872,7 +2037,11 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                     <button
                       type="submit"
                       disabled={cheerUpload.loading}
-                      className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-100 disabled:text-slate-400 text-white font-bold rounded-2xl transition-all flex items-center justify-center space-x-2 text-xs cursor-pointer shadow-xs active:scale-95"
+                      className={`w-full py-3 text-white font-bold rounded-2xl transition-all flex items-center justify-center space-x-2 text-xs cursor-pointer shadow-xs active:scale-95 disabled:bg-slate-100 disabled:text-slate-400 ${
+                        isAdminAutumnActive 
+                          ? 'bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600' 
+                          : 'bg-emerald-600 hover:bg-emerald-700'
+                      }`}
                       id="submit-cheer-vault-btn"
                     >
                       {cheerUpload.loading ? (
@@ -1890,30 +2059,42 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
 
               {/* Uploaded Cheer Vault Items List */}
               <div className="lg:col-span-6 space-y-6">
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <h3 className="text-sm font-extrabold text-slate-900 flex items-center space-x-2">
-                      <Music className="w-4 h-4 text-emerald-600" />
+                <section className={`rounded-[32px] p-6 shadow-sm space-y-4 ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <div className={`flex items-center justify-between border-b pb-3 ${
+                    isAdminAutumnActive ? 'border-amber-200/80' : 'border-slate-100'
+                  }`}>
+                    <h3 className={`text-sm font-extrabold flex items-center space-x-2 ${
+                      isAdminAutumnActive ? 'text-stone-900' : 'text-slate-900'
+                    }`}>
+                      <Music className={`w-4 h-4 ${isAdminAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
                       <span>Cheer Vault Items Sent to Bunny</span>
                     </h3>
                   </div>
 
                   {cheerVault.length === 0 ? (
-                    <div className="text-center py-12 px-4 bg-emerald-50/40 rounded-2xl border border-dashed border-emerald-200 space-y-2">
-                      <Sparkles className="w-8 h-8 text-emerald-400 mx-auto animate-pulse" />
-                      <p className="text-xs font-bold text-slate-700">No cheers broadcasted yet.</p>
-                      <p className="text-[11px] text-slate-400">
+                    <div className={`text-center py-12 px-4 rounded-2xl border border-dashed space-y-2 ${
+                      isAdminAutumnActive ? 'bg-amber-50/50 border-amber-300' : 'bg-emerald-50/40 border-emerald-200'
+                    }`}>
+                      <Sparkles className={`w-8 h-8 mx-auto animate-pulse ${isAdminAutumnActive ? 'text-amber-500' : 'text-emerald-400'}`} />
+                      <p className={`text-xs font-bold ${isAdminAutumnActive ? 'text-stone-800' : 'text-slate-700'}`}>No cheers broadcasted yet.</p>
+                      <p className={`text-[11px] ${isAdminAutumnActive ? 'text-stone-500 font-medium' : 'text-slate-400'}`}>
                         Upload audio voice notes and video cheers here to motivate Bunny on her dashboard.
                       </p>
                     </div>
                   ) : (
                     <div className="space-y-3 max-h-[30rem] overflow-y-auto pr-1">
                       {cheerVault.map((item) => (
-                        <div key={item.id} className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 shadow-xs space-y-3">
+                        <div key={item.id} className={`border rounded-2xl p-4 shadow-xs space-y-3 ${
+                          isAdminAutumnActive ? 'bg-amber-50/70 border-amber-200/80' : 'bg-slate-50 border-slate-200/80'
+                        }`}>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2.5">
                               {item.fileType === 'audio' ? (
-                                <div className="p-2 bg-emerald-100 text-emerald-700 rounded-xl">
+                                <div className={`p-2 rounded-xl ${isAdminAutumnActive ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-700'}`}>
                                   <Music className="w-4 h-4" />
                                 </div>
                               ) : (
@@ -1922,7 +2103,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                                 </div>
                               )}
                               <div>
-                                <h4 className="text-xs font-bold text-slate-800">{item.title}</h4>
+                                <h4 className={`text-xs font-bold ${isAdminAutumnActive ? 'text-stone-900' : 'text-slate-800'}`}>{item.title}</h4>
                                 <span className="text-[9px] text-slate-400 uppercase font-mono font-bold">
                                   {item.fileType === 'audio' ? '🎵 Voice Note' : '🎬 Video Cheer'}
                                 </span>
@@ -1982,18 +2163,30 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
               <div className="lg:col-span-6 space-y-6">
                 
                 {/* Form 1: Daily Broadcaster Tip */}
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+                <section className={`rounded-[32px] p-6 shadow-sm ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <h3 className={`text-xs font-bold uppercase tracking-wider flex items-center justify-between mb-4 pb-2 border-b ${
+                    isAdminAutumnActive ? 'border-amber-200/80 text-stone-800' : 'border-slate-100 text-slate-400'
+                  }`}>
                     <span className="flex items-center space-x-2">
-                      <MessageSquare className="w-4 h-4 text-emerald-600" />
+                      <MessageSquare className={`w-4 h-4 ${isAdminAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
                       <span>Daily Tip Broadcast</span>
                     </span>
-                    <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-mono font-bold">Standalone</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-bold ${
+                      isAdminAutumnActive ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-50 text-emerald-700'
+                    }`}>Standalone</span>
                   </h3>
 
                   <form onSubmit={handleSaveDailyTip} className="space-y-4">
                     {tipSuccess && (
-                      <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold rounded-xl text-center">
+                      <div className={`p-3 border text-xs font-semibold rounded-xl text-center ${
+                        isAdminAutumnActive 
+                          ? 'bg-amber-50 border-amber-300 text-amber-950' 
+                          : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                      }`}>
                         ✨ Daily Tip broadcasted successfully!
                       </div>
                     )}
@@ -2007,7 +2200,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                         onChange={(e) => setDailyTip(e.target.value)}
                         placeholder="e.g., Do 20 extra pushups today!"
                         rows={2.5}
-                        className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-100 focus:border-emerald-300 focus:ring-1 focus:ring-emerald-300 rounded-2xl text-xs text-slate-800 placeholder-slate-400 outline-none transition-all font-sans"
+                        className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-100 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 rounded-2xl text-xs text-slate-800 placeholder-slate-400 outline-none transition-all font-sans"
                         id="admin-daily-tip-input"
                       />
                     </div>
@@ -2015,7 +2208,11 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                     <button
                       type="submit"
                       disabled={savingTip}
-                      className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold rounded-2xl transition-all flex items-center justify-center space-x-2 text-xs cursor-pointer shadow-xs"
+                      className={`w-full py-2.5 active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold rounded-2xl transition-all flex items-center justify-center space-x-2 text-xs cursor-pointer shadow-xs ${
+                        isAdminAutumnActive 
+                          ? 'bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600' 
+                          : 'bg-emerald-600 hover:bg-emerald-700'
+                      }`}
                       id="save-daily-tip-btn"
                     >
                       {savingTip ? (
@@ -2031,8 +2228,14 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                 </section>
 
                 {/* Form 2: Punishment & Penalty Settings */}
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm space-y-4">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between pb-2 border-b border-slate-100">
+                <section className={`rounded-[32px] p-6 shadow-sm space-y-4 ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <h3 className={`text-xs font-bold uppercase tracking-wider flex items-center justify-between pb-2 border-b ${
+                    isAdminAutumnActive ? 'border-amber-200/80 text-stone-800' : 'border-slate-100 text-slate-400'
+                  }`}>
                     <span className="flex items-center space-x-2">
                       <AlertOctagon className="w-4 h-4 text-rose-500" />
                       <span>Punishments & Ego Deflater</span>
@@ -2124,8 +2327,14 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
               <div className="lg:col-span-6 space-y-6">
                 
                 {/* Form 3: 3-Stage Psychological Quiz Questions */}
-                <section className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm space-y-4">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between pb-2 border-b border-slate-100">
+                <section className={`rounded-[32px] p-6 shadow-sm space-y-4 ${
+                  isAdminAutumnActive 
+                    ? 'bg-white/85 backdrop-blur-md border border-amber-200/90 shadow-amber-950/5' 
+                    : 'bg-white border border-slate-100'
+                }`}>
+                  <h3 className={`text-xs font-bold uppercase tracking-wider flex items-center justify-between pb-2 border-b ${
+                    isAdminAutumnActive ? 'border-amber-200/80 text-stone-800' : 'border-slate-100 text-slate-400'
+                  }`}>
                     <span className="flex items-center space-x-2">
                       <HelpCircle className="w-4 h-4 text-cyan-600" />
                       <span>3-Stage Quiz Questions</span>
