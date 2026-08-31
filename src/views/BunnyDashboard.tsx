@@ -504,17 +504,17 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
     return (
       <div className="space-y-4">
         {/* Month indicator banner */}
-        <div className={`flex items-center justify-between text-xs font-bold px-1 pb-2 border-b ${
-          isAutumnActive ? 'border-amber-200/80 text-stone-900' : 'border-emerald-100/70 text-slate-800'
+        <div className={`flex items-center justify-between text-xs sm:text-sm font-bold px-1 pb-2 border-b ${
+          isAutumnActive ? 'border-amber-300/80 text-stone-950' : 'border-emerald-200/80 text-slate-900'
         }`}>
-          <span className="font-extrabold tracking-wide flex items-center gap-1.5 text-sm">
+          <span className="font-black tracking-wide flex items-center gap-1.5 text-sm sm:text-base">
             <span>📅 {currentMonthName} {year}</span>
-            {month === 8 && <span className="text-amber-700 font-mono text-[11px] bg-amber-100/90 px-2 py-0.5 rounded-full border border-amber-300/80 font-bold">🍁 Fall Season</span>}
+            {month === 8 && <span className="text-amber-950 font-mono text-[11px] bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-400 font-extrabold shadow-xs">🍁 Fall Season</span>}
           </span>
-          <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full border ${
+          <span className={`text-[11px] sm:text-xs font-mono font-extrabold px-2.5 py-1 rounded-full border ${
             isAutumnActive 
-              ? 'text-amber-950 bg-amber-100/90 border-amber-300 shadow-xs' 
-              : 'text-emerald-700 bg-emerald-50 border-emerald-200'
+              ? 'text-amber-950 bg-amber-200/90 border-amber-400 shadow-xs' 
+              : 'text-emerald-900 bg-emerald-100 border-emerald-300'
           }`}>
             🔒 2-Day Lock Active
           </span>
@@ -522,15 +522,15 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
         {/* Header weekdays */}
         <div className={`grid grid-cols-7 text-center text-xs font-black font-mono tracking-wider ${
-          isAutumnActive ? 'text-stone-800' : 'text-emerald-800/80'
+          isAutumnActive ? 'text-stone-950' : 'text-emerald-950'
         }`}>
           {weekdays.map((wd, i) => (
-            <div key={i}>{wd}</div>
+            <div key={i} className="py-0.5">{wd}</div>
           ))}
         </div>
 
         {/* Days grid */}
-        <div className="grid grid-cols-7 gap-2.5 text-center">
+        <div className="grid grid-cols-7 gap-1.5 sm:gap-2.5 text-center">
           {daysArray.map((dateStr, idx) => {
             if (!dateStr) {
               return <div key={`empty-${idx}`} className="aspect-square" />;
@@ -544,8 +544,8 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
             const isLocked = isDayLocked(dateStr, montanaToday);
             const daysDiff = getDaysDifference(dateStr, montanaToday);
 
-            let bgClass = "bg-stone-50 text-stone-500";
-            let borderClass = "border border-stone-200";
+            let bgClass = "bg-stone-50/90 text-stone-700 font-bold";
+            let borderClass = "border border-stone-300";
             let clickHandler = undefined;
             let badgeText: string | null = null;
             let badgeClass = "";
@@ -553,56 +553,56 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
             if (log) {
               if (log.status === 'attended') {
                 if (isAutumnActive) {
-                  bgClass = "bg-gradient-to-br from-amber-100 to-orange-100 text-amber-950 font-black shadow-sm";
-                  borderClass = isLocked ? "border-2 border-amber-700" : "border-2 border-orange-500 shadow-orange-200/50";
+                  bgClass = "bg-gradient-to-br from-amber-200/95 to-orange-200/95 text-amber-950 font-black shadow-sm";
+                  borderClass = isLocked ? "border-2 border-amber-800" : "border-2 border-orange-600 shadow-orange-300/60";
                   badgeText = isLocked ? "🔒 Smashed" : "Smashed";
                   badgeClass = "text-amber-950 font-black";
                 } else {
                   if (isLocked) {
-                    bgClass = "bg-emerald-100 text-emerald-950 font-bold shadow-xs";
-                    borderClass = "border-2 border-emerald-600";
+                    bgClass = "bg-emerald-200 text-emerald-950 font-black shadow-xs";
+                    borderClass = "border-2 border-emerald-700";
                     badgeText = "🔒 Smashed";
-                    badgeClass = "text-emerald-800 font-extrabold";
+                    badgeClass = "text-emerald-950 font-extrabold";
                   } else {
-                    bgClass = "bg-emerald-50 text-emerald-900 font-bold";
-                    borderClass = "border-2 border-emerald-500 shadow-sm shadow-emerald-100";
+                    bgClass = "bg-emerald-100 text-emerald-950 font-black";
+                    borderClass = "border-2 border-emerald-600 shadow-sm shadow-emerald-200";
                     badgeText = "Smashed";
-                    badgeClass = "text-emerald-600 font-bold";
+                    badgeClass = "text-emerald-900 font-black";
                   }
                 }
               } else if (log.status === 'skipped') {
                 if (isLocked) {
-                  bgClass = "bg-rose-100 text-rose-950 font-bold shadow-xs";
-                  borderClass = "border-2 border-rose-600";
+                  bgClass = "bg-rose-200 text-rose-950 font-black shadow-xs";
+                  borderClass = "border-2 border-rose-700";
                   badgeText = "🔒 Skipped";
-                  badgeClass = "text-rose-800 font-extrabold";
+                  badgeClass = "text-rose-950 font-extrabold";
                 } else {
-                  bgClass = "bg-rose-50 text-rose-900 font-bold";
-                  borderClass = "border-2 border-rose-500 shadow-sm shadow-rose-100";
+                  bgClass = "bg-rose-100 text-rose-950 font-black";
+                  borderClass = "border-2 border-rose-600 shadow-sm shadow-rose-200";
                   badgeText = "Skipped";
-                  badgeClass = "text-rose-600 font-bold";
+                  badgeClass = "text-rose-900 font-black";
                 }
               }
             } else if (isFuture) {
               if (isTarget) {
                 bgClass = isAutumnActive 
-                  ? "bg-amber-50/40 text-stone-500 cursor-not-allowed" 
-                  : "bg-emerald-50/30 text-emerald-800/50 cursor-not-allowed";
+                  ? "bg-amber-50/70 text-stone-600 cursor-not-allowed" 
+                  : "bg-emerald-50/50 text-emerald-900/60 cursor-not-allowed";
                 borderClass = isAutumnActive 
-                  ? "border border-amber-300/60 border-dashed" 
-                  : "border border-emerald-200/50 border-dashed";
+                  ? "border border-amber-400 border-dashed" 
+                  : "border border-emerald-300 border-dashed";
               } else {
-                bgClass = "bg-amber-100/50 text-amber-950/70 cursor-not-allowed";
-                borderClass = "border border-amber-300/80 border-dashed";
+                bgClass = "bg-amber-100/70 text-amber-950 font-extrabold cursor-not-allowed";
+                borderClass = "border border-amber-400 border-dashed";
                 badgeText = "OFF 🟧";
-                badgeClass = "text-amber-950 bg-amber-200/80 px-1 py-0.5 rounded border border-amber-400 font-bold";
+                badgeClass = "text-amber-950 bg-amber-300/90 px-1 py-0.5 rounded border border-amber-500 font-extrabold";
               }
             } else if (isToday) {
               if (isTarget) {
                 bgClass = isAutumnActive
-                  ? "bg-gradient-to-r from-amber-600 to-orange-500 text-white font-black shadow-lg shadow-orange-300/60 animate-pulse"
-                  : "bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-200 animate-pulse";
-                borderClass = isAutumnActive ? "border-2 border-amber-600" : "border-2 border-emerald-500";
+                  ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white font-black shadow-lg shadow-orange-400/60 animate-pulse"
+                  : "bg-emerald-600 text-white font-black shadow-lg shadow-emerald-300 animate-pulse";
+                borderClass = isAutumnActive ? "border-2 border-amber-800" : "border-2 border-emerald-700";
                 clickHandler = () => {
                   setCheckInTargetDate(dateStr);
                   setIsQuizOpen(true);
@@ -610,48 +610,48 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                 badgeText = "Tap! 🔥";
                 badgeClass = "text-white font-black animate-bounce";
               } else {
-                bgClass = "bg-amber-100 text-amber-950 font-black shadow-sm";
-                borderClass = "border-2 border-amber-400";
+                bgClass = "bg-amber-200 text-amber-950 font-black shadow-sm";
+                borderClass = "border-2 border-amber-500";
                 badgeText = "OFF 🟧";
-                badgeClass = "text-amber-950 bg-amber-200 font-black px-1 py-0.5 rounded border border-amber-400";
+                badgeClass = "text-amber-950 bg-amber-300 font-black px-1 py-0.5 rounded border border-amber-500";
               }
             } else {
               // Past day with no log
               if (isLocked) {
                 // Older than 2 days -> PERMANENTLY LOCKED
                 if (isTarget) {
-                  bgClass = "bg-stone-100 text-stone-600 font-bold cursor-not-allowed select-none";
-                  borderClass = "border border-stone-300 border-dashed";
+                  bgClass = "bg-stone-200/90 text-stone-800 font-black cursor-not-allowed select-none";
+                  borderClass = "border border-stone-400 border-dashed";
                   badgeText = "🔒 Missed";
-                  badgeClass = "text-stone-800 bg-stone-200 px-1 py-0.5 rounded border border-stone-400 font-mono font-bold";
+                  badgeClass = "text-stone-950 bg-stone-300 px-1 py-0.5 rounded border border-stone-500 font-mono font-bold";
                 } else {
-                  bgClass = "bg-amber-50/60 text-amber-950/70";
-                  borderClass = "border border-amber-200";
+                  bgClass = "bg-amber-100/70 text-amber-950 font-black";
+                  borderClass = "border border-amber-300";
                   badgeText = "OFF 🟧";
-                  badgeClass = "text-amber-950 bg-amber-100 px-1 py-0.5 rounded border border-amber-300 font-bold";
+                  badgeClass = "text-amber-950 bg-amber-200 px-1 py-0.5 rounded border border-amber-400 font-black";
                 }
               } else {
                 // Past day within 2-day grace window (yesterday or 2 days ago)
                 if (isTarget) {
                   bgClass = isAutumnActive
-                    ? "bg-amber-100/70 hover:bg-amber-200/80 text-amber-950 font-bold cursor-pointer"
-                    : "bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 font-medium cursor-pointer";
+                    ? "bg-amber-100/90 hover:bg-amber-200 text-amber-950 font-black cursor-pointer shadow-xs"
+                    : "bg-emerald-100/80 hover:bg-emerald-200 text-emerald-950 font-black cursor-pointer shadow-xs";
                   borderClass = isAutumnActive
-                    ? "border-2 border-amber-400 hover:border-orange-500 border-dashed shadow-sm"
-                    : "border-2 border-emerald-300 hover:border-emerald-500 border-dashed shadow-xs";
+                    ? "border-2 border-amber-500 hover:border-orange-600 border-dashed shadow-sm"
+                    : "border-2 border-emerald-400 hover:border-emerald-600 border-dashed shadow-xs";
                   clickHandler = () => {
                     setCheckInTargetDate(dateStr);
                     setIsQuizOpen(true);
                   };
                   badgeText = daysDiff === 1 ? "Log (1d)" : "Log (2d)";
                   badgeClass = isAutumnActive
-                    ? "text-amber-950 font-black bg-amber-200 px-1 py-0.2 rounded border border-amber-400"
-                    : "text-emerald-700 font-extrabold bg-emerald-100 px-1 py-0.2 rounded border border-emerald-300";
+                    ? "text-amber-950 font-black bg-amber-300 px-1 py-0.5 rounded border border-amber-500"
+                    : "text-emerald-950 font-black bg-emerald-200 px-1 py-0.5 rounded border border-emerald-400";
                 } else {
-                  bgClass = "bg-amber-50/70 text-amber-950 font-bold";
-                  borderClass = "border border-amber-300";
+                  bgClass = "bg-amber-100/80 text-amber-950 font-black";
+                  borderClass = "border border-amber-400";
                   badgeText = "OFF 🟧";
-                  badgeClass = "text-amber-950 bg-amber-100 px-1 py-0.5 rounded border border-amber-300 font-bold";
+                  badgeClass = "text-amber-950 bg-amber-200 px-1 py-0.5 rounded border border-amber-400 font-black";
                 }
               }
             }
@@ -672,7 +672,7 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                 <span className="font-sans font-black text-xs sm:text-sm">{dayNum}</span>
                 
                 {badgeText && (
-                  <span className={`text-[7px] uppercase tracking-tighter mt-0.5 ${badgeClass}`}>
+                  <span className={`text-[8px] sm:text-[9px] font-black uppercase tracking-tight mt-0.5 ${badgeClass}`}>
                     {badgeText}
                   </span>
                 )}
@@ -716,13 +716,13 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
     const diff = maxW - minW || 10;
     
     return (
-      <div className={`rounded-[32px] p-6 shadow-sm flex flex-col h-60 transition-all backdrop-blur-md ${
+      <div className={`rounded-[32px] p-6 shadow-md flex flex-col h-60 transition-all ${
         isAutumnActive 
-          ? 'bg-white/80 border border-amber-200/90 shadow-amber-900/5' 
-          : 'bg-white border border-emerald-100'
+          ? 'bg-white/50 backdrop-blur-xs border border-white/70 shadow-lg shadow-amber-950/5' 
+          : 'bg-white/75 backdrop-blur-xs border border-emerald-100/80 shadow-sm'
       }`}>
         <h4 className={`text-xs font-black uppercase mb-4 tracking-widest ${
-          isAutumnActive ? 'text-amber-950 font-mono' : 'text-slate-500'
+          isAutumnActive ? 'text-stone-950 font-mono' : 'text-slate-800'
         }`}>Weight Analytics (Sunday Only)</h4>
         
         <div className="flex-1 flex items-end gap-3.5 px-2">
@@ -734,28 +734,28 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
             return (
               <div key={log.id} className="flex-1 flex flex-col items-center gap-1 h-full justify-end relative group">
-                <span className={`text-[10px] font-black transition-transform group-hover:scale-110 ${
-                  isAutumnActive ? 'text-amber-950' : 'text-emerald-800'
+                <span className={`text-[11px] font-black transition-transform group-hover:scale-110 ${
+                  isAutumnActive ? 'text-stone-950' : 'text-emerald-950'
                 }`}>
-                  {wVal} <span className="text-[8px] font-medium">lb</span>
+                  {wVal} <span className="text-[9px] font-bold">lb</span>
                 </span>
                 <div 
                   className={`w-full rounded-t-xl transition-all duration-500 ease-out ${
                     isAutumnActive
                       ? idx === displayData.length - 1
-                        ? 'bg-gradient-to-t from-orange-600 to-amber-500 shadow-lg shadow-orange-200'
+                        ? 'bg-gradient-to-t from-orange-600 to-amber-500 shadow-md shadow-orange-300'
                         : idx === displayData.length - 2
+                        ? 'bg-amber-500'
+                        : idx === displayData.length - 3
                         ? 'bg-amber-400'
-                        : idx === displayData.length - 3
-                        ? 'bg-amber-300'
-                        : 'bg-amber-200'
+                        : 'bg-amber-300'
                       : idx === displayData.length - 1 
-                        ? 'bg-emerald-500 shadow-lg shadow-emerald-100' 
+                        ? 'bg-emerald-600 shadow-md shadow-emerald-200' 
                         : idx === displayData.length - 2
-                        ? 'bg-emerald-300'
+                        ? 'bg-emerald-400'
                         : idx === displayData.length - 3
-                        ? 'bg-emerald-200'
-                        : 'bg-emerald-100'
+                        ? 'bg-emerald-300'
+                        : 'bg-emerald-200'
                   }`} 
                   style={{ height: `${heightPct}%` }} 
                 />
@@ -764,8 +764,8 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
           })}
         </div>
 
-        <div className={`mt-2 pt-2 border-t flex justify-between px-2 text-[9px] font-bold font-mono ${
-          isAutumnActive ? 'border-amber-100 text-stone-700' : 'border-slate-50 text-slate-500'
+        <div className={`mt-2 pt-2 border-t flex justify-between px-2 text-[10px] sm:text-xs font-black font-mono ${
+          isAutumnActive ? 'border-amber-200 text-stone-950' : 'border-slate-200 text-slate-900'
         }`}>
           {displayData.map((log) => {
             const isReal = !log.id.startsWith('mock');
@@ -847,11 +847,11 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
         </div>
       )}
 
-      {/* Elegant sticky header */}
-      <header className={`backdrop-blur-md px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 sticky top-0 z-30 shadow-sm transition-all duration-300 ${
+      {/* Elegant sticky liquid header */}
+      <header className={`px-4 sm:px-6 py-3.5 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 sticky top-0 z-30 shadow-sm transition-all duration-300 ${
         isAutumnActive 
-          ? 'bg-amber-50/90 border-b border-amber-200/80 shadow-amber-900/5' 
-          : 'bg-white/80 border-b border-emerald-100'
+          ? 'bg-white/55 backdrop-blur-xs border-b border-white/60 shadow-amber-900/5' 
+          : 'bg-white/80 backdrop-blur-xs border-b border-emerald-100'
       }`} id="app-header">
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg overflow-hidden shrink-0 border ${
@@ -862,34 +862,34 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
             <img src="/icon.svg" alt="Bunny Gym Icon" className="w-full h-full object-cover" />
           </div>
           <div>
-            <h1 className={`text-lg font-bold tracking-tight flex items-center gap-1.5 ${
-              isAutumnActive ? 'text-amber-950' : 'text-emerald-900'
+            <h1 className={`text-lg font-black tracking-tight flex items-center gap-1.5 ${
+              isAutumnActive ? 'text-stone-950' : 'text-emerald-950'
             }`}>
               <span>Bunny’s Gym Record</span>
               <span className="text-base" title="Bunny">🐰</span>
               {isAutumnActive && (
-                <span className="ml-1 text-[10px] font-mono font-bold bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded-full border border-amber-300/60 flex items-center gap-0.5">
+                <span className="ml-1 text-[11px] font-mono font-black bg-amber-200 text-amber-950 px-2.5 py-0.5 rounded-full border border-amber-400 flex items-center gap-0.5 shadow-xs">
                   🍁 Autumn Edition
                 </span>
               )}
             </h1>
-            <p className={`text-[10px] font-semibold uppercase tracking-widest ${
-              isAutumnActive ? 'text-amber-700' : 'text-emerald-600'
+            <p className={`text-[10px] font-extrabold uppercase tracking-widest ${
+              isAutumnActive ? 'text-stone-700' : 'text-emerald-700'
             }`}>Montana, USA | UTC-7</p>
           </div>
         </div>
         
         <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-end">
-          <div className={`text-right border-r pr-4 sm:pr-6 ${isAutumnActive ? 'border-amber-200' : 'border-emerald-100'}`}>
-            <p className={`text-[10px] font-extrabold uppercase tracking-wider ${isAutumnActive ? 'text-stone-700' : 'text-slate-500'}`}>Current Streak</p>
-            <p className={`text-lg sm:text-2xl font-black leading-none ${isAutumnActive ? 'text-amber-950' : 'text-emerald-600'}`}>
-              {profile.currentStreak || 0} <span className={`text-xs sm:text-sm font-bold ${isAutumnActive ? 'text-amber-700' : 'text-emerald-700'}`}>Days</span>
+          <div className={`text-right border-r pr-4 sm:pr-6 ${isAutumnActive ? 'border-amber-300' : 'border-emerald-200'}`}>
+            <p className={`text-[10px] font-black uppercase tracking-wider ${isAutumnActive ? 'text-stone-800' : 'text-slate-700'}`}>Current Streak</p>
+            <p className={`text-lg sm:text-2xl font-black leading-none ${isAutumnActive ? 'text-stone-950' : 'text-emerald-700'}`}>
+              {profile.currentStreak || 0} <span className={`text-xs sm:text-sm font-bold ${isAutumnActive ? 'text-amber-800' : 'text-emerald-800'}`}>Days</span>
             </p>
           </div>
           
-          <div className={`text-right border-r pr-4 sm:pr-6 ${isAutumnActive ? 'border-amber-200' : 'border-emerald-100'}`}>
-            <p className={`text-[10px] font-extrabold uppercase tracking-wider ${isAutumnActive ? 'text-stone-700' : 'text-slate-500'}`}>Highest Record</p>
-            <p className={`text-lg sm:text-2xl font-black leading-none ${isAutumnActive ? 'text-stone-900' : 'text-slate-700'}`}>
+          <div className={`text-right border-r pr-4 sm:pr-6 ${isAutumnActive ? 'border-amber-300' : 'border-emerald-200'}`}>
+            <p className={`text-[10px] font-black uppercase tracking-wider ${isAutumnActive ? 'text-stone-800' : 'text-slate-700'}`}>Highest Record</p>
+            <p className={`text-lg sm:text-2xl font-black leading-none ${isAutumnActive ? 'text-stone-950' : 'text-slate-900'}`}>
               {profile.highestStreak || 0} <span className="text-xs sm:text-sm font-black text-amber-600">★</span>
             </p>
           </div>
@@ -897,12 +897,12 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className={`w-10 h-10 rounded-full border-2 overflow-hidden flex items-center justify-center shadow-sm ${
-                isAutumnActive ? 'border-amber-500 bg-amber-100' : 'border-emerald-400 bg-emerald-50'
+                isAutumnActive ? 'border-amber-600 bg-amber-100' : 'border-emerald-500 bg-emerald-50'
               }`}>
                 {profile.photoUrl ? (
                   <img src={profile.photoUrl} alt="Bunny Profile" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 ) : (
-                  <UserIcon className={`w-5 h-5 ${isAutumnActive ? 'text-amber-700' : 'text-emerald-500'}`} />
+                  <UserIcon className={`w-5 h-5 ${isAutumnActive ? 'text-amber-800' : 'text-emerald-600'}`} />
                 )}
               </div>
               <span className={`absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full animate-pulse ${
@@ -914,8 +914,8 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
               onClick={handleLogoutClick}
               className={`p-2 rounded-xl transition-all cursor-pointer border ${
                 isAutumnActive 
-                  ? 'bg-amber-100/80 hover:bg-amber-200/80 text-stone-700 hover:text-rose-600 border-amber-300' 
-                  : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-500 hover:text-red-500 border-neutral-200'
+                  ? 'bg-white/80 hover:bg-amber-100 text-stone-800 hover:text-rose-600 border-amber-300' 
+                  : 'bg-neutral-50 hover:bg-neutral-100 text-neutral-600 hover:text-red-500 border-neutral-200'
               }`}
               id="dashboard-logout-btn"
               title="Sign Out"
@@ -947,24 +947,24 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                   isActive 
                     ? isAutumnActive
                       ? 'bg-gradient-to-r from-amber-700 to-orange-600 text-white shadow-lg shadow-orange-300/40'
-                      : 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' 
+                      : 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' 
                     : isAutumnActive
-                      ? 'bg-white/80 hover:bg-amber-100/80 text-stone-800 border border-amber-200/80'
-                      : 'bg-white hover:bg-emerald-50 text-slate-700 border border-emerald-100/40'
+                      ? 'bg-white/60 hover:bg-white/80 text-stone-950 border border-white/70 shadow-xs'
+                      : 'bg-white hover:bg-emerald-50 text-slate-800 border border-emerald-100'
                 }`}
               >
                 {isActive && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse hidden md:inline-block" />}
                 <tab.icon className="w-4 h-4 shrink-0" />
-                <span className="text-xs sm:text-sm">{tab.label}</span>
+                <span className="text-xs sm:text-sm font-extrabold">{tab.label}</span>
               </button>
             );
           })}
           
           <div className={`hidden md:block mt-auto p-4 rounded-3xl text-white overflow-hidden relative shadow-inner ${
-            isAutumnActive ? 'bg-gradient-to-br from-amber-950 to-stone-900 border border-amber-800/40' : 'bg-emerald-900'
+            isAutumnActive ? 'bg-stone-900/85 backdrop-blur-xs border border-amber-500/30' : 'bg-emerald-900'
           }`}>
-            <p className="text-[9px] opacity-75 font-bold uppercase tracking-widest mb-1 font-mono text-amber-200">Penguin Broadcaster</p>
-            <p className="text-xs italic leading-relaxed font-semibold">"{dailyTip || 'Keep grinding. No excuses!'}"</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest mb-1 font-mono text-amber-300">Penguin Broadcaster</p>
+            <p className="text-xs italic leading-relaxed font-bold text-amber-100">"{dailyTip || 'Keep grinding. No excuses!'}"</p>
             <div className={`absolute -right-4 -bottom-4 w-12 h-12 rounded-full blur-xl ${
               isAutumnActive ? 'bg-orange-600/40' : 'bg-emerald-700/50'
             }`}></div>
@@ -973,28 +973,28 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
         {/* Central Card Column: Middle (col-span-6) */}
         <section className="col-span-12 md:col-span-6 flex flex-col gap-6">
-          <div className={`rounded-[32px] p-6 shadow-sm flex-1 flex flex-col justify-between min-h-[480px] transition-all duration-300 backdrop-blur-md ${
+          <div className={`rounded-[32px] p-4 sm:p-6 shadow-md flex-1 flex flex-col justify-between min-h-[480px] transition-all duration-300 ${
             isAutumnActive 
-              ? 'bg-white/80 border border-amber-200/90 shadow-lg shadow-amber-950/5' 
-              : 'bg-white border border-emerald-100'
+              ? 'bg-white/50 backdrop-blur-xs border border-white/70 shadow-lg shadow-amber-950/5' 
+              : 'bg-white/80 backdrop-blur-xs border border-emerald-100'
           }`}>
             
             {activeTab === 'calendar' && (
               <div className="flex-1 flex flex-col justify-between space-y-6">
                 <div>
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className={`text-base font-extrabold flex items-center gap-2 ${
-                      isAutumnActive ? 'text-stone-900' : 'text-slate-800'
+                    <h2 className={`text-base font-black flex items-center gap-2 ${
+                      isAutumnActive ? 'text-stone-950' : 'text-slate-900'
                     }`}>
                       <CalendarIcon className={`w-5 h-5 ${isAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
-                      <span>Current Month <span className="text-stone-400 font-light">/ Calendar</span></span>
+                      <span>Current Month <span className="text-stone-500 font-semibold">/ Calendar</span></span>
                     </h2>
-                    <div className="flex gap-3 text-[10px] font-extrabold">
-                      <span className={`flex items-center gap-1.5 ${isAutumnActive ? 'text-amber-950' : 'text-emerald-700'}`}>
-                        <span className={`w-2 h-2 rounded-full ${isAutumnActive ? 'bg-orange-500' : 'bg-emerald-500'}`} /> Smashed
+                    <div className="flex gap-3 text-[11px] sm:text-xs font-black">
+                      <span className={`flex items-center gap-1.5 ${isAutumnActive ? 'text-amber-950' : 'text-emerald-800'}`}>
+                        <span className={`w-2 h-2 rounded-full ${isAutumnActive ? 'bg-orange-600' : 'bg-emerald-500'}`} /> Smashed
                       </span>
-                      <span className="flex items-center gap-1.5 text-rose-600">
-                        <span className="w-2 h-2 rounded-full bg-rose-500" /> Skipped
+                      <span className="flex items-center gap-1.5 text-rose-700">
+                        <span className="w-2 h-2 rounded-full bg-rose-600" /> Skipped
                       </span>
                     </div>
                   </div>
@@ -1003,20 +1003,20 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                   {!isTargetWorkoutDay(montanaToday) ? (
                     <div className={`p-4 mb-4 rounded-2xl flex items-center justify-between shadow-xs ${
                       isAutumnActive 
-                        ? 'bg-amber-100/90 border-2 border-amber-300 text-amber-950' 
-                        : 'bg-amber-50 border-2 border-amber-300 rounded-2xl text-amber-900'
+                        ? 'bg-amber-200/90 border-2 border-amber-400 text-amber-950' 
+                        : 'bg-amber-100 border-2 border-amber-300 rounded-2xl text-amber-950'
                     }`}>
                       <div className="space-y-0.5">
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-800 block">
+                        <span className="text-[11px] font-mono font-black uppercase tracking-widest text-amber-950 block">
                           SCHEDULED OFF DAY / REST DAY 🟧
                         </span>
-                        <p className="text-xs font-bold text-amber-950">
+                        <p className="text-xs font-black text-amber-950">
                           Today ({getMontanaDayOfWeek(montanaToday)}) is your rest day. Stretch, relax, and let your body recover!
                         </p>
                       </div>
                       <button 
                         disabled 
-                        className="px-3.5 py-2 bg-amber-200 text-amber-950 text-xs font-black rounded-xl cursor-not-allowed border border-amber-400 shrink-0"
+                        className="px-3.5 py-2 bg-amber-300 text-amber-950 text-xs font-black rounded-xl cursor-not-allowed border border-amber-500 shrink-0 shadow-xs"
                       >
                         REST DAY 🟧
                       </button>
@@ -1024,12 +1024,12 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                   ) : (
                     <div className={`p-4 mb-4 rounded-2xl flex items-center justify-between shadow-lg ${
                       isAutumnActive 
-                        ? 'bg-gradient-to-r from-amber-600 to-orange-500 text-white shadow-orange-200/50' 
-                        : 'bg-emerald-500 text-white shadow-emerald-200'
+                        ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-orange-300/50' 
+                        : 'bg-emerald-600 text-white shadow-emerald-300'
                     }`}>
                       <div>
-                        <span className={`text-[10px] font-mono font-bold uppercase tracking-widest block ${
-                          isAutumnActive ? 'text-amber-100' : 'text-emerald-100'
+                        <span className={`text-[11px] font-mono font-black uppercase tracking-widest block ${
+                          isAutumnActive ? 'text-amber-200' : 'text-emerald-200'
                         }`}>
                           TARGET GYM DAY 🟩 ({getMontanaDayOfWeek(montanaToday)})
                         </span>
@@ -1044,8 +1044,8 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                           onClick={() => setIsQuizOpen(true)}
                           className={`px-4 py-2 text-xs font-black rounded-xl cursor-pointer transition-all active:scale-95 shadow-sm shrink-0 ${
                             isAutumnActive 
-                              ? 'bg-white hover:bg-amber-50 text-amber-950 border border-amber-200' 
-                              : 'bg-white hover:bg-emerald-50 text-emerald-800 shadow-xs'
+                              ? 'bg-white hover:bg-amber-50 text-stone-950 border border-amber-300' 
+                              : 'bg-white hover:bg-emerald-50 text-emerald-900 shadow-xs'
                           }`}
                         >
                           I Went to Gym 🏋️‍♀️
@@ -1078,12 +1078,12 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                 {/* Target schedule visual indicator block */}
                 <div className={`p-4 rounded-2xl border flex flex-col sm:flex-row gap-3 items-center justify-between ${
                   isAutumnActive 
-                    ? 'bg-amber-50/80 border-amber-200/80 text-stone-900' 
-                    : 'bg-emerald-50/50 border-emerald-100 text-slate-800'
+                    ? 'bg-white/60 backdrop-blur-xs border-amber-300/80 text-stone-950' 
+                    : 'bg-emerald-50/70 border-emerald-200 text-slate-900'
                 }`}>
                   <div>
-                    <span className={`text-[10px] font-mono tracking-wider block uppercase font-extrabold ${
-                      isAutumnActive ? 'text-amber-900' : 'text-emerald-700/70'
+                    <span className={`text-[10px] font-mono tracking-wider block uppercase font-black ${
+                      isAutumnActive ? 'text-amber-950' : 'text-emerald-800'
                     }`}>
                       Target Gym Days (Strict)
                     </span>
@@ -1093,12 +1093,12 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                         return (
                           <span 
                             key={day}
-                            className={`text-[9px] font-black font-sans px-2 py-0.5 rounded-md ${
+                            className={`text-[10px] font-black font-sans px-2 py-0.5 rounded-md ${
                               isTarget 
                                 ? isAutumnActive
-                                  ? 'bg-amber-200/90 text-amber-950 border border-amber-400'
-                                  : 'bg-emerald-100 text-emerald-800 border border-emerald-200' 
-                                : 'bg-amber-100 text-amber-900 border border-amber-300'
+                                  ? 'bg-amber-200 text-amber-950 border border-amber-400 shadow-xs'
+                                  : 'bg-emerald-200 text-emerald-950 border border-emerald-300' 
+                                : 'bg-amber-100 text-amber-950 border border-amber-300'
                             }`}
                           >
                             {day} {!isTarget ? '🟧 OFF' : '🟩'}
@@ -1108,13 +1108,13 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className={`text-[10px] font-mono tracking-wider block uppercase font-extrabold ${
-                      isAutumnActive ? 'text-amber-900' : 'text-emerald-700/70'
+                    <span className={`text-[10px] font-mono tracking-wider block uppercase font-black ${
+                      isAutumnActive ? 'text-amber-950' : 'text-emerald-800'
                     }`}>
                       Current Streak Goal
                     </span>
                     <span className={`text-sm font-black block mt-1 ${
-                      isAutumnActive ? 'text-amber-950' : 'text-emerald-800'
+                      isAutumnActive ? 'text-stone-950' : 'text-emerald-900'
                     }`}>
                       🔥 {profile.currentStreak || 0} Target Days
                     </span>
@@ -1127,46 +1127,70 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
               <div className="space-y-6 flex-1 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-sans font-bold text-base text-neutral-950 flex items-center space-x-2">
-                      <Volume2 className="w-5 h-5 text-emerald-500" />
+                    <h3 className={`font-sans font-black text-base flex items-center space-x-2 ${
+                      isAutumnActive ? 'text-stone-950' : 'text-neutral-950'
+                    }`}>
+                      <Volume2 className={`w-5 h-5 ${isAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
                       <span>Cheer Box (Penguin's Audio & Video Vault)</span>
                     </h3>
-                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-mono font-bold px-2.5 py-1 rounded-full uppercase">
+                    <span className={`text-[10px] font-mono font-black px-2.5 py-1 rounded-full uppercase border ${
+                      isAutumnActive 
+                        ? 'bg-amber-200 text-amber-950 border-amber-300' 
+                        : 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                    }`}>
                       Zambia Support 🇿🇲
                     </span>
                   </div>
 
                   {cheerVault.length === 0 ? (
-                    <div className="text-center py-12 px-4 bg-emerald-50/50 rounded-2xl border border-dashed border-emerald-200 space-y-2">
-                      <Sparkles className="w-8 h-8 text-emerald-400 mx-auto animate-pulse" />
-                      <p className="text-xs font-bold text-slate-700">The Cheer Box is waiting for Penguin!</p>
-                      <p className="text-[11px] text-slate-400">
+                    <div className={`text-center py-12 px-4 rounded-2xl border border-dashed space-y-2 ${
+                      isAutumnActive 
+                        ? 'bg-white/60 border-amber-300/80 text-stone-950' 
+                        : 'bg-emerald-50/50 border-emerald-200 text-slate-700'
+                    }`}>
+                      <Sparkles className={`w-8 h-8 mx-auto animate-pulse ${
+                        isAutumnActive ? 'text-amber-600' : 'text-emerald-500'
+                      }`} />
+                      <p className="text-xs font-black">The Cheer Box is waiting for Penguin!</p>
+                      <p className={`text-[11px] font-semibold ${isAutumnActive ? 'text-stone-700' : 'text-slate-500'}`}>
                         Penguin will upload audio voice notes and video cheers from Zambia to motivate you!
                       </p>
                     </div>
                   ) : (
                     <div className="space-y-4 max-h-[28rem] overflow-y-auto pr-1">
                       {cheerVault.map((item) => (
-                        <div key={item.id} className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-xs space-y-3">
+                        <div key={item.id} className={`border rounded-2xl p-4 shadow-xs space-y-3 ${
+                          isAutumnActive 
+                            ? 'bg-white/70 border-amber-200 shadow-xs' 
+                            : 'bg-white border-slate-200/80'
+                        }`}>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2.5">
                               {item.fileType === 'audio' ? (
-                                <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-xl">
+                                <div className={`p-2.5 rounded-xl ${
+                                  isAutumnActive ? 'bg-amber-200 text-amber-900' : 'bg-emerald-100 text-emerald-700'
+                                }`}>
                                   <Volume2 className="w-4 h-4" />
                                 </div>
                               ) : (
-                                <div className="p-2.5 bg-teal-100 text-teal-700 rounded-xl">
+                                <div className={`p-2.5 rounded-xl ${
+                                  isAutumnActive ? 'bg-orange-200 text-orange-900' : 'bg-teal-100 text-teal-700'
+                                }`}>
                                   <Play className="w-4 h-4" />
                                 </div>
                               )}
                               <div>
-                                <h4 className="text-sm font-bold text-slate-900">{item.title}</h4>
-                                <span className="text-[10px] text-slate-400 uppercase font-mono font-bold">
+                                <h4 className="text-sm font-black text-stone-950">{item.title}</h4>
+                                <span className={`text-[10px] uppercase font-mono font-black ${
+                                  isAutumnActive ? 'text-stone-700' : 'text-slate-500'
+                                }`}>
                                   {item.fileType === 'audio' ? '🎵 Audio Voice Note' : '🎬 Video Cheer'}
                                 </span>
                               </div>
                             </div>
-                            <span className="text-[10px] font-mono text-slate-400">
+                            <span className={`text-[10px] font-mono font-bold ${
+                              isAutumnActive ? 'text-stone-700' : 'text-slate-500'
+                            }`}>
                               {new Date(item.createdAt).toLocaleDateString()}
                             </span>
                           </div>
@@ -1193,21 +1217,25 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
             {activeTab === 'weight' && (
               <div className="space-y-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-sans font-bold text-base text-neutral-950 flex items-center space-x-2 mb-4">
-                    <Scale className="w-5 h-5 text-emerald-500" />
+                  <h3 className={`font-sans font-black text-base flex items-center space-x-2 mb-4 ${
+                    isAutumnActive ? 'text-stone-950' : 'text-neutral-950'
+                  }`}>
+                    <Scale className={`w-5 h-5 ${isAutumnActive ? 'text-amber-700' : 'text-emerald-600'}`} />
                     <span>Sunday Weight Logging</span>
                   </h3>
 
                   <form onSubmit={handleWeightSubmit} className="space-y-4">
                     {weightError && (
-                      <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-500 text-xs font-semibold">
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs font-black">
                         {weightError}
                       </div>
                     )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-xs font-bold text-neutral-600 block uppercase">Weight (lbs)</label>
+                        <label className={`text-xs font-black block uppercase ${
+                          isAutumnActive ? 'text-stone-900' : 'text-neutral-700'
+                        }`}>Weight (lbs)</label>
                         <input
                           type="number"
                           step="0.1"
@@ -1215,19 +1243,29 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                           value={weightInput}
                           onChange={(e) => setWeightInput(e.target.value)}
                           placeholder="e.g. 145.2"
-                          className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 focus:border-emerald-500 focus:bg-white rounded-xl text-sm outline-none transition-all font-sans text-neutral-800"
+                          className={`w-full px-4 py-3 border rounded-xl text-sm font-black outline-none transition-all ${
+                            isAutumnActive 
+                              ? 'bg-white/80 border-amber-300 focus:border-amber-600 text-stone-950' 
+                              : 'bg-neutral-50 border-neutral-200 focus:border-emerald-500 focus:bg-white text-neutral-800'
+                          }`}
                           id="weight-value-input"
                         />
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-xs font-bold text-neutral-600 block uppercase">Log Date (Sunday Only)</label>
+                        <label className={`text-xs font-black block uppercase ${
+                          isAutumnActive ? 'text-stone-900' : 'text-neutral-700'
+                        }`}>Log Date (Sunday Only)</label>
                         <input
                           type="date"
                           required
                           value={weightDate}
                           onChange={(e) => setWeightDate(e.target.value)}
-                          className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 focus:border-emerald-500 focus:bg-white rounded-xl text-sm outline-none transition-all font-sans text-neutral-800"
+                          className={`w-full px-4 py-3 border rounded-xl text-sm font-black outline-none transition-all ${
+                            isAutumnActive 
+                              ? 'bg-white/80 border-amber-300 focus:border-amber-600 text-stone-950' 
+                              : 'bg-neutral-50 border-neutral-200 focus:border-emerald-500 focus:bg-white text-neutral-800'
+                          }`}
                           id="weight-date-input"
                         />
                       </div>
@@ -1236,7 +1274,11 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                     <button
                       type="submit"
                       disabled={weightLoading}
-                      className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-neutral-300 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-200 cursor-pointer flex items-center justify-center space-x-2 text-sm"
+                      className={`w-full py-3 text-white font-black rounded-xl transition-all shadow-md cursor-pointer flex items-center justify-center space-x-2 text-sm ${
+                        isAutumnActive 
+                          ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 shadow-orange-300/40' 
+                          : 'bg-emerald-600 hover:bg-emerald-700 disabled:bg-neutral-300 shadow-emerald-200'
+                      }`}
                       id="submit-weight-btn"
                     >
                       {weightLoading ? (
@@ -1248,33 +1290,45 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                   </form>
                 </div>
 
-                <div className="pt-4 border-t border-slate-100">
-                  <span className="text-xs font-bold text-neutral-400 block mb-3 uppercase tracking-wider">
+                <div className={`pt-4 border-t ${isAutumnActive ? 'border-amber-200' : 'border-slate-100'}`}>
+                  <span className={`text-xs font-black block mb-3 uppercase tracking-wider ${
+                    isAutumnActive ? 'text-stone-900' : 'text-neutral-500'
+                  }`}>
                     Weight Log History
                   </span>
 
                   {weightLogs.length === 0 ? (
-                    <p className="text-neutral-400 text-xs text-center py-6 font-medium">
+                    <p className={`text-xs text-center py-6 font-bold ${
+                      isAutumnActive ? 'text-stone-700' : 'text-neutral-400'
+                    }`}>
                       No weight records logged yet. Make sure to log every Sunday!
                     </p>
                   ) : (
-                    <div className="divide-y divide-neutral-100 max-h-44 overflow-y-auto pr-1">
+                    <div className={`divide-y max-h-44 overflow-y-auto pr-1 ${
+                      isAutumnActive ? 'divide-amber-200/60' : 'divide-neutral-100'
+                    }`}>
                       {weightLogs.map((log) => (
                         <div key={log.id} className="py-2.5 flex items-center justify-between">
                           <div className="flex items-center space-x-3">
-                            <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600">
+                            <div className={`p-2 rounded-xl ${
+                              isAutumnActive ? 'bg-amber-200 text-amber-900' : 'bg-emerald-50 text-emerald-600'
+                            }`}>
                               <Scale className="w-4 h-4" />
                             </div>
                             <div>
-                              <span className="text-sm font-extrabold text-neutral-800 block">
+                              <span className="text-sm font-black text-stone-950 block">
                                 {log.weight} lbs
                               </span>
-                              <span className="text-[10px] text-neutral-400 block font-mono">
+                              <span className={`text-[10px] block font-mono font-bold ${
+                                isAutumnActive ? 'text-stone-700' : 'text-neutral-500'
+                              }`}>
                                 Logged on {getMontanaDayOfWeek(log.dateStr)}, {log.dateStr}
                               </span>
                             </div>
                           </div>
-                          <span className="text-xs text-neutral-300 font-mono">
+                          <span className={`text-xs font-mono font-bold ${
+                            isAutumnActive ? 'text-stone-700' : 'text-neutral-400'
+                          }`}>
                             {log.loggedAt ? new Date(log.loggedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                           </span>
                         </div>
@@ -1288,24 +1342,42 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
             {activeTab === 'rewards' && (
               <div className="space-y-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-sans font-bold text-base text-neutral-950 flex items-center space-x-2 mb-4">
-                    <Trophy className="w-5 h-5 text-emerald-500" />
+                  <h3 className={`font-sans font-black text-base flex items-center space-x-2 mb-4 ${
+                    isAutumnActive ? 'text-stone-950' : 'text-neutral-950'
+                  }`}>
+                    <Trophy className={`w-5 h-5 ${isAutumnActive ? 'text-amber-700' : 'text-emerald-500'}`} />
                     <span>Achievements Vault</span>
                   </h3>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl text-center space-y-1">
+                    <div className={`p-4 rounded-2xl text-center space-y-1 border ${
+                      isAutumnActive 
+                        ? 'bg-amber-100/90 border-amber-300' 
+                        : 'bg-emerald-50/50 border-emerald-100'
+                    }`}>
                       <span className="text-2xl block">🔥</span>
-                      <span className="text-xs text-neutral-400 block uppercase font-mono">Current Streak</span>
-                      <span className="text-lg font-black text-emerald-800 block">
+                      <span className={`text-xs block uppercase font-mono font-bold ${
+                        isAutumnActive ? 'text-stone-800' : 'text-neutral-400'
+                      }`}>Current Streak</span>
+                      <span className={`text-lg font-black block ${
+                        isAutumnActive ? 'text-stone-950' : 'text-emerald-800'
+                      }`}>
                         {profile.currentStreak || 0} Days
                       </span>
                     </div>
 
-                    <div className="p-4 bg-teal-50/50 border border-teal-100 rounded-2xl text-center space-y-1">
+                    <div className={`p-4 rounded-2xl text-center space-y-1 border ${
+                      isAutumnActive 
+                        ? 'bg-orange-100/90 border-orange-300' 
+                        : 'bg-teal-50/50 border-teal-100'
+                    }`}>
                       <span className="text-2xl block">👑</span>
-                      <span className="text-xs text-neutral-400 block uppercase font-mono">All-Time High</span>
-                      <span className="text-lg font-black text-teal-800 block">
+                      <span className={`text-xs block uppercase font-mono font-bold ${
+                        isAutumnActive ? 'text-stone-800' : 'text-neutral-400'
+                      }`}>All-Time High</span>
+                      <span className={`text-lg font-black block ${
+                        isAutumnActive ? 'text-stone-950' : 'text-teal-800'
+                      }`}>
                         {profile.highestStreak || 0} Days
                       </span>
                     </div>
@@ -1313,7 +1385,9 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                 </div>
 
                 <div className="space-y-3.5">
-                  <span className="text-xs font-bold text-neutral-400 block uppercase tracking-wider">
+                  <span className={`text-xs font-black block uppercase tracking-wider ${
+                    isAutumnActive ? 'text-stone-900' : 'text-neutral-400'
+                  }`}>
                     Your Unlocked Badges
                   </span>
 
@@ -1330,16 +1404,20 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                           key={badge.name} 
                           className={`p-3 rounded-2xl border flex items-center space-x-4 transition-all ${
                             isUnlocked 
-                              ? 'bg-gradient-to-r from-emerald-50 to-teal-50/30 border-emerald-100 text-neutral-800' 
+                              ? isAutumnActive
+                                ? 'bg-amber-100/90 border-amber-300 text-stone-950'
+                                : 'bg-gradient-to-r from-emerald-50 to-teal-50/30 border-emerald-100 text-neutral-800' 
                               : 'bg-neutral-50/50 border-neutral-100 opacity-40'
                           }`}
                         >
                           <span className="text-2xl">{badge.icon}</span>
                           <div>
-                            <h4 className="text-sm font-extrabold text-neutral-900 leading-tight">
+                            <h4 className="text-sm font-black leading-tight text-stone-950">
                               {badge.name}
                             </h4>
-                            <p className="text-xs text-neutral-500 mt-0.5">{badge.desc}</p>
+                            <p className={`text-xs mt-0.5 font-bold ${
+                              isAutumnActive ? 'text-stone-700' : 'text-neutral-500'
+                            }`}>{badge.desc}</p>
                           </div>
                         </div>
                       );
@@ -1348,7 +1426,7 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                 </div>
 
                 {/* Themes Vault & Milestone Progression */}
-                <div className="pt-4 border-t border-slate-100">
+                <div className={`pt-4 border-t ${isAutumnActive ? 'border-amber-200' : 'border-slate-100'}`}>
                   <ThemesVault
                     profile={profile}
                     currentStreak={profile.currentStreak || 0}
@@ -1363,18 +1441,26 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
             {activeTab === 'settings' && (
               <div className="space-y-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-sans font-bold text-base text-neutral-950 flex items-center space-x-2 mb-4">
-                    <SettingsIcon className="w-5 h-5 text-emerald-500" />
+                  <h3 className={`font-sans font-black text-base flex items-center space-x-2 mb-4 ${
+                    isAutumnActive ? 'text-stone-950' : 'text-neutral-950'
+                  }`}>
+                    <SettingsIcon className={`w-5 h-5 ${isAutumnActive ? 'text-amber-700' : 'text-emerald-500'}`} />
                     <span>Gym Profile Configuration</span>
                   </h3>
 
-                  <div className="flex flex-col items-center justify-center p-4 border border-dashed border-neutral-200 rounded-2xl bg-neutral-50/50 space-y-3">
+                  <div className={`flex flex-col items-center justify-center p-4 border border-dashed rounded-2xl space-y-3 ${
+                    isAutumnActive 
+                      ? 'bg-white/60 border-amber-300' 
+                      : 'bg-neutral-50/50 border-neutral-200'
+                  }`}>
                     <div className="relative">
-                      <div className="w-20 h-20 rounded-full border-4 border-emerald-400 overflow-hidden bg-white flex items-center justify-center shadow-md">
+                      <div className={`w-20 h-20 rounded-full border-4 overflow-hidden bg-white flex items-center justify-center shadow-md ${
+                        isAutumnActive ? 'border-amber-500' : 'border-emerald-400'
+                      }`}>
                         {profile.photoUrl ? (
                           <img src={profile.photoUrl} alt="Bunny avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                         ) : (
-                          <UserIcon className="w-10 h-10 text-emerald-400" />
+                          <UserIcon className={`w-10 h-10 ${isAutumnActive ? 'text-amber-500' : 'text-emerald-400'}`} />
                         )}
                       </div>
                       {profileUploading && (
@@ -1384,7 +1470,11 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                       )}
                     </div>
 
-                    <label className="py-2 px-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 cursor-pointer transition-all active:scale-95 shadow-sm">
+                    <label className={`py-2 px-4 text-xs font-black rounded-xl border cursor-pointer transition-all active:scale-95 shadow-sm ${
+                      isAutumnActive 
+                        ? 'bg-amber-200 hover:bg-amber-300 text-amber-950 border-amber-400' 
+                        : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200'
+                    }`}>
                       <Upload className="w-3.5 h-3.5 inline-block mr-1.5" />
                       <span>Upload Profile Photo</span>
                       <input 
@@ -1399,11 +1489,13 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                         }}
                       />
                     </label>
-                    <span className="text-[10px] text-neutral-400">Pushed to Firebase Storage</span>
+                    <span className={`text-[10px] font-bold ${
+                      isAutumnActive ? 'text-stone-700' : 'text-neutral-400'
+                    }`}>Pushed to Firebase Storage</span>
                   </div>
                 </div>
 
-                <div className="space-y-4 pt-2 border-t border-slate-100">
+                <div className={`space-y-4 pt-2 border-t ${isAutumnActive ? 'border-amber-200' : 'border-slate-100'}`}>
                   <GymLocationPicker 
                     currentGymLocation={profile.gymLocation}
                     onSaveGymLocation={handleSaveGymLocation}

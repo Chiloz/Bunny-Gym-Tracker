@@ -96,12 +96,12 @@ export default function FallAutumnTreeBackground() {
       <div className="absolute inset-0 bg-gradient-to-b from-amber-200/45 via-orange-100/30 to-amber-50/50 pointer-events-none" />
       
       {/* Centered Sunbeam Radiance */}
-      <div className="absolute top-44 sm:top-20 md:top-10 left-1/2 -translate-x-1/2 w-[750px] sm:w-[950px] h-[550px] bg-radial from-amber-300/40 via-orange-200/20 to-transparent blur-3xl pointer-events-none" />
-      <div className="absolute top-52 sm:top-28 left-1/4 w-[450px] h-[450px] bg-radial from-yellow-200/35 via-orange-100/15 to-transparent blur-3xl pointer-events-none" />
-      <div className="absolute top-52 sm:top-28 right-1/4 w-[450px] h-[450px] bg-radial from-yellow-200/35 via-orange-100/15 to-transparent blur-3xl pointer-events-none" />
+      <div className="absolute top-60 sm:top-20 md:top-10 left-1/2 -translate-x-1/2 w-[750px] sm:w-[950px] h-[550px] bg-radial from-amber-300/40 via-orange-200/20 to-transparent blur-3xl pointer-events-none" />
+      <div className="absolute top-64 sm:top-28 left-1/4 w-[450px] h-[450px] bg-radial from-yellow-200/35 via-orange-100/15 to-transparent blur-3xl pointer-events-none" />
+      <div className="absolute top-64 sm:top-28 right-1/4 w-[450px] h-[450px] bg-radial from-yellow-200/35 via-orange-100/15 to-transparent blur-3xl pointer-events-none" />
 
       {/* 2. Majestic Centered Autumn Maple Tree (Dropped Down so Canopy is Fully Visible on Phone & Laptop) */}
-      <div className="absolute top-48 sm:top-28 md:top-16 lg:top-20 left-1/2 -translate-x-1/2 w-[98vw] sm:w-[92vw] max-w-[880px] h-[360px] sm:h-[460px] md:h-[560px] pointer-events-none opacity-95">
+      <div className="absolute top-64 sm:top-28 md:top-16 lg:top-20 left-1/2 -translate-x-1/2 w-[98vw] sm:w-[92vw] max-w-[880px] h-[380px] sm:h-[460px] md:h-[560px] pointer-events-none opacity-95">
         <svg 
           viewBox="0 0 800 550" 
           fill="none" 
