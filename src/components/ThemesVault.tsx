@@ -74,6 +74,15 @@ export const THEME_CONFIGS: ThemeConfig[] = [
     previewBorder: 'border-pink-300',
     previewBadge: 'bg-pink-100 text-pink-800',
     description: 'Sunday Jogging Day theme with running emojis & flowers.'
+  },
+  {
+    id: 'autumn',
+    name: 'September Fall Foliage 🍁',
+    minStreak: 0, // Unlocked for Fall Season
+    previewBg: 'bg-gradient-to-tr from-amber-600 via-orange-500 to-red-600',
+    previewBorder: 'border-amber-400',
+    previewBadge: 'bg-amber-100 text-amber-900',
+    description: 'Montana Autumn Harvest theme with falling leaves & golden maple aura.'
   }
 ];
 
@@ -156,7 +165,7 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
           {THEME_CONFIGS.map((theme) => {
-            const isUnlocked = currentStreak >= theme.minStreak || theme.id === 'emerald' || theme.id === 'pink_floral';
+            const isUnlocked = currentStreak >= theme.minStreak || theme.id === 'emerald' || theme.id === 'pink_floral' || theme.id === 'autumn';
             const isActive = activeTheme === theme.id;
 
             return (

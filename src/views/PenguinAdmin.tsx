@@ -3,11 +3,11 @@ import { motion } from 'motion/react';
 import { 
   Users, Scale, Award, ShieldAlert, CheckCircle2, XCircle, 
   Video, Music, Play, Upload, MessageSquare, AlertOctagon, 
-  Save, RefreshCw, Calendar as CalendarIcon, LogOut, HelpCircle, Sparkles, Download 
+  Save, RefreshCw, Calendar as CalendarIcon, LogOut, HelpCircle, Sparkles, Download, Trash2
 } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { 
-  doc, getDoc, setDoc, updateDoc, collection, query, 
+  doc, getDoc, setDoc, updateDoc, deleteDoc, collection, query, 
   where, getDocs, addDoc, onSnapshot, orderBy 
 } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -87,20 +87,23 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
   const [cheerSuccess, setCheerSuccess] = useState(false);
 
   // Media Gallery Filter State
-  const [mediaGalleryFilter, setMediaGalleryFilter] = useState<'all' | 'gym' | 'jog' | 'penalty'>('all');
+  const [mediaGalleryFilter, setMediaGalleryFilter] = useState<'all' | 'gym' | 'jog' | 'penalty' | 'cheer'>('all');
 
   // Aggregated Media List across all collections
   const allUploadedMedia = useMemo(() => {
     const items: {
       id: string;
-      source: 'gym_proof' | 'sunday_jog' | 'penalty';
+      rawId: string;
+      source: 'gym_proof' | 'sunday_jog' | 'penalty' | 'cheer_vault';
       categoryLabel: string;
       url: string;
       title: string;
       dateStr: string;
       uploadedAt: string;
-      fileType: 'image' | 'video';
+      fileType: 'image' | 'video' | 'audio';
       fileName?: string;
+      slotKey?: string;
+      nameKey?: string;
     }[] = [];
 
     // 1. Gym Spot-Check Proofs
@@ -108,6 +111,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
       if (gp.fileUrl) {
         items.push({
           id: `gym_${gp.id}`,
+          rawId: gp.id,
           source: 'gym_proof',
           categoryLabel: 'Gym Spot Check',
           url: gp.fileUrl,
@@ -125,6 +129,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
       if (jog.startUrl) {
         items.push({
           id: `jog_start_${jog.id}`,
+          rawId: jog.id,
           source: 'sunday_jog',
           categoryLabel: 'Sunday Jog (Start)',
           url: jog.startUrl,
@@ -132,12 +137,15 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
           dateStr: jog.dateStr,
           uploadedAt: jog.createdAt || jog.dateStr,
           fileType: 'video',
-          fileName: jog.startName || 'start_clip.mp4'
+          fileName: jog.startName || 'start_clip.mp4',
+          slotKey: 'startUrl',
+          nameKey: 'startName'
         });
       }
       if (jog.middleUrl) {
         items.push({
           id: `jog_mid_${jog.id}`,
+          rawId: jog.id,
           source: 'sunday_jog',
           categoryLabel: 'Sunday Jog (Mid)',
           url: jog.middleUrl,
@@ -145,12 +153,15 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
           dateStr: jog.dateStr,
           uploadedAt: jog.createdAt || jog.dateStr,
           fileType: 'video',
-          fileName: jog.middleName || 'midpoint_clip.mp4'
+          fileName: jog.middleName || 'midpoint_clip.mp4',
+          slotKey: 'middleUrl',
+          nameKey: 'middleName'
         });
       }
       if (jog.finishUrl) {
         items.push({
           id: `jog_finish_${jog.id}`,
+          rawId: jog.id,
           source: 'sunday_jog',
           categoryLabel: 'Sunday Jog (Finish)',
           url: jog.finishUrl,
@@ -158,7 +169,9 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
           dateStr: jog.dateStr,
           uploadedAt: jog.createdAt || jog.dateStr,
           fileType: 'video',
-          fileName: jog.finishName || 'finish_clip.mp4'
+          fileName: jog.finishName || 'finish_clip.mp4',
+          slotKey: 'finishUrl',
+          nameKey: 'finishName'
         });
       }
     });
@@ -180,6 +193,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
         if (url) {
           items.push({
             id: `penalty_${p.id}_${s.key}`,
+            rawId: p.id,
             source: 'penalty',
             categoryLabel: `Penalty (${s.label})`,
             url,
@@ -187,19 +201,40 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
             dateStr: p.dateStr || new Date(p.createdAt).toLocaleDateString(),
             uploadedAt: p.createdAt,
             fileType: 'video',
-            fileName: fileName || `${s.label}.mp4`
+            fileName: fileName || `${s.label}.mp4`,
+            slotKey: s.key,
+            nameKey: s.nameKey
           });
         }
       });
     });
 
+    // 4. Cheer Vault Broadcasts (Voice Notes & Video Clips)
+    cheerVault.forEach((c) => {
+      if (c.fileUrl) {
+        items.push({
+          id: `cheer_${c.id}`,
+          rawId: c.id,
+          source: 'cheer_vault',
+          categoryLabel: `Cheer Vault (${c.fileType === 'video' ? 'Video' : 'Audio'})`,
+          url: c.fileUrl,
+          title: `Cheer Broadcast: ${c.title}`,
+          dateStr: c.createdAt ? new Date(c.createdAt).toLocaleDateString() : 'Recent',
+          uploadedAt: c.createdAt || c.uploadedAt || new Date().toISOString(),
+          fileType: c.fileType === 'video' ? 'video' : (/\.(mp4|mov|webm|avi|3gp)/i.test(c.fileUrl) ? 'video' : 'audio'),
+          fileName: c.title
+        });
+      }
+    });
+
     return items.sort((a, b) => new Date(b.uploadedAt || 0).getTime() - new Date(a.uploadedAt || 0).getTime());
-  }, [gymProofs, sundayJogs, penalties]);
+  }, [gymProofs, sundayJogs, penalties, cheerVault]);
 
   const filteredMediaList = useMemo(() => {
     if (mediaGalleryFilter === 'gym') return allUploadedMedia.filter(m => m.source === 'gym_proof');
     if (mediaGalleryFilter === 'jog') return allUploadedMedia.filter(m => m.source === 'sunday_jog');
     if (mediaGalleryFilter === 'penalty') return allUploadedMedia.filter(m => m.source === 'penalty');
+    if (mediaGalleryFilter === 'cheer') return allUploadedMedia.filter(m => m.source === 'cheer_vault');
     return allUploadedMedia;
   }, [allUploadedMedia, mediaGalleryFilter]);
 
@@ -282,13 +317,23 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
       setGymProofs(list);
     });
 
-    // Listen for Cheer Vault uploads
-    const cheerVaultQuery = query(collection(db, 'cheer_vault'), orderBy('uploadedAt', 'desc'));
+    // Listen for Cheer Vault uploads (robust fetch without filtering out documents missing uploadedAt)
+    const cheerVaultQuery = collection(db, 'cheer_vault');
     const unsubCheerVault = onSnapshot(cheerVaultQuery, (snapshot) => {
       const list: CheerItem[] = [];
       snapshot.forEach(d => {
-        list.push({ id: d.id, ...d.data() } as CheerItem);
+        const data = d.data();
+        list.push({ 
+          id: d.id, 
+          title: data.title || 'Cheer Broadcast',
+          fileUrl: data.fileUrl || '',
+          fileType: data.fileType || 'video',
+          createdAt: data.createdAt || data.uploadedAt || new Date().toISOString(),
+          uploadedAt: data.uploadedAt || data.createdAt,
+          ...data 
+        } as CheerItem);
       });
+      list.sort((a, b) => new Date(b.createdAt || b.uploadedAt || 0).getTime() - new Date(a.createdAt || a.uploadedAt || 0).getTime());
       setCheerVault(list);
     });
 
@@ -510,6 +555,75 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
       }
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  // Handlers for deleting media items
+  const handleDeleteCheer = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this cheer broadcast? Bunny will no longer see it.")) return;
+    try {
+      await deleteDoc(doc(db, 'cheer_vault', id));
+      setManualPenaltySuccess("Cheer broadcast deleted successfully.");
+      setTimeout(() => setManualPenaltySuccess(''), 3000);
+    } catch (err: any) {
+      alert("Error deleting cheer: " + err.message);
+    }
+  };
+
+  const handleDeleteGymProof = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this gym spot-check proof record?")) return;
+    try {
+      await deleteDoc(doc(db, 'gym_proofs', id));
+      setManualPenaltySuccess("Gym proof record deleted successfully.");
+      setTimeout(() => setManualPenaltySuccess(''), 3000);
+    } catch (err: any) {
+      alert("Error deleting gym proof: " + err.message);
+    }
+  };
+
+  const handleDeleteSundayJog = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this Sunday jog submission?")) return;
+    try {
+      await deleteDoc(doc(db, 'sunday_jogs', id));
+      setManualPenaltySuccess("Sunday jog record deleted successfully.");
+      setTimeout(() => setManualPenaltySuccess(''), 3000);
+    } catch (err: any) {
+      alert("Error deleting jog record: " + err.message);
+    }
+  };
+
+  const handleDeletePenaltyVideo = async (penaltyId: string, slotKey?: string, nameKey?: string) => {
+    if (!window.confirm("Are you sure you want to remove this penalty video proof?")) return;
+    try {
+      if (slotKey) {
+        await updateDoc(doc(db, 'penalties', penaltyId), {
+          [slotKey]: null,
+          ...(nameKey ? { [nameKey]: null } : {})
+        });
+      } else {
+        await deleteDoc(doc(db, 'penalties', penaltyId));
+      }
+      setManualPenaltySuccess("Penalty video removed successfully.");
+      setTimeout(() => setManualPenaltySuccess(''), 3000);
+    } catch (err: any) {
+      alert("Error updating penalty: " + err.message);
+    }
+  };
+
+  const handleDeleteGenericMedia = async (item: {
+    rawId: string;
+    source: 'gym_proof' | 'sunday_jog' | 'penalty' | 'cheer_vault';
+    slotKey?: string;
+    nameKey?: string;
+  }) => {
+    if (item.source === 'cheer_vault') {
+      await handleDeleteCheer(item.rawId);
+    } else if (item.source === 'gym_proof') {
+      await handleDeleteGymProof(item.rawId);
+    } else if (item.source === 'sunday_jog') {
+      await handleDeleteSundayJog(item.rawId);
+    } else if (item.source === 'penalty') {
+      await handleDeletePenaltyVideo(item.rawId, item.slotKey, item.nameKey);
     }
   };
 
@@ -1166,6 +1280,17 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                   </button>
                   <button
                     type="button"
+                    onClick={() => setMediaGalleryFilter('cheer')}
+                    className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
+                      mediaGalleryFilter === 'cheer'
+                        ? 'bg-emerald-600 text-white shadow-xs'
+                        : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'
+                    }`}
+                  >
+                    Cheer Vault ({allUploadedMedia.filter(m => m.source === 'cheer_vault').length})
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => setMediaGalleryFilter('gym')}
                     className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
                       mediaGalleryFilter === 'gym'
@@ -1205,18 +1330,21 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                     <Video className="w-10 h-10 text-slate-300 mx-auto mb-3" />
                     <p className="text-sm font-bold text-slate-700">No media uploaded in this category yet.</p>
                     <p className="text-xs text-slate-400 mt-1">
-                      Photos and videos Bunny uploads from her phone will appear here with live streaming playback.
+                      Photos and videos Bunny uploads from her phone, plus Cheer Vault broadcasts, will appear here with live streaming playback.
                     </p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredMediaList.map((item) => {
                       const isVideo = item.fileType === 'video' || item.url.includes('video') || /\.(mp4|mov|webm|avi|m4v|3gp)/i.test(item.url) || item.url.includes('/video/upload/');
+                      const isAudio = item.fileType === 'audio' || item.url.includes('audio') || /\.(mp3|wav|ogg|m4a|aac)/i.test(item.url);
+
                       return (
                         <div key={item.id} className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-3 shadow-2xs flex flex-col justify-between">
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
                               <span className={`text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full ${
+                                item.source === 'cheer_vault' ? 'bg-emerald-100 text-emerald-900 border border-emerald-200' :
                                 item.source === 'gym_proof' ? 'bg-amber-100 text-amber-900 border border-amber-200' :
                                 item.source === 'sunday_jog' ? 'bg-pink-100 text-pink-900 border border-pink-200' :
                                 'bg-rose-100 text-rose-900 border border-rose-200'
@@ -1233,7 +1361,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                               {item.fileName && <p className="text-[10px] text-slate-400 font-mono truncate">{item.fileName}</p>}
                             </div>
 
-                            {/* Video Player or Image Viewer */}
+                            {/* Video / Audio Player or Image Viewer */}
                             <div className="rounded-xl overflow-hidden bg-black aspect-video flex items-center justify-center">
                               {isVideo ? (
                                 <video 
@@ -1244,6 +1372,13 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                                   className="w-full h-full object-contain"
                                   id={`admin-media-video-${item.id}`}
                                 />
+                              ) : isAudio ? (
+                                <div className="p-4 flex flex-col items-center justify-center text-emerald-400 space-y-2 w-full">
+                                  <Music className="w-8 h-8" />
+                                  <audio controls className="w-full max-w-[220px]">
+                                    <source src={item.url} />
+                                  </audio>
+                                </div>
                               ) : (
                                 <img 
                                   src={item.url} 
@@ -1255,16 +1390,27 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                             </div>
                           </div>
 
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                            className="w-full py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center justify-center space-x-1.5 transition-all shadow-2xs cursor-pointer active:scale-95"
-                          >
-                            <Download className="w-3.5 h-3.5 text-slate-500" />
-                            <span>Download File</span>
-                          </a>
+                          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/60">
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              download
+                              className="py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center justify-center space-x-1.5 transition-all shadow-2xs cursor-pointer active:scale-95"
+                            >
+                              <Download className="w-3.5 h-3.5 text-slate-500" />
+                              <span>Download</span>
+                            </a>
+
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteGenericMedia(item)}
+                              className="py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold rounded-xl flex items-center justify-center space-x-1.5 transition-all shadow-2xs cursor-pointer active:scale-95"
+                            >
+                              <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                              <span>Delete</span>
+                            </button>
+                          </div>
                         </div>
                       );
                     })}
@@ -1798,6 +1944,27 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                               Your browser does not support video playback.
                             </video>
                           )}
+
+                          <div className="flex items-center justify-between pt-2 border-t border-slate-200/60">
+                            <a
+                              href={item.fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              download
+                              className="text-[11px] font-bold text-slate-600 hover:text-slate-800 flex items-center space-x-1"
+                            >
+                              <Download className="w-3.5 h-3.5 text-slate-400" />
+                              <span>Download</span>
+                            </a>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteCheer(item.id)}
+                              className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[11px] font-bold flex items-center space-x-1 transition-all cursor-pointer active:scale-95"
+                            >
+                              <Trash2 className="w-3 h-3 text-rose-500" />
+                              <span>Delete Broadcast</span>
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>

@@ -82,3 +82,35 @@ export function formatMontanaTime(date = new Date()): string {
     timeStyle: 'short',
   }).format(date);
 }
+
+/**
+ * Calculates calendar days difference between two YYYY-MM-DD date strings
+ * (referenceDateStr minus targetDateStr in days).
+ * Positive if targetDateStr is in the past compared to referenceDateStr.
+ */
+export function getDaysDifference(targetDateStr: string, referenceDateStr: string): number {
+  const target = new Date(`${targetDateStr}T12:00:00`);
+  const ref = new Date(`${referenceDateStr}T12:00:00`);
+  if (isNaN(target.getTime()) || isNaN(ref.getTime())) return 0;
+  const diffTime = ref.getTime() - target.getTime();
+  return Math.round(diffTime / (1000 * 60 * 60 * 24));
+}
+
+/**
+ * Returns true if a past day is past the 2-day logging grace period and is permanently locked.
+ * (e.g. today is day 0, yesterday is day 1, 2 days ago is day 2. Anything 3+ days in the past is locked).
+ */
+export function isDayLocked(dateStr: string, todayStr: string): boolean {
+  if (dateStr >= todayStr) return false;
+  const diff = getDaysDifference(dateStr, todayStr);
+  return diff > 2;
+}
+
+/**
+ * Checks if a date falls in September (Montana Fall / Autumn kick-off season).
+ */
+export function isSeptemberOrFall(dateStr?: string): boolean {
+  const dateToCheck = dateStr || getMontanaDate();
+  // Month 09 is September (Autumn in Montana)
+  return dateToCheck.includes('-09-') || dateToCheck.includes('-10-') || dateToCheck.includes('-11-');
+}

@@ -1,6 +1,6 @@
 export type UserRole = 'admin' | 'user';
 
-export type AppTheme = 'emerald' | 'silver' | 'crystal' | 'sunrise' | 'gold' | 'pink_floral';
+export type AppTheme = 'emerald' | 'silver' | 'crystal' | 'sunrise' | 'gold' | 'pink_floral' | 'autumn';
 
 export interface GymLocation {
   lat: number;
@@ -106,4 +106,5 @@ export interface CheerItem {
   fileUrl: string;
   fileType: 'audio' | 'video';
   createdAt: string;
+  uploadedAt?: string;
 }

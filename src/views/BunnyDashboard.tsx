@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   Calendar as CalendarIcon, Scale, Trophy, Settings as SettingsIcon, 
   Dumbbell, Flame, Sparkles, LogOut, CheckCircle2, AlertTriangle, 
-  HelpCircle, User as UserIcon, Upload, ArrowRight, Play, Volume2
+  HelpCircle, User as UserIcon, Upload, ArrowRight, Play, Volume2, Lock
 } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { 
@@ -17,12 +17,14 @@ import {
 } from '../types';
 import { 
   getMontanaDate, getMontanaDayOfWeek, isTargetWorkoutDay, 
-  isRestDay, getPastTargetDates, getDateRange, formatMontanaTime 
+  isRestDay, getPastTargetDates, getDateRange, formatMontanaTime,
+  isDayLocked, isSeptemberOrFall, getDaysDifference 
 } from '../lib/time';
 import { getRandomPenaltyTask } from '../lib/penalties';
 
 // Component Imports
 import BouncingBunnies from '../components/BouncingBunnies';
+import FallAutumnTreeBackground from '../components/FallAutumnTreeBackground';
 import QuizModal from '../components/QuizModal';
 import EgoDeflaterModal from '../components/EgoDeflaterModal';
 import PenaltyBox from '../components/PenaltyBox';
@@ -116,7 +118,13 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
   const montanaToday = getMontanaDate();
   const isSunday = getMontanaDayOfWeek(montanaToday) === 'Sunday' || new Date().getDay() === 0;
-  const currentTheme = isSunday ? 'pink_floral' : activeTheme;
+  const isFallSeason = isSeptemberOrFall(montanaToday);
+  // In September / Fall season, default active theme to 'autumn' unless explicitly chosen otherwise
+  const currentTheme = isSunday 
+    ? 'pink_floral' 
+    : (activeTheme === 'emerald' && isFallSeason)
+      ? 'autumn'
+      : activeTheme;
 
   useEffect(() => {
     if (!profile.uid) return;
@@ -151,12 +159,21 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
     // Real-time listener for Cheer Vault
     const cheerColRef = collection(db, 'cheer_vault');
-    const qCheer = query(cheerColRef, orderBy('createdAt', 'desc'));
-    const unsubCheer = onSnapshot(qCheer, (snapshot) => {
+    const unsubCheer = onSnapshot(cheerColRef, (snapshot) => {
       const items: CheerItem[] = [];
       snapshot.forEach((doc) => {
-        items.push({ id: doc.id, ...doc.data() } as CheerItem);
+        const data = doc.data();
+        items.push({ 
+          id: doc.id, 
+          title: data.title || 'Cheer Broadcast',
+          fileUrl: data.fileUrl || '',
+          fileType: data.fileType || 'video',
+          createdAt: data.createdAt || data.uploadedAt || new Date().toISOString(),
+          uploadedAt: data.uploadedAt || data.createdAt,
+          ...data 
+        } as CheerItem);
       });
+      items.sort((a, b) => new Date(b.createdAt || b.uploadedAt || 0).getTime() - new Date(a.createdAt || a.uploadedAt || 0).getTime());
       setCheerVault(items);
     });
 
@@ -456,9 +473,16 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
   // Build the calendar days of the current month
   const renderCalendarDays = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth(); // 0-indexed
+    // Respect Montana local date/year/month
+    const montanaParts = montanaToday.split('-');
+    const year = parseInt(montanaParts[0], 10) || new Date().getFullYear();
+    const month = (parseInt(montanaParts[1], 10) - 1); // 0-indexed month
+
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const currentMonthName = monthNames[month] || 'Current Month';
 
     // Days in this month
     const totalDays = new Date(year, month + 1, 0).getDate();
@@ -479,6 +503,17 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
 
     return (
       <div className="space-y-4">
+        {/* Month indicator banner */}
+        <div className="flex items-center justify-between text-xs font-bold px-1 pb-1 border-b border-emerald-100/70">
+          <span className="font-extrabold text-slate-800 tracking-wide flex items-center gap-1.5">
+            <span>📅 {currentMonthName} {year}</span>
+            {month === 8 && <span className="text-amber-600 font-mono text-[11px]">🍁 Fall Season</span>}
+          </span>
+          <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+            🔒 2-Day Lock Active
+          </span>
+        </div>
+
         {/* Header weekdays */}
         <div className="grid grid-cols-7 text-center text-xs font-bold text-emerald-800/60 font-mono tracking-wider">
           {weekdays.map((wd, i) => (
@@ -498,18 +533,40 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
             const log = workoutLogs[dateStr];
             const isTarget = isTargetWorkoutDay(dateStr);
             const isFuture = dateStr > montanaToday;
+            const isLocked = isDayLocked(dateStr, montanaToday);
+            const daysDiff = getDaysDifference(dateStr, montanaToday);
 
             let bgClass = "bg-neutral-50 text-neutral-400";
             let borderClass = "border border-neutral-100";
             let clickHandler = undefined;
+            let badgeText: string | null = null;
+            let badgeClass = "";
 
             if (log) {
               if (log.status === 'attended') {
-                bgClass = "bg-emerald-50 text-emerald-900 font-bold";
-                borderClass = "border-2 border-emerald-500 shadow-sm shadow-emerald-100";
+                if (isLocked) {
+                  bgClass = "bg-emerald-100 text-emerald-950 font-bold shadow-xs";
+                  borderClass = "border-2 border-emerald-600";
+                  badgeText = "🔒 Smashed";
+                  badgeClass = "text-emerald-800 font-extrabold";
+                } else {
+                  bgClass = "bg-emerald-50 text-emerald-900 font-bold";
+                  borderClass = "border-2 border-emerald-500 shadow-sm shadow-emerald-100";
+                  badgeText = "Smashed";
+                  badgeClass = "text-emerald-600 font-bold";
+                }
               } else if (log.status === 'skipped') {
-                bgClass = "bg-rose-50 text-rose-900 font-bold";
-                borderClass = "border-2 border-rose-500 shadow-sm shadow-rose-100";
+                if (isLocked) {
+                  bgClass = "bg-rose-100 text-rose-950 font-bold shadow-xs";
+                  borderClass = "border-2 border-rose-600";
+                  badgeText = "🔒 Skipped";
+                  badgeClass = "text-rose-800 font-extrabold";
+                } else {
+                  bgClass = "bg-rose-50 text-rose-900 font-bold";
+                  borderClass = "border-2 border-rose-500 shadow-sm shadow-rose-100";
+                  badgeText = "Skipped";
+                  badgeClass = "text-rose-600 font-bold";
+                }
               }
             } else if (isFuture) {
               if (isTarget) {
@@ -518,6 +575,8 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
               } else {
                 bgClass = "bg-amber-50/40 text-amber-700/60 cursor-not-allowed";
                 borderClass = "border border-amber-200/60 border-dashed";
+                badgeText = "OFF 🟧";
+                badgeClass = "text-amber-700 bg-amber-100/80 px-1 py-0.5 rounded border border-amber-300/80";
               }
             } else if (isToday) {
               if (isTarget) {
@@ -527,22 +586,46 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                   setCheckInTargetDate(dateStr);
                   setIsQuizOpen(true);
                 };
+                badgeText = "Tap! 🔥";
+                badgeClass = "text-white font-black animate-bounce";
               } else {
                 bgClass = "bg-amber-100/90 text-amber-900 font-bold shadow-xs";
                 borderClass = "border-2 border-amber-400";
+                badgeText = "OFF 🟧";
+                badgeClass = "text-amber-800 bg-amber-200/70 px-1 py-0.5 rounded border border-amber-400/80";
               }
             } else {
               // Past day with no log
-              if (isTarget) {
-                bgClass = "bg-emerald-50/40 hover:bg-emerald-100 text-emerald-900 font-medium cursor-pointer";
-                borderClass = "border border-emerald-200/80 border-dashed hover:border-emerald-400";
-                clickHandler = () => {
-                  setCheckInTargetDate(dateStr);
-                  setIsQuizOpen(true);
-                };
+              if (isLocked) {
+                // Older than 2 days -> PERMANENTLY LOCKED
+                if (isTarget) {
+                  bgClass = "bg-slate-100/90 text-slate-400 font-medium cursor-not-allowed select-none opacity-85";
+                  borderClass = "border border-slate-300 border-dashed";
+                  badgeText = "🔒 Missed";
+                  badgeClass = "text-slate-500 bg-slate-200/80 px-1 py-0.5 rounded border border-slate-300 font-mono";
+                } else {
+                  bgClass = "bg-amber-50/50 text-amber-900/60";
+                  borderClass = "border border-amber-200/60";
+                  badgeText = "OFF 🟧";
+                  badgeClass = "text-amber-700 bg-amber-100/80 px-1 py-0.5 rounded border border-amber-300/80";
+                }
               } else {
-                bgClass = "bg-amber-50/60 text-amber-900 font-medium";
-                borderClass = "border border-amber-200/80";
+                // Past day within 2-day grace window (yesterday or 2 days ago)
+                if (isTarget) {
+                  bgClass = "bg-emerald-50/70 hover:bg-emerald-100 text-emerald-900 font-medium cursor-pointer";
+                  borderClass = "border-2 border-emerald-300 hover:border-emerald-500 border-dashed shadow-xs";
+                  clickHandler = () => {
+                    setCheckInTargetDate(dateStr);
+                    setIsQuizOpen(true);
+                  };
+                  badgeText = daysDiff === 1 ? "Log (1d)" : "Log (2d)";
+                  badgeClass = "text-emerald-700 font-extrabold bg-emerald-100 px-1 py-0.2 rounded border border-emerald-300";
+                } else {
+                  bgClass = "bg-amber-50/60 text-amber-900 font-medium";
+                  borderClass = "border border-amber-200/80";
+                  badgeText = "OFF 🟧";
+                  badgeClass = "text-amber-700 bg-amber-100/80 px-1 py-0.5 rounded border border-amber-300/80";
+                }
               }
             }
 
@@ -553,23 +636,18 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
                 onClick={clickHandler}
                 disabled={!clickHandler}
                 className={`aspect-square rounded-2xl flex flex-col items-center justify-center relative text-sm select-none transition-all ${bgClass} ${borderClass} ${clickHandler ? 'cursor-pointer hover:scale-105 hover:shadow-md' : 'cursor-default'}`}
+                title={
+                  isLocked && !log && isTarget 
+                    ? `Locked: ${dateStr} is past the 2-day logging grace period.` 
+                    : undefined
+                }
               >
                 <span className="font-sans font-black text-xs sm:text-sm">{dayNum}</span>
                 
-                {isTarget && !log && !isFuture && !isToday && (
-                  <span className="text-[7px] font-bold text-emerald-700/80 uppercase tracking-tighter">Log +</span>
-                )}
-                {log?.status === 'attended' && (
-                  <span className="text-[7px] font-bold text-emerald-600 uppercase tracking-tighter">Smashed</span>
-                )}
-                {log?.status === 'skipped' && isTarget && (
-                  <span className="text-[7px] font-bold text-rose-600 uppercase tracking-tighter font-mono">Skipped</span>
-                )}
-                {!isTarget && (
-                  <span className="text-[7px] font-bold text-amber-700 uppercase tracking-tighter bg-amber-100/80 px-1 py-0.5 rounded border border-amber-300/80 mt-0.5">OFF 🟧</span>
-                )}
-                {isToday && isTarget && !log && (
-                  <span className="text-[8px] font-black text-white uppercase tracking-wider animate-bounce mt-0.5">Tap!</span>
+                {badgeText && (
+                  <span className={`text-[7px] uppercase tracking-tighter mt-0.5 ${badgeClass}`}>
+                    {badgeText}
+                  </span>
                 )}
               </motion.button>
             );
@@ -676,6 +754,7 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
     sunrise: 'bg-gradient-to-br from-amber-950 via-slate-900 to-yellow-950 text-amber-50',
     gold: 'bg-gradient-to-br from-yellow-950 via-amber-900 to-slate-950 text-amber-100',
     pink_floral: 'bg-gradient-to-br from-pink-50 via-rose-50/60 to-pink-100/50 text-slate-850',
+    autumn: 'bg-gradient-to-br from-amber-50/90 via-orange-50/50 to-stone-100 text-stone-900',
   };
 
   return (
@@ -686,6 +765,11 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
         isOpen={showGreetingModal} 
         onClose={() => setShowGreetingModal(false)} 
       />
+
+      {/* Fall / Autumn Tree with Smoothly Dropping Leaves Background */}
+      {(currentTheme === 'autumn' || isFallSeason) && !isSunday && (
+        <FallAutumnTreeBackground />
+      )}
 
       {/* Top Preview Banner when viewed from Admin */}
       {isPreviewMode && (
