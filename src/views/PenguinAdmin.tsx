@@ -877,10 +877,10 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                       handleToggleWorkoutStatus(selectedDateModal, 'skipped');
                       setSelectedDateModal(null);
                     }}
-                    className="w-full py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-xs"
+                    className="w-full py-3 px-4 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs sm:text-sm rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-xs border border-rose-700"
                   >
-                    <XCircle className="w-4 h-4" />
-                    <span>Mark as Skipped 🔴 & Issue Penalty</span>
+                    <XCircle className="w-4 h-4 shrink-0" />
+                    <span className="whitespace-nowrap">Mark as Skipped 🔴 & Issue Penalty</span>
                   </button>
 
                   <button
@@ -888,14 +888,14 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                       handleToggleWorkoutStatus(selectedDateModal, 'attended');
                       setSelectedDateModal(null);
                     }}
-                    className={`w-full py-2.5 px-4 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-xs ${
+                    className={`w-full py-3 px-4 text-white font-black text-xs sm:text-sm rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-xs border ${
                       isAdminAutumnActive 
-                        ? 'bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600' 
-                        : 'bg-emerald-600 hover:bg-emerald-700'
+                        ? 'bg-gradient-to-r from-amber-800 to-orange-600 hover:from-amber-900 hover:to-orange-700 border-amber-900/50' 
+                        : 'bg-emerald-600 hover:bg-emerald-700 border-emerald-700'
                     }`}
                   >
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Mark as Attended 🟢</span>
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span className="whitespace-nowrap">Mark as Attended 🟢</span>
                   </button>
 
                   <button
@@ -904,10 +904,10 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                       setSelectedDateModal(null);
                       openIssuePenaltyModal(d);
                     }}
-                    className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-xs"
+                    className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-700 text-white font-black text-xs sm:text-sm rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-xs border border-amber-700"
                   >
-                    <AlertOctagon className="w-4 h-4" />
-                    <span>Issue Penalty for {selectedDateModal}</span>
+                    <AlertOctagon className="w-4 h-4 shrink-0" />
+                    <span className="whitespace-nowrap">Issue Penalty for {selectedDateModal}</span>
                   </button>
                 </div>
               </div>
@@ -1132,42 +1132,42 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-12 gap-6 relative z-10" id="penguin-admin-body">
         
         {/* Left Section Navigation Sidebar */}
-        <nav className="col-span-12 md:col-span-3 lg:col-span-2 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0" id="admin-sidebar-nav">
+        <nav className="col-span-12 md:col-span-3 lg:col-span-2 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 scrollbar-none" id="admin-sidebar-nav">
           {[
             { 
               id: 'monitor', 
               label: 'Live Monitor', 
               icon: CalendarIcon, 
               badge: bunnyProfile?.currentStreak ? `${bunnyProfile.currentStreak}d` : null,
-              color: isAdminAutumnActive ? 'text-amber-700' : 'text-emerald-500'
+              color: isAdminAutumnActive ? 'text-amber-800' : 'text-emerald-700'
             },
             { 
               id: 'media', 
               label: 'Media Vault', 
               icon: Video, 
               badge: allUploadedMedia.length > 0 ? `${allUploadedMedia.length}` : null,
-              color: 'text-cyan-500'
+              color: isAdminAutumnActive ? 'text-amber-800' : 'text-teal-700'
             },
             { 
               id: 'penalties', 
               label: 'Penalties Box', 
               icon: AlertOctagon, 
               badge: penalties.filter(p => p.status !== 'cleared').length > 0 ? `! ${penalties.filter(p => p.status !== 'cleared').length}` : null,
-              color: 'text-rose-500'
+              color: 'text-rose-600'
             },
             { 
               id: 'cheer', 
               label: 'Cheer Vault', 
               icon: Music, 
               badge: 'Zambia 🇿🇲',
-              color: 'text-amber-500'
+              color: isAdminAutumnActive ? 'text-amber-900' : 'text-amber-700'
             },
             { 
               id: 'broadcaster', 
               label: 'Broadcaster', 
               icon: Sparkles, 
               badge: 'Config',
-              color: 'text-purple-500'
+              color: isAdminAutumnActive ? 'text-amber-900' : 'text-purple-700'
             },
           ].map((tab) => {
             const isActive = adminTab === tab.id;
@@ -1176,28 +1176,28 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
               <button
                 key={tab.id}
                 onClick={() => setAdminTab(tab.id as any)}
-                className={`flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 md:shrink border ${
+                className={`flex items-center justify-between gap-2.5 px-4 py-3 rounded-2xl text-xs font-black transition-all cursor-pointer whitespace-nowrap shrink-0 md:w-full border ${
                   isActive
                     ? isAdminAutumnActive
-                      ? 'bg-gradient-to-r from-amber-700 to-orange-600 text-white border-amber-800 shadow-md translate-x-0.5'
+                      ? 'bg-gradient-to-r from-amber-800 to-orange-600 text-white border-amber-900 shadow-md translate-x-0.5'
                       : 'bg-slate-900 text-white border-slate-800 shadow-md translate-x-0.5'
                     : isAdminAutumnActive
-                      ? 'bg-white/80 hover:bg-amber-100/80 text-stone-800 border-amber-200/80'
-                      : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-100 hover:border-slate-200'
+                      ? 'bg-white/95 hover:bg-white text-stone-950 border-amber-300/90 shadow-xs'
+                      : 'bg-white hover:bg-slate-50 text-slate-900 border-slate-200 shadow-xs'
                 }`}
                 id={`admin-nav-tab-${tab.id}`}
               >
-                <div className="flex items-center space-x-2.5">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : tab.color}`} />
-                  <span>{tab.label}</span>
+                <div className="flex items-center space-x-2.5 shrink-0">
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : tab.color}`} />
+                  <span className="font-black text-xs sm:text-sm whitespace-nowrap">{tab.label}</span>
                 </div>
                 {tab.badge && (
-                  <span className={`text-[9px] font-mono px-2 py-0.5 rounded-full font-extrabold ${
+                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-black ml-1.5 shrink-0 border ${
                     isActive 
-                      ? 'bg-black/20 text-white border border-white/20' 
+                      ? 'bg-black/30 text-white border-white/30' 
                       : isAdminAutumnActive
-                        ? 'bg-amber-100 text-amber-900 border border-amber-300'
-                        : 'bg-slate-100 text-slate-600 border border-slate-200'
+                        ? 'bg-amber-200 text-amber-950 border-amber-400'
+                        : 'bg-slate-100 text-slate-800 border-slate-300'
                   }`}>
                     {tab.badge}
                   </span>
@@ -1386,14 +1386,18 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                 </div>
 
                 {/* Category Filter Pills */}
-                <div className="flex items-center space-x-2 overflow-x-auto pb-1 text-[11px]">
+                <div className="flex items-center space-x-2 overflow-x-auto pb-1 text-[11px] scrollbar-none">
                   <button
                     type="button"
                     onClick={() => setMediaGalleryFilter('all')}
-                    className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`px-3.5 py-2 rounded-xl font-black transition-all shrink-0 cursor-pointer whitespace-nowrap border ${
                       mediaGalleryFilter === 'all'
-                        ? isAdminAutumnActive ? 'bg-gradient-to-r from-amber-700 to-orange-600 text-white shadow-xs' : 'bg-slate-900 text-white shadow-xs'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? isAdminAutumnActive 
+                          ? 'bg-gradient-to-r from-amber-800 to-orange-600 text-white border-amber-900 shadow-xs' 
+                          : 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                        : isAdminAutumnActive
+                          ? 'bg-white/95 text-stone-950 border-amber-300 hover:bg-amber-100 shadow-2xs'
+                          : 'bg-white text-slate-900 border-slate-200 hover:bg-slate-100 shadow-2xs'
                     }`}
                   >
                     All Media ({allUploadedMedia.length})
@@ -1401,10 +1405,14 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                   <button
                     type="button"
                     onClick={() => setMediaGalleryFilter('cheer')}
-                    className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`px-3.5 py-2 rounded-xl font-black transition-all shrink-0 cursor-pointer whitespace-nowrap border ${
                       mediaGalleryFilter === 'cheer'
-                        ? isAdminAutumnActive ? 'bg-amber-600 text-white shadow-xs' : 'bg-emerald-600 text-white shadow-xs'
-                        : isAdminAutumnActive ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100' : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'
+                        ? isAdminAutumnActive 
+                          ? 'bg-amber-600 text-white border-amber-700 shadow-xs' 
+                          : 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
+                        : isAdminAutumnActive 
+                          ? 'bg-amber-100 text-amber-950 border-amber-400 hover:bg-amber-200' 
+                          : 'bg-emerald-50 text-emerald-950 border-emerald-300 hover:bg-emerald-100'
                     }`}
                   >
                     Cheer Vault ({allUploadedMedia.filter(m => m.source === 'cheer_vault').length})
@@ -1412,10 +1420,10 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                   <button
                     type="button"
                     onClick={() => setMediaGalleryFilter('gym')}
-                    className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`px-3.5 py-2 rounded-xl font-black transition-all shrink-0 cursor-pointer whitespace-nowrap border ${
                       mediaGalleryFilter === 'gym'
-                        ? 'bg-amber-500 text-white shadow-xs'
-                        : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
+                        ? 'bg-orange-600 text-white border-orange-700 shadow-xs'
+                        : 'bg-amber-100 text-amber-950 border-amber-400 hover:bg-amber-200'
                     }`}
                   >
                     Gym Spot Checks ({allUploadedMedia.filter(m => m.source === 'gym_proof').length})
@@ -1423,10 +1431,10 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                   <button
                     type="button"
                     onClick={() => setMediaGalleryFilter('jog')}
-                    className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`px-3.5 py-2 rounded-xl font-black transition-all shrink-0 cursor-pointer whitespace-nowrap border ${
                       mediaGalleryFilter === 'jog'
-                        ? 'bg-pink-600 text-white shadow-xs'
-                        : 'bg-pink-50 text-pink-800 border border-pink-200 hover:bg-pink-100'
+                        ? 'bg-pink-600 text-white border-pink-700 shadow-xs'
+                        : 'bg-pink-100 text-pink-950 border-pink-300 hover:bg-pink-200'
                     }`}
                   >
                     Sunday Jogs ({allUploadedMedia.filter(m => m.source === 'sunday_jog').length})
@@ -1434,10 +1442,10 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                   <button
                     type="button"
                     onClick={() => setMediaGalleryFilter('penalty')}
-                    className={`px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`px-3.5 py-2 rounded-xl font-black transition-all shrink-0 cursor-pointer whitespace-nowrap border ${
                       mediaGalleryFilter === 'penalty'
-                        ? 'bg-rose-600 text-white shadow-xs'
-                        : 'bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100'
+                        ? 'bg-rose-600 text-white border-rose-700 shadow-xs'
+                        : 'bg-rose-100 text-rose-950 border-rose-300 hover:bg-rose-200'
                     }`}
                   >
                     Lockout Penalties ({allUploadedMedia.filter(m => m.source === 'penalty').length})
@@ -1953,37 +1961,39 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                       <button
                         type="button"
                         onClick={() => setCheerType('audio')}
-                        className={`p-3 border text-xs font-bold rounded-xl text-center flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                        className={`p-3.5 border-2 text-xs font-black rounded-xl text-center flex items-center justify-center space-x-2 transition-all cursor-pointer ${
                           cheerType === 'audio' 
-                            ? (isAdminAutumnActive ? 'bg-amber-100 border-amber-400 text-amber-950 shadow-sm' : 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-sm')
-                            : 'bg-slate-50 border-slate-100 hover:border-slate-200 text-slate-500'
+                            ? (isAdminAutumnActive ? 'bg-amber-200 border-amber-500 text-amber-950 shadow-sm' : 'bg-emerald-100 border-emerald-500 text-emerald-950 shadow-sm')
+                            : (isAdminAutumnActive ? 'bg-white border-amber-200 hover:bg-amber-50 text-stone-900' : 'bg-white border-slate-200 hover:bg-slate-100 text-slate-800')
                         }`}
                       >
-                        <Music className="w-4 h-4" />
-                        <span>Audio Voice Note</span>
+                        <Music className="w-4 h-4 shrink-0" />
+                        <span className="whitespace-nowrap">Audio Voice Note</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => setCheerType('video')}
-                        className={`p-3 border text-xs font-bold rounded-xl text-center flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                        className={`p-3.5 border-2 text-xs font-black rounded-xl text-center flex items-center justify-center space-x-2 transition-all cursor-pointer ${
                           cheerType === 'video' 
-                            ? (isAdminAutumnActive ? 'bg-amber-100 border-amber-400 text-amber-950 shadow-sm' : 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-sm')
-                            : 'bg-slate-50 border-slate-100 hover:border-slate-200 text-slate-500'
+                            ? (isAdminAutumnActive ? 'bg-amber-200 border-amber-500 text-amber-950 shadow-sm' : 'bg-emerald-100 border-emerald-500 text-emerald-950 shadow-sm')
+                            : (isAdminAutumnActive ? 'bg-white border-amber-200 hover:bg-amber-50 text-stone-900' : 'bg-white border-slate-200 hover:bg-slate-100 text-slate-800')
                         }`}
                       >
-                        <Video className="w-4 h-4" />
-                        <span>Video Clip</span>
+                        <Video className="w-4 h-4 shrink-0" />
+                        <span className="whitespace-nowrap">Video Clip</span>
                       </button>
                     </div>
 
                     {/* Mode Toggle: File vs Link */}
-                    <div className="flex items-center space-x-1.5 p-1 bg-slate-100 rounded-xl text-xs font-bold">
+                    <div className="flex items-center space-x-1.5 p-1 bg-amber-100/70 border border-amber-200 rounded-xl text-xs font-black">
                       <button
                         type="button"
                         onClick={() => setCheerInputMode('file')}
-                        className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer ${
-                          cheerInputMode === 'file' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-700'
+                        className={`flex-1 py-2 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                          cheerInputMode === 'file' 
+                            ? 'bg-white text-stone-950 shadow-xs font-black border border-amber-300' 
+                            : 'text-stone-700 hover:text-stone-950 font-bold'
                         }`}
                       >
                         📁 File Upload
@@ -1991,8 +2001,10 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                       <button
                         type="button"
                         onClick={() => setCheerInputMode('link')}
-                        className={`flex-1 py-1.5 rounded-lg transition-all cursor-pointer ${
-                          cheerInputMode === 'link' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-700'
+                        className={`flex-1 py-2 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                          cheerInputMode === 'link' 
+                            ? 'bg-white text-stone-950 shadow-xs font-black border border-amber-300' 
+                            : 'text-stone-700 hover:text-stone-950 font-bold'
                         }`}
                       >
                         🔗 Paste Link
@@ -2002,9 +2014,9 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                     {cheerInputMode === 'file' ? (
                       <div className="space-y-1">
                         <label className="text-[10px] font-mono text-slate-400 block uppercase font-bold">Select Local File</label>
-                        <label className="flex flex-col items-center justify-center p-6 border border-dashed border-slate-200 bg-slate-50 hover:bg-slate-100 rounded-2xl cursor-pointer transition-all">
-                          <Upload className="w-6 h-6 text-slate-400 mb-1" />
-                          <span className="text-xs text-slate-600 font-bold truncate max-w-[220px]">
+                        <label className="flex flex-col items-center justify-center p-6 border border-dashed border-amber-300 bg-amber-50/50 hover:bg-amber-100/60 rounded-2xl cursor-pointer transition-all">
+                          <Upload className="w-6 h-6 text-amber-700 mb-1" />
+                          <span className="text-xs text-stone-900 font-black truncate max-w-[220px]">
                             {cheerFile ? cheerFile.name : "Select audio or video..."}
                           </span>
                           <input
@@ -2028,7 +2040,7 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                           value={cheerLinkUrl}
                           onChange={(e) => setCheerLinkUrl(e.target.value)}
                           placeholder="https://drive.google.com/file/d/... or YouTube / MP3 link"
-                          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-amber-400 rounded-xl text-xs text-slate-800"
+                          className="w-full px-3.5 py-2.5 bg-white border border-amber-300 focus:border-amber-500 rounded-xl text-xs text-stone-950 font-medium"
                           id="admin-cheer-link-input"
                         />
                       </div>
@@ -2037,10 +2049,10 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                     <button
                       type="submit"
                       disabled={cheerUpload.loading}
-                      className={`w-full py-3 text-white font-bold rounded-2xl transition-all flex items-center justify-center space-x-2 text-xs cursor-pointer shadow-xs active:scale-95 disabled:bg-slate-100 disabled:text-slate-400 ${
+                      className={`w-full py-3.5 text-white font-black rounded-2xl transition-all flex items-center justify-center space-x-2 text-xs sm:text-sm cursor-pointer shadow-md active:scale-95 disabled:bg-slate-200 disabled:text-slate-500 ${
                         isAdminAutumnActive 
-                          ? 'bg-gradient-to-r from-amber-600 to-orange-500 hover:from-amber-700 hover:to-orange-600' 
-                          : 'bg-emerald-600 hover:bg-emerald-700'
+                          ? 'bg-gradient-to-r from-amber-800 to-orange-600 hover:from-amber-900 hover:to-orange-700 border border-amber-900/40' 
+                          : 'bg-emerald-600 hover:bg-emerald-700 border border-emerald-700'
                       }`}
                       id="submit-cheer-vault-btn"
                     >
@@ -2048,8 +2060,8 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
                         <span className="animate-pulse">Broadcasting {cheerUpload.pct}%...</span>
                       ) : (
                         <>
-                          <Upload className="w-3.5 h-3.5" />
-                          <span>Broadcast Cheer to Bunny</span>
+                          <Upload className="w-4 h-4 shrink-0" />
+                          <span className="whitespace-nowrap font-black">Broadcast Cheer to Bunny</span>
                         </>
                       )}
                     </button>

@@ -930,7 +930,7 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
       <main className="flex-1 p-4 md:p-6 grid grid-cols-1 md:grid-cols-12 gap-6 w-full max-w-7xl mx-auto relative z-10">
         
         {/* Sidebar Column: Left (col-span-2) */}
-        <nav className="col-span-12 md:col-span-2 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0" id="sidebar-navigation">
+        <nav className="col-span-12 md:col-span-2 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 scrollbar-none" id="sidebar-navigation">
           {[
             { id: 'calendar', label: 'Calendar', icon: CalendarIcon },
             { id: 'cheer', label: 'Cheer Box', icon: Volume2 },
@@ -943,19 +943,25 @@ export default function BunnyDashboard({ profile: initialProfile, onLogout, isPr
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-bold text-sm cursor-pointer shrink-0 md:w-full text-left ${
+                className={`flex items-center gap-2.5 sm:gap-3 px-4 py-3 rounded-2xl transition-all cursor-pointer shrink-0 md:w-full text-left whitespace-nowrap border ${
                   isActive 
                     ? isAutumnActive
-                      ? 'bg-gradient-to-r from-amber-700 to-orange-600 text-white shadow-lg shadow-orange-300/40'
-                      : 'bg-emerald-600 text-white shadow-lg shadow-emerald-200' 
+                      ? 'bg-gradient-to-r from-amber-800 to-orange-600 text-white shadow-md shadow-orange-950/25 border-amber-900/50'
+                      : 'bg-emerald-600 text-white shadow-md shadow-emerald-200 border-emerald-700' 
                     : isAutumnActive
-                      ? 'bg-white/60 hover:bg-white/80 text-stone-950 border border-white/70 shadow-xs'
-                      : 'bg-white hover:bg-emerald-50 text-slate-800 border border-emerald-100'
+                      ? 'bg-white/95 hover:bg-white text-stone-950 border-amber-300/90 shadow-xs'
+                      : 'bg-white hover:bg-emerald-50 text-slate-900 border-emerald-200 shadow-xs'
                 }`}
               >
-                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse hidden md:inline-block" />}
-                <tab.icon className="w-4 h-4 shrink-0" />
-                <span className="text-xs sm:text-sm font-extrabold">{tab.label}</span>
+                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse hidden md:inline-block shrink-0" />}
+                <tab.icon className={`w-4 h-4 shrink-0 ${
+                  isActive 
+                    ? 'text-white' 
+                    : isAutumnActive 
+                      ? 'text-amber-800' 
+                      : 'text-emerald-700'
+                }`} />
+                <span className="text-xs sm:text-sm font-black whitespace-nowrap">{tab.label}</span>
               </button>
             );
           })}
