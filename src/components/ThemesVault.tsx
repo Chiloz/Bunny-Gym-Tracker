@@ -30,130 +30,130 @@ interface ThemeVisualTheme {
 
 const THEME_STYLES: Record<AppTheme, ThemeVisualTheme> = {
   pumpkin_spice: {
-    cardBgActive: 'bg-gradient-to-br from-[#ffedd5] via-[#fed7aa]/95 to-[#fdba74]/90',
-    cardBgUnlocked: 'bg-gradient-to-br from-[#fff7ed]/95 via-[#ffedd5]/90 to-[#fed7aa]/80',
-    cardBgLocked: 'bg-stone-100/90',
+    cardBgActive: 'bg-[#ffedd5]/55 backdrop-blur-md',
+    cardBgUnlocked: 'bg-white/40 backdrop-blur-md',
+    cardBgLocked: 'bg-white/20 backdrop-blur-md',
     borderActive: 'border-2 border-[#ea580c] shadow-lg shadow-[#7c2d12]/20 ring-4 ring-[#fb923c]/50',
-    borderUnlocked: 'border-2 border-[#f97316] hover:border-[#ea580c] shadow-sm',
+    borderUnlocked: 'border-2 border-[#ea580c]/60 hover:border-[#ea580c] shadow-sm',
     badgeActive: 'bg-[#7c2d12] text-[#ffedd5] font-black',
     badgeUnlocked: 'bg-[#fed7aa] text-[#7c2d12] font-black border border-[#ea580c]',
-    badgeLocked: 'bg-stone-200 text-stone-700 font-black',
-    titleColor: 'text-[#431407]',
-    descColor: 'text-[#7c2d12]',
-    equipBtnBg: 'bg-gradient-to-r from-[#9a3412] to-[#ea580c] hover:from-[#7c2d12] hover:to-[#c2410c] text-white font-black shadow-md border border-[#431407]/50',
-    equippedBtnBg: 'bg-gradient-to-r from-[#7c2d12] to-[#9a3412] text-[#ffedd5] font-black border-2 border-[#431407] shadow-md ring-2 ring-[#fb923c]',
+    badgeLocked: 'bg-stone-200 text-stone-800 font-black',
+    titleColor: 'text-stone-950 font-black',
+    descColor: 'text-stone-800 font-bold',
+    equipBtnBg: 'bg-gradient-to-r from-[#9a3412] to-[#ea580c] hover:from-[#7c2d12] hover:to-[#c2410c] text-white font-black shadow-md border border-[#431407]/40',
+    equippedBtnBg: 'bg-[#431407] text-[#fed7aa] font-black border-2 border-[#431407] shadow-md ring-2 ring-[#fb923c]',
     iconBg: 'bg-gradient-to-tr from-[#c2410c] to-[#ea580c]',
     accentIcon: Coffee
   },
   autumn: {
-    cardBgActive: 'bg-gradient-to-br from-amber-100 via-orange-100/90 to-amber-200/95',
-    cardBgUnlocked: 'bg-gradient-to-br from-amber-50/90 via-orange-50/80 to-amber-100/70',
-    cardBgLocked: 'bg-stone-100/90',
+    cardBgActive: 'bg-amber-100/60 backdrop-blur-md',
+    cardBgUnlocked: 'bg-white/40 backdrop-blur-md',
+    cardBgLocked: 'bg-white/20 backdrop-blur-md',
     borderActive: 'border-2 border-orange-600 shadow-lg shadow-orange-900/15 ring-4 ring-orange-400/40',
     borderUnlocked: 'border-2 border-amber-400 hover:border-amber-600 shadow-sm',
     badgeActive: 'bg-amber-900 text-amber-100 font-black',
     badgeUnlocked: 'bg-amber-200 text-amber-950 font-black border border-amber-400',
-    badgeLocked: 'bg-stone-200 text-stone-700 font-black',
-    titleColor: 'text-amber-950',
-    descColor: 'text-amber-900',
+    badgeLocked: 'bg-stone-200 text-stone-800 font-black',
+    titleColor: 'text-stone-950 font-black',
+    descColor: 'text-stone-800 font-bold',
     equipBtnBg: 'bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white font-black shadow-md border border-amber-950/40',
-    equippedBtnBg: 'bg-gradient-to-r from-amber-900 to-orange-800 text-amber-100 font-black border-2 border-amber-950 shadow-md ring-2 ring-amber-400',
+    equippedBtnBg: 'bg-amber-950 text-amber-100 font-black border-2 border-amber-950 shadow-md ring-2 ring-amber-400',
     iconBg: 'bg-gradient-to-tr from-amber-600 to-orange-500',
     accentIcon: Leaf
   },
   pink_floral: {
-    cardBgActive: 'bg-gradient-to-br from-pink-100 via-rose-100/90 to-pink-200/95',
-    cardBgUnlocked: 'bg-gradient-to-br from-pink-50/90 via-rose-50/80 to-pink-100/70',
-    cardBgLocked: 'bg-stone-100/90',
+    cardBgActive: 'bg-pink-100/60 backdrop-blur-md',
+    cardBgUnlocked: 'bg-white/40 backdrop-blur-md',
+    cardBgLocked: 'bg-white/20 backdrop-blur-md',
     borderActive: 'border-2 border-pink-500 shadow-lg shadow-pink-900/15 ring-4 ring-pink-400/40',
     borderUnlocked: 'border-2 border-pink-300 hover:border-pink-500 shadow-sm',
     badgeActive: 'bg-pink-900 text-pink-100 font-black',
     badgeUnlocked: 'bg-pink-200 text-pink-950 font-black border border-pink-400',
-    badgeLocked: 'bg-stone-200 text-stone-700 font-black',
-    titleColor: 'text-pink-950',
-    descColor: 'text-pink-900',
+    badgeLocked: 'bg-stone-200 text-stone-800 font-black',
+    titleColor: 'text-stone-950 font-black',
+    descColor: 'text-stone-800 font-bold',
     equipBtnBg: 'bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-700 hover:to-rose-600 text-white font-black shadow-md border border-pink-800/40',
-    equippedBtnBg: 'bg-gradient-to-r from-pink-900 to-rose-800 text-pink-100 font-black border-2 border-pink-950 shadow-md ring-2 ring-pink-400',
+    equippedBtnBg: 'bg-pink-950 text-pink-100 font-black border-2 border-pink-950 shadow-md ring-2 ring-pink-400',
     iconBg: 'bg-gradient-to-tr from-pink-500 to-rose-400',
     accentIcon: Heart
   },
   emerald: {
-    cardBgActive: 'bg-gradient-to-br from-emerald-100 via-teal-100/90 to-emerald-200/95',
-    cardBgUnlocked: 'bg-gradient-to-br from-emerald-50/90 via-teal-50/80 to-emerald-100/70',
-    cardBgLocked: 'bg-stone-100/90',
+    cardBgActive: 'bg-emerald-100/60 backdrop-blur-md',
+    cardBgUnlocked: 'bg-white/40 backdrop-blur-md',
+    cardBgLocked: 'bg-white/20 backdrop-blur-md',
     borderActive: 'border-2 border-emerald-600 shadow-lg shadow-emerald-900/15 ring-4 ring-emerald-400/40',
     borderUnlocked: 'border-2 border-emerald-300 hover:border-emerald-500 shadow-sm',
     badgeActive: 'bg-emerald-900 text-emerald-100 font-black',
     badgeUnlocked: 'bg-emerald-200 text-emerald-950 font-black border border-emerald-400',
-    badgeLocked: 'bg-stone-200 text-stone-700 font-black',
-    titleColor: 'text-emerald-950',
-    descColor: 'text-emerald-900',
+    badgeLocked: 'bg-stone-200 text-stone-800 font-black',
+    titleColor: 'text-stone-950 font-black',
+    descColor: 'text-stone-800 font-bold',
     equipBtnBg: 'bg-gradient-to-r from-emerald-700 to-teal-600 hover:from-emerald-800 hover:to-teal-700 text-white font-black shadow-md border border-emerald-900/40',
-    equippedBtnBg: 'bg-gradient-to-r from-emerald-900 to-teal-800 text-emerald-100 font-black border-2 border-emerald-950 shadow-md ring-2 ring-emerald-400',
+    equippedBtnBg: 'bg-emerald-950 text-emerald-100 font-black border-2 border-emerald-950 shadow-md ring-2 ring-emerald-400',
     iconBg: 'bg-gradient-to-tr from-emerald-600 to-teal-500',
     accentIcon: Trophy
   },
   silver: {
-    cardBgActive: 'bg-gradient-to-br from-slate-200 via-zinc-200/90 to-slate-300/95',
-    cardBgUnlocked: 'bg-gradient-to-br from-slate-100/90 via-zinc-100/80 to-slate-200/70',
-    cardBgLocked: 'bg-stone-100/90',
+    cardBgActive: 'bg-slate-200/60 backdrop-blur-md',
+    cardBgUnlocked: 'bg-white/40 backdrop-blur-md',
+    cardBgLocked: 'bg-white/20 backdrop-blur-md',
     borderActive: 'border-2 border-slate-600 shadow-lg shadow-slate-900/15 ring-4 ring-slate-400/40',
     borderUnlocked: 'border-2 border-slate-300 hover:border-slate-500 shadow-sm',
     badgeActive: 'bg-slate-900 text-slate-100 font-black',
     badgeUnlocked: 'bg-slate-200 text-slate-950 font-black border border-slate-400',
-    badgeLocked: 'bg-stone-200 text-stone-700 font-black',
-    titleColor: 'text-slate-950',
-    descColor: 'text-slate-900',
+    badgeLocked: 'bg-stone-200 text-stone-800 font-black',
+    titleColor: 'text-stone-950 font-black',
+    descColor: 'text-stone-800 font-bold',
     equipBtnBg: 'bg-gradient-to-r from-slate-700 to-zinc-800 hover:from-slate-800 hover:to-zinc-900 text-white font-black shadow-md border border-slate-900',
-    equippedBtnBg: 'bg-slate-900 text-white font-black border-2 border-slate-950 shadow-md ring-2 ring-slate-400',
+    equippedBtnBg: 'bg-slate-950 text-white font-black border-2 border-slate-950 shadow-md ring-2 ring-slate-400',
     iconBg: 'bg-gradient-to-tr from-slate-600 to-slate-400',
     accentIcon: Sparkles
   },
   crystal: {
-    cardBgActive: 'bg-gradient-to-br from-cyan-100 via-sky-100/90 to-blue-200/95',
-    cardBgUnlocked: 'bg-gradient-to-br from-cyan-50/90 via-sky-50/80 to-blue-100/70',
-    cardBgLocked: 'bg-stone-100/90',
+    cardBgActive: 'bg-cyan-100/60 backdrop-blur-md',
+    cardBgUnlocked: 'bg-white/40 backdrop-blur-md',
+    cardBgLocked: 'bg-white/20 backdrop-blur-md',
     borderActive: 'border-2 border-cyan-600 shadow-lg shadow-cyan-900/15 ring-4 ring-cyan-400/40',
     borderUnlocked: 'border-2 border-cyan-300 hover:border-cyan-500 shadow-sm',
     badgeActive: 'bg-cyan-900 text-cyan-100 font-black',
     badgeUnlocked: 'bg-cyan-200 text-cyan-950 font-black border border-cyan-400',
-    badgeLocked: 'bg-stone-200 text-stone-700 font-black',
-    titleColor: 'text-cyan-950',
-    descColor: 'text-cyan-900',
+    badgeLocked: 'bg-stone-200 text-stone-800 font-black',
+    titleColor: 'text-stone-950 font-black',
+    descColor: 'text-stone-800 font-bold',
     equipBtnBg: 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-black shadow-md border border-cyan-900/40',
-    equippedBtnBg: 'bg-gradient-to-r from-cyan-900 to-blue-900 text-cyan-100 font-black border-2 border-cyan-950 shadow-md ring-2 ring-cyan-400',
+    equippedBtnBg: 'bg-cyan-950 text-cyan-100 font-black border-2 border-cyan-950 shadow-md ring-2 ring-cyan-400',
     iconBg: 'bg-gradient-to-tr from-cyan-600 to-blue-500',
     accentIcon: Diamond
   },
   sunrise: {
-    cardBgActive: 'bg-gradient-to-br from-amber-100 via-yellow-100/90 to-amber-200/95',
-    cardBgUnlocked: 'bg-gradient-to-br from-yellow-50/90 via-amber-50/80 to-yellow-100/70',
-    cardBgLocked: 'bg-stone-100/90',
+    cardBgActive: 'bg-amber-100/60 backdrop-blur-md',
+    cardBgUnlocked: 'bg-white/40 backdrop-blur-md',
+    cardBgLocked: 'bg-white/20 backdrop-blur-md',
     borderActive: 'border-2 border-yellow-500 shadow-lg shadow-yellow-900/15 ring-4 ring-yellow-400/40',
     borderUnlocked: 'border-2 border-yellow-300 hover:border-yellow-500 shadow-sm',
     badgeActive: 'bg-amber-900 text-yellow-100 font-black',
     badgeUnlocked: 'bg-yellow-200 text-amber-950 font-black border border-yellow-400',
-    badgeLocked: 'bg-stone-200 text-stone-700 font-black',
-    titleColor: 'text-amber-950',
-    descColor: 'text-amber-900',
-    equipBtnBg: 'bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-700 hover:to-yellow-700 text-stone-950 font-black shadow-md border border-amber-800/40',
-    equippedBtnBg: 'bg-gradient-to-r from-amber-900 to-yellow-800 text-amber-100 font-black border-2 border-amber-950 shadow-md ring-2 ring-amber-400',
+    badgeLocked: 'bg-stone-200 text-stone-800 font-black',
+    titleColor: 'text-stone-950 font-black',
+    descColor: 'text-stone-800 font-bold',
+    equipBtnBg: 'bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-700 hover:to-yellow-700 text-white font-black shadow-md border border-amber-800/40',
+    equippedBtnBg: 'bg-amber-950 text-yellow-200 font-black border-2 border-amber-950 shadow-md ring-2 ring-amber-400',
     iconBg: 'bg-gradient-to-tr from-amber-500 to-yellow-400',
     accentIcon: Sun
   },
   gold: {
-    cardBgActive: 'bg-gradient-to-br from-yellow-200 via-amber-200/90 to-yellow-300/95',
-    cardBgUnlocked: 'bg-gradient-to-br from-yellow-100/90 via-amber-100/80 to-yellow-200/70',
-    cardBgLocked: 'bg-stone-100/90',
+    cardBgActive: 'bg-yellow-200/60 backdrop-blur-md',
+    cardBgUnlocked: 'bg-white/40 backdrop-blur-md',
+    cardBgLocked: 'bg-white/20 backdrop-blur-md',
     borderActive: 'border-2 border-yellow-600 shadow-lg shadow-yellow-900/20 ring-4 ring-yellow-500/40',
     borderUnlocked: 'border-2 border-yellow-400 hover:border-yellow-600 shadow-sm',
     badgeActive: 'bg-amber-950 text-yellow-300 font-black',
     badgeUnlocked: 'bg-yellow-300 text-amber-950 font-black border border-yellow-500',
-    badgeLocked: 'bg-stone-200 text-stone-700 font-black',
-    titleColor: 'text-amber-950',
-    descColor: 'text-amber-950',
+    badgeLocked: 'bg-stone-200 text-stone-800 font-black',
+    titleColor: 'text-stone-950 font-black',
+    descColor: 'text-stone-800 font-bold',
     equipBtnBg: 'bg-gradient-to-r from-yellow-600 via-amber-600 to-amber-700 hover:from-yellow-700 hover:to-amber-800 text-stone-950 font-black shadow-md border border-amber-950/40',
-    equippedBtnBg: 'bg-gradient-to-r from-yellow-950 to-amber-900 text-yellow-200 font-black border-2 border-yellow-950 shadow-md ring-2 ring-yellow-400',
+    equippedBtnBg: 'bg-amber-950 text-yellow-200 font-black border-2 border-yellow-950 shadow-md ring-2 ring-yellow-400',
     iconBg: 'bg-gradient-to-tr from-yellow-500 via-amber-500 to-amber-600',
     accentIcon: Crown
   }
@@ -162,14 +162,13 @@ const THEME_STYLES: Record<AppTheme, ThemeVisualTheme> = {
 /* 0. Starbucks Pumpkin Spice Latte Illustrated Preview */
 function MiniPumpkinSpicePreview() {
   return (
-    <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-[#ffedd5] via-[#fed7aa] to-[#fdba74] overflow-hidden border-2 border-[#ea580c]/60 flex items-center justify-center shadow-inner">
-      {/* Terracotta warmth & glow */}
-      <div className="absolute inset-0 bg-radial from-[#fb923c]/40 via-[#ea580c]/20 to-transparent blur-md pointer-events-none" />
+    <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-[#ffedd5]/80 via-[#fed7aa]/70 to-[#fdba74]/80 overflow-hidden border border-[#ea580c]/50 flex items-center justify-center shadow-inner">
+      <div className="absolute inset-0 bg-radial from-[#fb923c]/30 via-[#ea580c]/15 to-transparent blur-md pointer-events-none" />
       
       {/* SVG Illustration of Starbucks Iced Pumpkin Spice Latte */}
-      <svg viewBox="0 0 200 130" className="w-full h-full max-h-24 drop-shadow-xs">
+      <svg viewBox="0 0 200 120" className="w-full h-full max-h-24 drop-shadow-xs">
         {/* Left Pumpkin */}
-        <g transform="translate(18, 55) scale(0.45)">
+        <g transform="translate(18, 50) scale(0.45)">
           <path d="M 90 20 Q 80 -10 60 -18 Q 75 -8 85 20 Z" fill="#3f4f1d" />
           <ellipse cx="90" cy="80" rx="75" ry="60" fill="#ea580c" />
           <ellipse cx="50" cy="80" rx="42" ry="54" fill="#f97316" />
@@ -177,64 +176,42 @@ function MiniPumpkinSpicePreview() {
         </g>
 
         {/* Stacked Frosted Cookies (Right) */}
-        <g transform="translate(145, 65) scale(0.55)">
+        <g transform="translate(145, 60) scale(0.55)">
           <ellipse cx="40" cy="30" rx="36" ry="16" fill="#9a3412" />
           <ellipse cx="40" cy="24" rx="30" ry="12" fill="#fffbeb" />
           <ellipse cx="40" cy="14" rx="32" ry="14" fill="#9a3412" />
           <ellipse cx="40" cy="9" rx="26" ry="10" fill="#fffbeb" />
-          {/* Cinnamon Specks */}
           <circle cx="36" cy="8" r="1.2" fill="#78350f" />
           <circle cx="44" cy="9" r="1.2" fill="#78350f" />
         </g>
 
-        {/* Mini Right Pumpkin */}
-        <g transform="translate(130, 75) scale(0.35)">
-          <ellipse cx="60" cy="60" rx="55" ry="42" fill="#c2410c" />
-          <ellipse cx="35" cy="60" rx="30" ry="36" fill="#ea580c" />
-          <ellipse cx="85" cy="60" rx="30" ry="36" fill="#ea580c" />
-        </g>
-
         {/* Starbucks Iced PSL Cup (Center) */}
-        <g transform="translate(75, 12) scale(0.28)">
-          {/* Shadow */}
+        <g transform="translate(75, 8) scale(0.3)">
           <ellipse cx="90" cy="385" rx="70" ry="15" fill="#451a03" opacity="0.4" />
-          
-          {/* Cup Body Liquid */}
           <path d="M 20 40 L 36 370 Q 38 385 90 385 Q 142 385 144 370 L 160 40 Z" fill="#92400e" />
           
           {/* Ice Cubes */}
-          <rect x="45" y="100" width="35" height="30" rx="6" fill="#ffffff" opacity="0.35" />
-          <rect x="95" y="120" width="35" height="30" rx="6" fill="#ffffff" opacity="0.35" />
-          <rect x="55" y="180" width="35" height="30" rx="6" fill="#ffffff" opacity="0.3" />
+          <rect x="45" y="100" width="35" height="30" rx="6" fill="#ffffff" opacity="0.4" />
+          <rect x="95" y="120" width="35" height="30" rx="6" fill="#ffffff" opacity="0.4" />
+          <rect x="55" y="180" width="35" height="30" rx="6" fill="#ffffff" opacity="0.35" />
 
-          {/* Starbucks Siren Emblem Circle */}
-          <circle cx="90" cy="180" r="36" fill="#ffffff" opacity="0.25" stroke="#ffffff" strokeWidth="2" />
+          {/* Starbucks Siren Emblem */}
+          <circle cx="90" cy="180" r="36" fill="#ffffff" opacity="0.3" stroke="#ffffff" strokeWidth="2" />
           <path d="M 90 156 L 92 163 L 99 163 L 94 167 L 96 174 L 90 170 L 84 174 L 86 167 L 81 163 L 88 163 Z" fill="#ffffff" opacity="0.95" />
           <circle cx="90" cy="180" r="14" fill="#ffffff" opacity="0.9" />
 
           {/* Thick Sweet Cream Cold Foam */}
           <path d="M 18 40 Q 90 52 162 40 L 164 12 Q 90 20 16 12 Z" fill="#fffbeb" />
           <ellipse cx="90" cy="14" rx="74" ry="14" fill="#fffbeb" stroke="#ffffff" strokeWidth="2" />
-          {/* Cinnamon Topping */}
           <ellipse cx="90" cy="13" rx="65" ry="10" fill="#78350f" opacity="0.65" />
           <circle cx="70" cy="12" r="1.5" fill="#451a03" />
           <circle cx="90" cy="13" r="2" fill="#451a03" />
           <circle cx="110" cy="12" r="1.5" fill="#451a03" />
-
-          {/* Glass Highlight */}
-          <path d="M 28 40 L 42 365 Q 45 375 58 375 L 48 40 Z" fill="#ffffff" opacity="0.4" />
         </g>
-
-        {/* Floating Cinnamon Stars */}
-        <circle cx="32" cy="35" r="1.8" fill="#9a3412" />
-        <circle cx="168" cy="32" r="1.8" fill="#c2410c" />
-        <circle cx="58" cy="98" r="1.5" fill="#78350f" />
-        <circle cx="120" cy="105" r="1.5" fill="#ea580c" />
       </svg>
 
-      {/* Badge */}
-      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-[#7c2d12] text-[#ffedd5] px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs border border-[#ea580c]/50">
-        ☕ Starbucks PSL Edition
+      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-[#431407] text-[#fed7aa] px-2 py-0.5 rounded-md shadow-xs border border-[#ea580c]/50">
+        ☕ Starbucks PSL
       </span>
     </div>
   );
@@ -244,38 +221,19 @@ function MiniPumpkinSpicePreview() {
 function MiniAutumnTreePreview() {
   return (
     <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-amber-200/70 via-orange-100/60 to-amber-100/80 overflow-hidden border border-amber-300/80 flex items-center justify-center shadow-inner">
-      {/* Sunbeam radiance */}
-      <div className="absolute inset-0 bg-radial from-amber-300/40 via-orange-200/20 to-transparent blur-md pointer-events-none" />
-      {/* Mini Autumn Tree SVG */}
-      <svg viewBox="0 0 200 130" className="w-full h-full max-h-24 drop-shadow-xs">
-        {/* Canopy Back Layers */}
-        <ellipse cx="100" cy="55" rx="65" ry="38" fill="#e65100" opacity="0.9" />
-        <ellipse cx="60" cy="62" rx="35" ry="26" fill="#f57c00" opacity="0.95" />
-        <ellipse cx="140" cy="62" rx="35" ry="26" fill="#ef6c00" opacity="0.95" />
-        
-        {/* Trunk & Main Branches */}
-        <path d="M92 130 L96 75 L85 55 L90 52 L99 70 L108 50 L113 53 L102 75 L108 130 Z" fill="#4e342e" />
-        
-        {/* Golden & Pumpkin Foliage Clusters */}
-        <circle cx="100" cy="42" r="30" fill="#ffa726" />
-        <circle cx="75" cy="48" r="24" fill="#fb8c00" />
-        <circle cx="125" cy="48" r="24" fill="#f57c00" />
-        <circle cx="60" cy="58" r="18" fill="#e65100" />
-        <circle cx="140" cy="58" r="18" fill="#d84315" />
-        <circle cx="85" cy="35" r="20" fill="#ffb74d" />
-        <circle cx="115" cy="35" r="20" fill="#ffa726" />
-        <circle cx="100" cy="28" r="16" fill="#ffd54f" />
-        
-        {/* Floating Mini Leaves */}
-        <circle cx="45" cy="78" r="2.5" fill="#e65100" />
-        <circle cx="155" cy="74" r="2.5" fill="#f57c00" />
-        <circle cx="130" cy="92" r="2" fill="#ffd54f" />
-        <circle cx="70" cy="96" r="2" fill="#d84315" />
-        <circle cx="95" cy="112" r="2" fill="#ff9800" />
+      <div className="absolute inset-0 bg-radial from-amber-300/30 to-transparent blur-md pointer-events-none" />
+      <svg viewBox="0 0 200 120" className="w-full h-full max-h-24 drop-shadow-xs">
+        <ellipse cx="100" cy="50" rx="60" ry="35" fill="#e65100" opacity="0.9" />
+        <ellipse cx="65" cy="58" rx="32" ry="24" fill="#f57c00" opacity="0.95" />
+        <ellipse cx="135" cy="58" rx="32" ry="24" fill="#ef6c00" opacity="0.95" />
+        <path d="M93 120 L96 70 L86 52 L91 49 L99 65 L107 47 L112 50 L102 70 L107 120 Z" fill="#4e342e" />
+        <circle cx="100" cy="38" r="26" fill="#ffa726" />
+        <circle cx="78" cy="44" r="20" fill="#fb8c00" />
+        <circle cx="122" cy="44" r="20" fill="#f57c00" />
+        <circle cx="100" cy="25" r="14" fill="#ffd54f" />
       </svg>
-      {/* Falling Leaf label badge */}
-      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-amber-900/85 text-amber-100 px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs border border-amber-700/50">
-        🍁 Autumn Tree & Leaves
+      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-amber-950 text-amber-100 px-2 py-0.5 rounded-md shadow-xs border border-amber-700/50">
+        🍁 Autumn Tree
       </span>
     </div>
   );
@@ -285,26 +243,17 @@ function MiniAutumnTreePreview() {
 function MiniFloralPreview() {
   return (
     <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-pink-200/70 via-rose-100/60 to-pink-100/80 overflow-hidden border border-pink-300/80 flex items-center justify-center shadow-inner">
-      <div className="absolute inset-0 bg-radial from-pink-300/40 to-transparent blur-md pointer-events-none" />
-      <svg viewBox="0 0 200 130" className="w-full h-full max-h-24 drop-shadow-xs">
-        <path d="M0 130 Q50 95 100 115 T200 105 L200 130 Z" fill="#fbcfe8" />
-        <path d="M0 130 Q60 110 120 120 T200 115 L200 130 Z" fill="#f472b6" opacity="0.4" />
-        
-        <path d="M94 130 L97 80 L88 62 L92 60 L99 75 L106 58 L110 60 L101 80 L106 130 Z" fill="#5c3d2e" />
-        <circle cx="100" cy="50" r="28" fill="#f472b6" opacity="0.9" />
-        <circle cx="78" cy="55" r="22" fill="#fb7185" opacity="0.9" />
-        <circle cx="122" cy="55" r="22" fill="#f43f5e" opacity="0.8" />
-        <circle cx="90" cy="40" r="18" fill="#fbcfe8" />
-        <circle cx="110" cy="40" r="18" fill="#fda4af" />
-        <circle cx="100" cy="32" r="14" fill="#fff1f2" />
-        
-        <circle cx="50" cy="70" r="2.5" fill="#f43f5e" />
-        <circle cx="150" cy="65" r="2.5" fill="#fb7185" />
-        <circle cx="130" cy="85" r="2" fill="#fda4af" />
-        <circle cx="70" cy="90" r="2" fill="#f472b6" />
+      <div className="absolute inset-0 bg-radial from-pink-300/30 to-transparent blur-md pointer-events-none" />
+      <svg viewBox="0 0 200 120" className="w-full h-full max-h-24 drop-shadow-xs">
+        <path d="M0 120 Q50 90 100 105 T200 95 L200 120 Z" fill="#fbcfe8" />
+        <path d="M94 120 L97 75 L88 58 L92 56 L99 70 L106 54 L110 56 L101 75 L106 120 Z" fill="#5c3d2e" />
+        <circle cx="100" cy="46" r="25" fill="#f472b6" opacity="0.9" />
+        <circle cx="80" cy="50" r="20" fill="#fb7185" opacity="0.9" />
+        <circle cx="120" cy="50" r="20" fill="#f43f5e" opacity="0.8" />
+        <circle cx="100" cy="30" r="13" fill="#fff1f2" />
       </svg>
-      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-pink-900/85 text-pink-100 px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs border border-pink-700/50">
-        🌸 Sunday Flowers & Jog
+      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-pink-950 text-pink-100 px-2 py-0.5 rounded-md shadow-xs border border-pink-700/50">
+        🌸 Sunday Floral
       </span>
     </div>
   );
@@ -314,91 +263,78 @@ function MiniFloralPreview() {
 function MiniEmeraldPreview() {
   return (
     <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-emerald-200/70 via-teal-100/60 to-emerald-100/80 overflow-hidden border border-emerald-300/80 flex items-center justify-center shadow-inner">
-      <div className="absolute inset-0 bg-radial from-emerald-300/40 to-transparent blur-md pointer-events-none" />
-      <svg viewBox="0 0 200 130" className="w-full h-full max-h-24 drop-shadow-xs">
-        <path d="M0 130 Q60 100 120 115 T200 105 L200 130 Z" fill="#a7f3d0" />
-        <polygon points="60,110 40,110 50,75" fill="#047857" />
-        <polygon points="60,95 40,95 50,65" fill="#059669" />
-        <polygon points="145,110 125,110 135,75" fill="#047857" />
-        <polygon points="145,95 125,95 135,65" fill="#059669" />
-        <polygon points="115,120 85,120 100,70" fill="#065f46" />
-        <polygon points="112,98 88,98 100,55" fill="#047857" />
-        <polygon points="108,78 92,78 100,40" fill="#10b981" />
-        <polygon points="105,58 95,58 100,28" fill="#34d399" />
+      <div className="absolute inset-0 bg-radial from-emerald-300/30 to-transparent blur-md pointer-events-none" />
+      <svg viewBox="0 0 200 120" className="w-full h-full max-h-24 drop-shadow-xs">
+        <path d="M0 120 Q60 95 120 108 T200 100 L200 120 Z" fill="#a7f3d0" />
+        <polygon points="60,105 40,105 50,70" fill="#047857" />
+        <polygon points="60,90 40,90 50,60" fill="#059669" />
+        <polygon points="145,105 125,105 135,70" fill="#047857" />
+        <polygon points="145,90 125,90 135,60" fill="#059669" />
+        <polygon points="112,110 88,110 100,50" fill="#047857" />
+        <polygon points="108,72 92,72 100,36" fill="#10b981" />
+        <polygon points="105,52 95,52 100,24" fill="#34d399" />
       </svg>
-      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-emerald-900/85 text-emerald-100 px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs border border-emerald-700/50">
+      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-emerald-950 text-emerald-100 px-2 py-0.5 rounded-md shadow-xs border border-emerald-700/50">
         🌿 Evergreen Classic
       </span>
     </div>
   );
 }
 
-/* 4. Silver Metallic Illustrated Preview */
+/* 4. Silver Metallic Illustrated Preview (Fixed No Text Overlap) */
 function MiniSilverPreview() {
   return (
     <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-slate-200 via-zinc-100 to-slate-200 overflow-hidden border border-slate-400 flex items-center justify-center shadow-inner">
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent blur-xs pointer-events-none" />
-      <div className="text-center space-y-1 relative z-10">
-        <Sparkles className="w-7 h-7 text-slate-700 mx-auto animate-pulse" />
-        <span className="text-[11px] font-black text-slate-900 block font-mono uppercase tracking-widest">
-          Sleek Chrome Titanium
-        </span>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent blur-xs pointer-events-none" />
+      <div className="text-center relative z-10 flex flex-col items-center">
+        <Sparkles className="w-8 h-8 text-slate-700 animate-pulse" />
       </div>
-      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-slate-900/85 text-slate-100 px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs">
+      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-slate-900 text-slate-100 px-2 py-0.5 rounded-md shadow-xs border border-slate-700">
         ⚡ 7-Day Silver
       </span>
     </div>
   );
 }
 
-/* 5. Crystal Quartz Illustrated Preview */
+/* 5. Crystal Quartz Illustrated Preview (Fixed No Text Overlap) */
 function MiniCrystalPreview() {
   return (
     <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-cyan-200 via-sky-100 to-blue-200 overflow-hidden border border-cyan-400 flex items-center justify-center shadow-inner">
-      <div className="absolute inset-0 bg-radial from-cyan-300/60 to-transparent blur-md pointer-events-none" />
-      <div className="text-center space-y-1 relative z-10">
-        <Diamond className="w-7 h-7 text-cyan-800 mx-auto animate-bounce" />
-        <span className="text-[11px] font-black text-cyan-950 block font-mono uppercase tracking-widest">
-          Iridescent Diamond
-        </span>
+      <div className="absolute inset-0 bg-radial from-cyan-300/50 to-transparent blur-md pointer-events-none" />
+      <div className="text-center relative z-10 flex flex-col items-center">
+        <Diamond className="w-8 h-8 text-cyan-800 animate-bounce" />
       </div>
-      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-cyan-900/85 text-cyan-100 px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs">
+      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-cyan-950 text-cyan-100 px-2 py-0.5 rounded-md shadow-xs border border-cyan-700">
         💎 14-Day Diamond
       </span>
     </div>
   );
 }
 
-/* 6. Sunrise Yellow Illustrated Preview */
+/* 6. Sunrise Yellow Illustrated Preview (Fixed No Text Overlap) */
 function MiniSunrisePreview() {
   return (
     <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-amber-200 via-yellow-100 to-amber-200 overflow-hidden border border-yellow-400 flex items-center justify-center shadow-inner">
       <div className="absolute inset-0 bg-radial from-yellow-300/60 to-transparent blur-md pointer-events-none" />
-      <div className="text-center space-y-1 relative z-10">
-        <Sun className="w-7 h-7 text-amber-700 mx-auto animate-spin" style={{ animationDuration: '12s' }} />
-        <span className="text-[11px] font-black text-amber-950 block font-mono uppercase tracking-widest">
-          Solar Horizon Radiance
-        </span>
+      <div className="text-center relative z-10 flex flex-col items-center">
+        <Sun className="w-8 h-8 text-amber-700 animate-spin" style={{ animationDuration: '14s' }} />
       </div>
-      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-amber-900/85 text-amber-100 px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs">
+      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-amber-950 text-yellow-200 px-2 py-0.5 rounded-md shadow-xs border border-yellow-600">
         🌅 21-Day Sunrise
       </span>
     </div>
   );
 }
 
-/* 7. Gold Emperor Illustrated Preview */
+/* 7. Gold Emperor Illustrated Preview (Fixed No Text Overlap) */
 function MiniGoldEmperorPreview() {
   return (
     <div className="relative w-full h-24 my-2.5 rounded-xl bg-gradient-to-b from-yellow-200 via-amber-200 to-yellow-300 overflow-hidden border border-yellow-500 flex items-center justify-center shadow-inner">
       <div className="absolute inset-0 bg-radial from-yellow-400/60 to-transparent blur-md pointer-events-none" />
-      <div className="text-center space-y-1 relative z-10">
-        <Crown className="w-7 h-7 text-amber-900 mx-auto drop-shadow-sm" />
-        <span className="text-[11px] font-black text-amber-950 block font-mono uppercase tracking-widest">
-          24K Gold Royal Emperor
-        </span>
+      <div className="text-center relative z-10 flex flex-col items-center">
+        <Crown className="w-8 h-8 text-amber-900 drop-shadow-sm" />
       </div>
-      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-amber-950 text-yellow-200 px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow-xs">
+      <span className="absolute bottom-1 right-2 text-[9px] font-black font-mono bg-amber-950 text-yellow-200 px-2 py-0.5 rounded-md shadow-xs border border-yellow-600">
         👑 30-Day Emperor
       </span>
     </div>
@@ -409,13 +345,15 @@ export const THEME_CONFIGS = [
   {
     id: 'pumpkin_spice' as AppTheme,
     name: 'Starbucks Pumpkin Spice Latte ☕🎃',
+    shortName: 'Starbucks PSL',
     minStreak: 0,
-    description: "Bunny's Favorite Tradition! Iced Pumpkin Spice Latte with cinnamon cold foam, spiced cookies & warm terracotta aesthetic.",
+    description: "Bunny's Traditional PSL",
     previewComponent: MiniPumpkinSpicePreview
   },
   {
     id: 'autumn' as AppTheme,
     name: 'September Fall Foliage 🍁',
+    shortName: 'Fall Foliage',
     minStreak: 0,
     description: 'Montana Autumn Harvest theme with falling leaves & golden maple aura.',
     previewComponent: MiniAutumnTreePreview
@@ -423,6 +361,7 @@ export const THEME_CONFIGS = [
   {
     id: 'pink_floral' as AppTheme,
     name: 'White & Pink Floral Jogger 🌸',
+    shortName: 'Pink Floral',
     minStreak: 0,
     description: 'Sunday Jogging Day theme with running emojis & flowers.',
     previewComponent: MiniFloralPreview
@@ -430,6 +369,7 @@ export const THEME_CONFIGS = [
   {
     id: 'emerald' as AppTheme,
     name: 'Default Emerald 🌿',
+    shortName: 'Emerald',
     minStreak: 0,
     description: 'Clean classic gym control room layout with evergreen energy.',
     previewComponent: MiniEmeraldPreview
@@ -437,6 +377,7 @@ export const THEME_CONFIGS = [
   {
     id: 'silver' as AppTheme,
     name: 'Silver Metallic ⚡',
+    shortName: 'Silver',
     minStreak: 7,
     description: 'Unlocked at 7 Days Streak! Elegant cool metal aesthetics.',
     previewComponent: MiniSilverPreview
@@ -444,6 +385,7 @@ export const THEME_CONFIGS = [
   {
     id: 'crystal' as AppTheme,
     name: 'Crystal Quartz / Diamond 💎',
+    shortName: 'Crystal Diamond',
     minStreak: 14,
     description: 'Unlocked at 14 Days Streak! Vibrant iridescent diamond blue.',
     previewComponent: MiniCrystalPreview
@@ -451,6 +393,7 @@ export const THEME_CONFIGS = [
   {
     id: 'sunrise' as AppTheme,
     name: 'Sunrise Yellow / Gold Glow 🌅',
+    shortName: 'Sunrise Gold',
     minStreak: 21,
     description: 'Unlocked at 21 Days Streak! Energetic warm sunrise aura.',
     previewComponent: MiniSunrisePreview
@@ -458,6 +401,7 @@ export const THEME_CONFIGS = [
   {
     id: 'gold' as AppTheme,
     name: 'Gold Emperor 👑',
+    shortName: 'Gold Emperor',
     minStreak: 30,
     description: 'Unlocked at 30 Days Streak! Prestigious 24k gold with fireworks!',
     previewComponent: MiniGoldEmperorPreview
@@ -493,8 +437,8 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
 
   return (
     <div className="space-y-6">
-      {/* Milestone Progress Card */}
-      <div className="bg-gradient-to-br from-stone-900 via-amber-950 to-stone-900 rounded-[32px] p-6 text-white shadow-xl relative overflow-hidden border border-amber-600/40">
+      {/* Milestone Progress Card (iPhone Liquid Glass Tint) */}
+      <div className="bg-stone-900/65 backdrop-blur-xl rounded-[32px] p-6 text-white shadow-xl relative overflow-hidden border border-white/30">
         <div className="absolute top-0 right-0 w-36 h-36 bg-orange-500/20 rounded-full blur-2xl" />
         
         <div className="flex items-center justify-between mb-3 relative z-10">
@@ -504,7 +448,7 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-black tracking-tight text-white">Milestone Progression Vault</h3>
-              <p className="text-xs text-amber-200/90 font-bold">
+              <p className="text-xs text-amber-200 font-bold">
                 Current Streak: <span className="font-black text-amber-400 font-mono text-sm">{currentStreak} Days 🔥</span>
               </p>
             </div>
@@ -521,7 +465,7 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
             <span>Progress to Day {nextMilestone}</span>
             <span>{daysToNext === 0 ? "Milestone Reached! 🎉" : `${daysToNext} days remaining`}</span>
           </div>
-          <div className="w-full bg-stone-800/90 h-3.5 rounded-full overflow-hidden p-0.5 border border-amber-500/30">
+          <div className="w-full bg-stone-800/80 h-3.5 rounded-full overflow-hidden p-0.5 border border-amber-500/30">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${progressPct}%` }}
@@ -531,15 +475,15 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
         </div>
       </div>
 
-      {/* Themes Vault Grid */}
-      <div className="bg-white/90 backdrop-blur-xs rounded-[32px] p-5 sm:p-6 shadow-md border border-amber-300/80 space-y-4">
-        <div className="flex items-center space-x-3 pb-3 border-b border-amber-200">
+      {/* Themes Vault Grid (iPhone Liquid Glass Translucent) */}
+      <div className="bg-white/35 backdrop-blur-xl rounded-[32px] p-5 sm:p-6 shadow-xl border border-white/60 space-y-4">
+        <div className="flex items-center space-x-3 pb-3 border-b border-amber-950/15">
           <div className="p-2.5 bg-gradient-to-tr from-amber-600 to-orange-500 text-white rounded-2xl shadow-sm">
             <Palette className="w-5 h-5" />
           </div>
           <div>
             <h3 className="text-base font-black text-stone-950">Themes Vault & Rewards</h3>
-            <p className="text-xs text-stone-700 font-bold">Select and equip custom themes to transform Bunny's Gym Record!</p>
+            <p className="text-xs text-stone-800 font-bold">Select and equip custom themes to transform Bunny's Gym Record!</p>
           </div>
         </div>
 
@@ -559,29 +503,29 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
                     ? `${style.cardBgActive} ${style.borderActive}` 
                     : isUnlocked 
                       ? `${style.cardBgUnlocked} ${style.borderUnlocked}` 
-                      : `${style.cardBgLocked} border-2 border-stone-300 opacity-75`
+                      : `${style.cardBgLocked} border-2 border-stone-300/80 opacity-75`
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-2">
-                      <div className={`w-6 h-6 rounded-full ${style.iconBg} flex items-center justify-center text-white shadow-xs`}>
-                        <AccentIcon className="w-3.5 h-3.5" />
+                      <div className={`w-7 h-7 rounded-full ${style.iconBg} flex items-center justify-center text-white shadow-xs shrink-0`}>
+                        <AccentIcon className="w-4 h-4 text-white" />
                       </div>
                       <span className={`text-xs sm:text-sm font-black ${style.titleColor}`}>{theme.name}</span>
                     </div>
 
                     {isActive ? (
-                      <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 shadow-xs ${style.badgeActive}`}>
+                      <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 shadow-xs shrink-0 ${style.badgeActive}`}>
                         <CheckCircle2 className="w-3.5 h-3.5" /> Active
                       </span>
                     ) : isUnlocked ? (
-                      <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full shadow-2xs ${style.badgeUnlocked}`}>
+                      <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full shadow-2xs shrink-0 ${style.badgeUnlocked}`}>
                         Unlocked
                       </span>
                     ) : (
-                      <span className={`text-[10px] font-mono font-black px-2 py-0.5 rounded-full flex items-center gap-1 ${style.badgeLocked}`}>
-                        <Lock className="w-3 h-3" /> Day {theme.minStreak}
+                      <span className={`text-[10px] font-mono font-black px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0 ${style.badgeLocked}`}>
+                        <Lock className="w-3 h-3 text-stone-800" /> Day {theme.minStreak}
                       </span>
                     )}
                   </div>
@@ -599,7 +543,7 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
                     <button
                       onClick={() => onSelectTheme(theme.id)}
                       disabled={isActive}
-                      className={`w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-2 active:scale-95 ${
+                      className={`w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-2 active:scale-95 shadow-md ${
                         isActive 
                           ? `${style.equippedBtnBg} cursor-default` 
                           : `${style.equipBtnBg}`
@@ -607,19 +551,19 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
                     >
                       {isActive ? (
                         <>
-                          <CheckCircle2 className="w-4 h-4 shrink-0" />
-                          <span>✓ Currently Equipped</span>
+                          <CheckCircle2 className="w-4 h-4 shrink-0 text-amber-300" />
+                          <span className="text-[#fed7aa] font-black">✓ Currently Equipped</span>
                         </>
                       ) : (
                         <>
-                          <Sparkles className="w-4 h-4 shrink-0" />
-                          <span>Equip {theme.name.split(' ')[0]} Theme</span>
+                          <Sparkles className="w-4 h-4 shrink-0 text-white" />
+                          <span className="text-white font-black">Equip {theme.shortName} Theme</span>
                         </>
                       )}
                     </button>
                   ) : (
                     <div className="w-full py-3 px-3 bg-stone-200/90 text-stone-900 font-black rounded-xl text-xs font-mono text-center border border-stone-300 flex items-center justify-center gap-1.5 shadow-2xs">
-                      <Lock className="w-3.5 h-3.5 text-stone-700" />
+                      <Lock className="w-3.5 h-3.5 text-stone-800" />
                       <span>Reach Day {theme.minStreak} Streak to Unlock</span>
                     </div>
                   )}
@@ -630,8 +574,8 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
         </div>
       </div>
 
-      {/* Skip Days Perk Panel (Day 60) */}
-      <div className="bg-white/90 backdrop-blur-xs rounded-[32px] p-5 sm:p-6 shadow-md border border-amber-300/80 space-y-3">
+      {/* Skip Days Perk Panel (iPhone Liquid Glass Translucent) */}
+      <div className="bg-white/35 backdrop-blur-xl rounded-[32px] p-5 sm:p-6 shadow-xl border border-white/60 space-y-3">
         <div className="flex items-center space-x-3">
           <div className="p-2.5 bg-gradient-to-tr from-amber-600 to-orange-500 text-white rounded-2xl shadow-sm">
             <Shield className="w-5 h-5" />
@@ -641,17 +585,17 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
               <span>Protected Skip Days Perk</span>
               {!skipUnlocked && <span className="text-[10px] font-mono bg-amber-100 text-amber-950 px-2 py-0.5 rounded-full font-black border border-amber-300">Unlocks Day 60</span>}
             </h3>
-            <p className="text-xs text-stone-700 font-bold">
+            <p className="text-xs text-stone-800 font-bold">
               Allows up to 2 rest days per month without breaking your active streak!
             </p>
           </div>
         </div>
 
         {skipUnlocked ? (
-          <div className="p-4 bg-amber-100/90 border border-amber-300 rounded-2xl flex items-center justify-between shadow-xs">
+          <div className="p-4 bg-white/50 backdrop-blur-md border border-amber-300 rounded-2xl flex items-center justify-between shadow-xs">
             <div>
-              <span className="text-xs font-black text-amber-950 block">Monthly Protected Skip Days</span>
-              <span className="text-xs text-amber-900 font-bold">Used: {usedSkip} / 2 this month</span>
+              <span className="text-xs font-black text-stone-950 block">Monthly Protected Skip Days</span>
+              <span className="text-xs text-stone-800 font-bold">Used: {usedSkip} / 2 this month</span>
             </div>
             {onUseSkipDay && usedSkip < 2 && (
               <button
@@ -663,7 +607,7 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
             )}
           </div>
         ) : (
-          <div className="p-3.5 bg-stone-100 border border-stone-300 text-stone-800 text-xs rounded-2xl font-mono leading-relaxed font-bold">
+          <div className="p-3.5 bg-white/40 backdrop-blur-md border border-stone-300 text-stone-900 text-xs rounded-2xl font-mono leading-relaxed font-bold">
             🔒 Milestone locked until hitting 60 continuous streak days! ({60 - currentStreak} days remaining).
           </div>
         )}
@@ -671,4 +615,3 @@ export default function ThemesVault({ profile, currentStreak, activeTheme, onSel
     </div>
   );
 }
-

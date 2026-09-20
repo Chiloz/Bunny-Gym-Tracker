@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { 
   Users, Scale, Award, ShieldAlert, CheckCircle2, XCircle, 
   Video, Music, Play, Upload, MessageSquare, AlertOctagon, 
-  Save, RefreshCw, Calendar as CalendarIcon, LogOut, HelpCircle, Sparkles, Download, Trash2
+  Save, RefreshCw, Calendar as CalendarIcon, LogOut, HelpCircle, Sparkles, Download, Trash2, Mail
 } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { 
@@ -26,6 +26,8 @@ import { WEIGHT_LOSS_PENALTIES, getRandomPenaltyTask } from '../lib/penalties';
 import BunnyDashboard from './BunnyDashboard';
 import CloudinaryConfigCard from '../components/CloudinaryConfigCard';
 import FallAutumnTreeBackground from '../components/FallAutumnTreeBackground';
+import CoachCheckinAdmin from '../components/CoachCheckinAdmin';
+import DailyCheckinView from '../components/DailyCheckinView';
 import { getCloudinaryConfig, uploadToCloudinary } from '../lib/cloudinary';
 
 interface PenguinAdminProps {
@@ -57,9 +59,10 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
 
   // Admin View as Bunny toggle
   const [viewingAsBunny, setViewingAsBunny] = useState(false);
+  const [previewCheckinModal, setPreviewCheckinModal] = useState(false);
 
   // Admin Section Navigation Tabs
-  const [adminTab, setAdminTab] = useState<'monitor' | 'media' | 'penalties' | 'cheer' | 'broadcaster'>('monitor');
+  const [adminTab, setAdminTab] = useState<'monitor' | 'media' | 'penalties' | 'cheer' | 'broadcaster' | 'checkins'>('monitor');
 
   // Broadcasting configurations
   const [q1, setQ1] = useState('');
@@ -1168,6 +1171,13 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
               icon: Sparkles, 
               badge: 'Config',
               color: isAdminAutumnActive ? 'text-amber-900' : 'text-purple-700'
+            },
+            { 
+              id: 'checkins', 
+              label: 'Daily Check-in & Email', 
+              icon: Mail, 
+              badge: 'Email 💌',
+              color: isAdminAutumnActive ? 'text-amber-900' : 'text-indigo-600'
             },
           ].map((tab) => {
             const isActive = adminTab === tab.id;
@@ -2423,8 +2433,34 @@ export default function PenguinAdmin({ profile: adminProfile, onLogout }: Pengui
             </div>
           )}
 
+          {/* TAB 6: DAILY CHECK-IN & EMAIL REMINDERS */}
+          {adminTab === 'checkins' && (
+            <div className="animate-fadeIn">
+              <CoachCheckinAdmin onOpenCheckinPreview={() => setPreviewCheckinModal(true)} />
+            </div>
+          )}
+
         </div>
       </div>
+
+      {/* Bunny Daily Check-in Full Preview Modal for Penguin */}
+      {previewCheckinModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 overflow-y-auto p-4 flex justify-center items-start animate-fadeIn">
+          <div className="relative w-full max-w-2xl my-8">
+            <button
+              onClick={() => setPreviewCheckinModal(false)}
+              className="absolute top-4 right-4 z-50 px-3 py-1.5 rounded-full bg-[#2B2620] text-white text-xs font-bold hover:bg-black transition-all cursor-pointer shadow-lg"
+            >
+              ✕ Close Preview
+            </button>
+            <DailyCheckinView
+              profile={bunnyProfile}
+              onBackToApp={() => setPreviewCheckinModal(false)}
+              isTestMode={true}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Date Details Inspector Modal */}
       {selectedDateModal && (

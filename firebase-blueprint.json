@@ -53,6 +53,34 @@
         "uploadedAt": { "type": "string" }
       },
       "required": ["title", "fileUrl", "fileType", "uploadedAt"]
+    },
+    "DailyCheckin": {
+      "title": "DailyCheckin",
+      "description": "Daily check-in response submitted by Bunny from email or app",
+      "type": "object",
+      "properties": {
+        "dateStr": { "type": "string" },
+        "dateFormatted": { "type": "string" },
+        "submittedAt": { "type": "string" },
+        "uid": { "type": "string" },
+        "userName": { "type": "string" },
+        "ate": { "type": "boolean" },
+        "mealCount": { "type": "number" },
+        "whatAte": { "type": "string" },
+        "morningExercise": { "type": "boolean" },
+        "gym": { "type": "boolean" },
+        "caloriesBurned": { "type": "number" },
+        "water": { "type": "boolean" },
+        "lostWeight": { "type": "boolean" },
+        "weightDelta": { "type": "number" },
+        "weightUnit": { "type": "string", "enum": ["kg", "lb"] },
+        "energyMorning": { "type": "number" },
+        "energyNow": { "type": "number" },
+        "energyDiff": { "type": "number" },
+        "goodDay": { "type": "boolean" },
+        "note": { "type": "string" }
+      },
+      "required": ["dateStr", "submittedAt"]
     }
   },
   "firestore": {
@@ -71,6 +99,10 @@
     "/cheer_vault/{cheerId}": {
       "schema": "CheerItem",
       "description": "Cheer vault items"
+    },
+    "/daily_checkins/{checkinId}": {
+      "schema": "DailyCheckin",
+      "description": "Daily check-in submissions"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "Bunny's Gym Record",
-  "description": "A Progressive Web Application for tracking gym attendance, streaks, weight logs, and penalty box challenges.",
+  "description": "A vintage accountability and fitness companion with automated daily email reminders, evening question box dispatches, celebration fireworks, and cheering catchphrases.",
   "requestFramePermissions": ["geolocation"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

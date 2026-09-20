@@ -7,11 +7,25 @@ import { UserProfile } from './types';
 import AuthView from './views/AuthView';
 import BunnyDashboard from './views/BunnyDashboard';
 import PenguinAdmin from './views/PenguinAdmin';
+import DailyCheckinView from './components/DailyCheckinView';
 
 export default function App() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Check URL query parameters for direct check-in view from email
+  const [isCheckinView, setIsCheckinView] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('view') === 'checkin' || params.get('checkin') === 'true';
+    }
+    return false;
+  });
+
+  const checkinDateParam = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('date') || undefined
+    : undefined;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -54,6 +68,28 @@ export default function App() {
     setProfile(null);
   };
 
+  // If user opened via the email checkin link or toggled check-in view
+  if (isCheckinView) {
+    return (
+      <DailyCheckinView
+        profile={profile}
+        initialDate={checkinDateParam}
+        onBackToApp={() => {
+          // Remove query params and return to standard dashboard
+          if (typeof window !== 'undefined') {
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+          }
+          setIsCheckinView(false);
+        }}
+        showAdminSwitch={profile?.role === 'admin'}
+        onSwitchToAdmin={() => {
+          setIsCheckinView(false);
+        }}
+      />
+    );
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-emerald-50 flex flex-col items-center justify-center p-4 font-sans">
@@ -81,4 +117,5 @@ export default function App() {
 
   return <BunnyDashboard profile={profile} onLogout={handleLogout} />;
 }
+
 

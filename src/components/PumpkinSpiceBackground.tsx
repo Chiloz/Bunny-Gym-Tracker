@@ -30,7 +30,7 @@ export default function PumpkinSpiceBackground() {
   // Generate floating spice particles & cinnamon dusting
   const spices: SpiceParticle[] = useMemo(() => {
     const list: SpiceParticle[] = [];
-    const count = 30;
+    const count = 32;
 
     for (let i = 0; i < count; i++) {
       const typeChoice: SpiceParticle['type'] = 
@@ -41,15 +41,15 @@ export default function PumpkinSpiceBackground() {
 
       list.push({
         id: i,
-        startX: 3 + (i * (94 / count)) + ((i % 3) * 2),
+        startX: 2 + (i * (96 / count)),
         startY: -20 - ((i % 5) * 20),
-        size: typeChoice === 'star_anise' ? 22 + (i % 3) * 4 :
-              typeChoice === 'sparkle' ? 14 + (i % 3) * 3 :
-              typeChoice === 'mini_leaf' ? 18 + (i % 3) * 4 :
+        size: typeChoice === 'star_anise' ? 24 + (i % 3) * 4 :
+              typeChoice === 'sparkle' ? 16 + (i % 3) * 3 :
+              typeChoice === 'mini_leaf' ? 20 + (i % 3) * 4 :
               8 + (i % 4) * 4,
         color: PSL_WARM_SPICE_PALETTE[i % PSL_WARM_SPICE_PALETTE.length],
         duration: 8 + (i % 5) * 2,
-        delay: (i * 0.4) % 6,
+        delay: (i * 0.35) % 6,
         swayAmount: 25 + (i % 4) * 20,
         type: typeChoice,
         rotationStart: (i * 45) % 360,
@@ -107,8 +107,8 @@ export default function PumpkinSpiceBackground() {
       aria-hidden="true"
       id="pumpkin-spice-latte-background"
     >
-      {/* 1. Terracotta Warm Café Atmosphere & Ambient Glow */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#ffedd5]/85 via-[#fed7aa]/55 to-[#ffedd5]/90 pointer-events-none" />
+      {/* 1. Terracotta Warm Café Atmosphere & Ambient Glow (Light & Crisp) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#fff7ed]/70 via-[#fed7aa]/35 to-[#ffedd5]/70 pointer-events-none" />
       
       {/* Subtle Terracotta Ceramic Tiles Backdrop Pattern */}
       <div 
@@ -118,19 +118,19 @@ export default function PumpkinSpiceBackground() {
             linear-gradient(to right, #9a3412 1px, transparent 1px),
             linear-gradient(to bottom, #9a3412 1px, transparent 1px)
           `,
-          backgroundSize: '120px 120px',
+          backgroundSize: '110px 110px',
         }}
       />
 
-      {/* Warm Golden Cinnamon Sunbeam Radiance */}
-      <div className="absolute top-48 sm:top-20 md:top-10 left-1/2 -translate-x-1/2 w-[750px] sm:w-[950px] h-[550px] bg-radial from-[#fb923c]/35 via-[#ea580c]/20 to-transparent blur-3xl pointer-events-none" />
-      <div className="absolute top-52 sm:top-28 left-1/4 w-[450px] h-[450px] bg-radial from-[#fdba74]/30 via-[#fed7aa]/15 to-transparent blur-3xl pointer-events-none" />
-      <div className="absolute top-52 sm:top-28 right-1/4 w-[450px] h-[450px] bg-radial from-[#fdba74]/30 via-[#fed7aa]/15 to-transparent blur-3xl pointer-events-none" />
+      {/* Warm Golden Cinnamon Sunbeam Radiance (Crisp, subtle) */}
+      <div className="absolute top-14 left-1/2 -translate-x-1/2 w-[850px] sm:w-[1100px] h-[600px] bg-radial from-[#fb923c]/20 via-[#ea580c]/10 to-transparent blur-xl pointer-events-none" />
+      <div className="absolute top-36 left-1/5 w-[400px] h-[400px] bg-radial from-[#fdba74]/20 to-transparent blur-xl pointer-events-none" />
+      <div className="absolute top-36 right-1/5 w-[400px] h-[400px] bg-radial from-[#fdba74]/20 to-transparent blur-xl pointer-events-none" />
 
-      {/* 2. Centerpiece Starbucks Iced Pumpkin Spice Latte Artwork (Carefully position on laptop & phone) */}
-      <div className="absolute top-48 sm:top-24 md:top-14 lg:top-16 left-1/2 -translate-x-1/2 w-[95vw] sm:w-[90vw] max-w-[840px] h-[420px] sm:h-[500px] md:h-[580px] pointer-events-none opacity-[0.92]">
+      {/* 2. Super-Sized Centerpiece Starbucks Iced Pumpkin Spice Latte Artwork */}
+      <div className="absolute top-10 sm:top-6 md:top-4 lg:top-6 left-1/2 -translate-x-1/2 w-[98vw] sm:w-[92vw] max-w-[1020px] h-[540px] sm:h-[640px] md:h-[740px] pointer-events-none opacity-100">
         <svg 
-          viewBox="0 0 800 600" 
+          viewBox="0 0 900 700" 
           fill="none" 
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-full filter drop-shadow-2xl"
@@ -142,28 +142,29 @@ export default function PumpkinSpiceBackground() {
               <stop offset="100%" stopColor="#9a3412" stopOpacity="0.2" />
             </linearGradient>
 
-            {/* Iced PSL Coffee Layers Gradient */}
+            {/* Iced PSL Coffee Rich Liquid Gradient */}
             <linearGradient id="pslIcedLiquid" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#d97706" />
-              <stop offset="25%" stopColor="#b45309" />
-              <stop offset="55%" stopColor="#92400e" />
+              <stop offset="0%" stopColor="#eab308" />
+              <stop offset="15%" stopColor="#d97706" />
+              <stop offset="35%" stopColor="#b45309" />
+              <stop offset="60%" stopColor="#92400e" />
               <stop offset="85%" stopColor="#78350f" />
               <stop offset="100%" stopColor="#451a03" />
             </linearGradient>
 
             {/* Thick Pumpkin Sweet Cream Cold Foam */}
             <linearGradient id="sweetCreamColdFoam" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#fffbeb" />
+              <stop offset="0%" stopColor="#fffdfa" />
               <stop offset="35%" stopColor="#fef3c7" />
-              <stop offset="75%" stopColor="#fde68a" />
+              <stop offset="70%" stopColor="#fde68a" />
               <stop offset="100%" stopColor="#fcd34d" />
             </linearGradient>
 
             {/* Cinnamon Dusting Gradient */}
             <radialGradient id="cinnamonDust" cx="50%" cy="40%" r="50%">
-              <stop offset="0%" stopColor="#78350f" stopOpacity="0.85" />
-              <stop offset="60%" stopColor="#9a3412" stopOpacity="0.65" />
-              <stop offset="100%" stopColor="#c2410c" stopOpacity="0.3" />
+              <stop offset="0%" stopColor="#78350f" stopOpacity="0.9" />
+              <stop offset="60%" stopColor="#9a3412" stopOpacity="0.75" />
+              <stop offset="100%" stopColor="#c2410c" stopOpacity="0.4" />
             </radialGradient>
 
             {/* Pumpkin Orange Gradients */}
@@ -191,10 +192,10 @@ export default function PumpkinSpiceBackground() {
 
             {/* Clear Cup Glass Highlight */}
             <linearGradient id="cupGlassSheen" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.6" />
-              <stop offset="25%" stopColor="#ffffff" stopOpacity="0.2" />
-              <stop offset="70%" stopColor="#ffffff" stopOpacity="0.05" />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.4" />
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.7" />
+              <stop offset="25%" stopColor="#ffffff" stopOpacity="0.25" />
+              <stop offset="70%" stopColor="#ffffff" stopOpacity="0.08" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.5" />
             </linearGradient>
           </defs>
 
@@ -203,9 +204,9 @@ export default function PumpkinSpiceBackground() {
           {/* ======================================================== */}
           
           {/* Large Autumn Pumpkin (Left Background) */}
-          <g transform="translate(110, 230) scale(1.15)">
+          <g transform="translate(80, 290) scale(1.35)">
             {/* Pumpkin Stem */}
-            <path d="M 90 20 Q 80 -10 60 -18 Q 75 -8 85 20 Z" fill="#3f4f1d" stroke="#2d3814" strokeWidth="2" />
+            <path d="M 90 20 Q 80 -10 60 -18 Q 75 -8 85 20 Z" fill="#3f4f1d" stroke="#2d3814" strokeWidth="2.5" />
             {/* Pumpkin Ribs */}
             <ellipse cx="90" cy="80" rx="75" ry="60" fill="url(#pumpkinShade)" />
             <ellipse cx="50" cy="80" rx="42" ry="54" fill="url(#pumpkinShade)" />
@@ -217,51 +218,51 @@ export default function PumpkinSpiceBackground() {
 
           {/* Stack of Frosted Pumpkin Spice Cookies (Left Midground) */}
           {/* Cookie 1 (Bottom of stack) */}
-          <g transform="translate(180, 420)">
+          <g transform="translate(170, 490) scale(1.15)">
             <ellipse cx="60" cy="40" rx="55" ry="24" fill="url(#cookieBase)" />
             {/* Frosting Swirl */}
             <ellipse cx="60" cy="34" rx="46" ry="18" fill="url(#cookieFrosting)" />
             <path d="M 28 32 Q 60 18 92 32 Q 60 42 28 32 Z" fill="#ffffff" opacity="0.9" />
             {/* Cinnamon dust on frosting */}
-            <circle cx="50" cy="30" r="1.5" fill="#78350f" />
-            <circle cx="65" cy="28" r="1.2" fill="#9a3412" />
-            <circle cx="75" cy="35" r="1.5" fill="#78350f" />
-            <circle cx="42" cy="36" r="1.2" fill="#9a3412" />
+            <circle cx="50" cy="30" r="1.8" fill="#78350f" />
+            <circle cx="65" cy="28" r="1.4" fill="#9a3412" />
+            <circle cx="75" cy="35" r="1.8" fill="#78350f" />
+            <circle cx="42" cy="36" r="1.4" fill="#9a3412" />
           </g>
 
           {/* Cookie 2 (Middle of stack) */}
-          <g transform="translate(185, 365)">
+          <g transform="translate(175, 435) scale(1.15)">
             <ellipse cx="55" cy="36" rx="52" ry="22" fill="url(#cookieBase)" />
             <ellipse cx="55" cy="30" rx="43" ry="16" fill="url(#cookieFrosting)" />
             <path d="M 26 28 Q 55 16 84 28 Q 55 36 26 28 Z" fill="#ffffff" opacity="0.9" />
-            <circle cx="48" cy="26" r="1.5" fill="#78350f" />
-            <circle cx="60" cy="24" r="1.2" fill="#9a3412" />
-            <circle cx="70" cy="31" r="1.5" fill="#78350f" />
+            <circle cx="48" cy="26" r="1.8" fill="#78350f" />
+            <circle cx="60" cy="24" r="1.4" fill="#9a3412" />
+            <circle cx="70" cy="31" r="1.8" fill="#78350f" />
           </g>
 
           {/* Cookie 3 (Top of stack) */}
-          <g transform="translate(190, 310)">
+          <g transform="translate(180, 380) scale(1.15)">
             <ellipse cx="50" cy="32" rx="48" ry="20" fill="url(#cookieBase)" />
             <ellipse cx="50" cy="26" rx="40" ry="15" fill="url(#cookieFrosting)" />
             <path d="M 24 24 Q 50 14 76 24 Q 50 32 24 24 Z" fill="#ffffff" opacity="0.9" />
-            <circle cx="44" cy="22" r="1.5" fill="#78350f" />
-            <circle cx="56" cy="20" r="1.2" fill="#9a3412" />
-            <circle cx="64" cy="27" r="1.5" fill="#78350f" />
+            <circle cx="44" cy="22" r="1.8" fill="#78350f" />
+            <circle cx="56" cy="20" r="1.4" fill="#9a3412" />
+            <circle cx="64" cy="27" r="1.8" fill="#78350f" />
           </g>
 
           {/* Mini Pumpkin (Foreground Left) */}
-          <g transform="translate(70, 430) scale(0.75)">
-            <path d="M 80 15 Q 70 -5 50 -10 Q 65 -2 75 15 Z" fill="#3f4f1d" stroke="#2d3814" strokeWidth="2" />
+          <g transform="translate(40, 480) scale(0.95)">
+            <path d="M 80 15 Q 70 -5 50 -10 Q 65 -2 75 15 Z" fill="#3f4f1d" stroke="#2d3814" strokeWidth="2.5" />
             <ellipse cx="80" cy="65" rx="60" ry="46" fill="url(#pumpkinShade)" />
             <ellipse cx="50" cy="65" rx="35" ry="42" fill="url(#pumpkinShade)" />
             <ellipse cx="110" cy="65" rx="35" ry="42" fill="url(#pumpkinShade)" />
             <ellipse cx="80" cy="65" rx="25" ry="45" fill="#ea580c" />
           </g>
 
-          {/* Mini Pumpkin (Foreground Right) */}
-          <g transform="translate(560, 410) scale(0.9)">
+          {/* Large Pumpkin (Foreground Right) */}
+          <g transform="translate(640, 390) scale(1.25)">
             {/* Long Curled Stem */}
-            <path d="M 90 20 Q 95 -15 125 -30 Q 115 -10 95 20 Z" fill="#3f4f1d" stroke="#2d3814" strokeWidth="2" />
+            <path d="M 90 20 Q 95 -15 125 -30 Q 115 -10 95 20 Z" fill="#3f4f1d" stroke="#2d3814" strokeWidth="2.5" />
             <ellipse cx="90" cy="75" rx="70" ry="54" fill="url(#pumpkinShade)" />
             <ellipse cx="55" cy="75" rx="40" ry="48" fill="url(#pumpkinShade)" />
             <ellipse cx="125" cy="75" rx="40" ry="48" fill="url(#pumpkinShade)" />
@@ -271,157 +272,161 @@ export default function PumpkinSpiceBackground() {
           </g>
 
           {/* Frosted Cookie (Right Background) */}
-          <g transform="translate(630, 310)">
+          <g transform="translate(730, 310) scale(1.2)">
             <ellipse cx="50" cy="30" rx="46" ry="20" fill="url(#cookieBase)" />
             <ellipse cx="50" cy="24" rx="38" ry="14" fill="url(#cookieFrosting)" />
             <path d="M 22 22 Q 50 12 78 22 Q 50 30 22 22 Z" fill="#ffffff" opacity="0.9" />
-            <circle cx="45" cy="20" r="1.5" fill="#78350f" />
-            <circle cx="58" cy="18" r="1.2" fill="#9a3412" />
+            <circle cx="45" cy="20" r="1.8" fill="#78350f" />
+            <circle cx="58" cy="18" r="1.4" fill="#9a3412" />
           </g>
 
 
           {/* ======================================================== */}
-          {/* CENTERPIECE: Starbucks Iced Pumpkin Spice Latte Cup */}
+          {/* CENTERPIECE: Extra Large Starbucks Iced PSL Cup (Scale 1.6) */}
           {/* ======================================================== */}
-          <g transform="translate(290, 80) scale(1.18)">
+          <g transform="translate(305, 45) scale(1.58)">
             
             {/* Shadow under the cup */}
-            <ellipse cx="100" cy="405" rx="78" ry="18" fill="#451a03" opacity="0.45" />
+            <ellipse cx="100" cy="405" rx="88" ry="20" fill="#451a03" opacity="0.55" />
 
             {/* Clear Starbucks Iced Cup Silhouette */}
             {/* Main Cup Body Path */}
             <path 
-              d="M 20 50 L 38 385 Q 40 400 100 400 Q 160 400 162 385 L 180 50 Z" 
+              d="M 18 50 L 36 385 Q 38 402 100 402 Q 162 402 164 385 L 182 50 Z" 
               fill="url(#pslIcedLiquid)" 
             />
 
             {/* Ribbed cup horizontal bands */}
-            <path d="M 23 80 L 177 80" stroke="#ffffff" strokeWidth="1.5" opacity="0.3" />
-            <path d="M 27 150 L 173 150" stroke="#ffffff" strokeWidth="1.5" opacity="0.25" />
-            <path d="M 31 220 L 169 220" stroke="#ffffff" strokeWidth="1.5" opacity="0.2" />
-            <path d="M 35 290 L 165 290" stroke="#ffffff" strokeWidth="1.5" opacity="0.2" />
+            <path d="M 21 80 L 179 80" stroke="#ffffff" strokeWidth="2" opacity="0.35" />
+            <path d="M 25 150 L 175 150" stroke="#ffffff" strokeWidth="2" opacity="0.3" />
+            <path d="M 29 220 L 171 220" stroke="#ffffff" strokeWidth="2" opacity="0.25" />
+            <path d="M 33 290 L 167 290" stroke="#ffffff" strokeWidth="2" opacity="0.25" />
 
             {/* Realistic Floating Ice Cubes in Liquid */}
             {/* Ice Cube 1 */}
-            <g transform="translate(45, 120) rotate(15)">
-              <rect x="0" y="0" width="36" height="32" rx="6" fill="#ffffff" opacity="0.35" stroke="#ffffff" strokeWidth="1.5" />
-              <path d="M 4 8 L 32 8" stroke="#ffffff" strokeWidth="1" opacity="0.5" />
+            <g transform="translate(42, 110) rotate(14)">
+              <rect x="0" y="0" width="40" height="34" rx="7" fill="#ffffff" opacity="0.4" stroke="#ffffff" strokeWidth="1.8" />
+              <path d="M 4 8 L 36 8" stroke="#ffffff" strokeWidth="1.2" opacity="0.55" />
             </g>
             {/* Ice Cube 2 */}
-            <g transform="translate(110, 140) rotate(-20)">
-              <rect x="0" y="0" width="38" height="34" rx="6" fill="#ffffff" opacity="0.35" stroke="#ffffff" strokeWidth="1.5" />
+            <g transform="translate(112, 130) rotate(-18)">
+              <rect x="0" y="0" width="42" height="36" rx="7" fill="#ffffff" opacity="0.4" stroke="#ffffff" strokeWidth="1.8" />
             </g>
             {/* Ice Cube 3 */}
-            <g transform="translate(60, 200) rotate(8)">
-              <rect x="0" y="0" width="34" height="30" rx="5" fill="#ffffff" opacity="0.3" stroke="#ffffff" strokeWidth="1.5" />
+            <g transform="translate(56, 195) rotate(10)">
+              <rect x="0" y="0" width="38" height="32" rx="6" fill="#ffffff" opacity="0.35" stroke="#ffffff" strokeWidth="1.8" />
             </g>
             {/* Ice Cube 4 */}
-            <g transform="translate(105, 235) rotate(-12)">
-              <rect x="0" y="0" width="38" height="32" rx="6" fill="#ffffff" opacity="0.28" stroke="#ffffff" strokeWidth="1.5" />
+            <g transform="translate(108, 235) rotate(-12)">
+              <rect x="0" y="0" width="42" height="34" rx="7" fill="#ffffff" opacity="0.32" stroke="#ffffff" strokeWidth="1.8" />
+            </g>
+            {/* Ice Cube 5 (Bottom) */}
+            <g transform="translate(70, 310) rotate(5)">
+              <rect x="0" y="0" width="44" height="32" rx="6" fill="#ffffff" opacity="0.28" stroke="#ffffff" strokeWidth="1.5" />
             </g>
 
             {/* Starbucks Iconic Circular Siren Logo Emblem */}
             <g transform="translate(100, 210)">
               {/* Outer circle with frosted translucent background */}
-              <circle cx="0" cy="0" r="42" fill="#ffffff" opacity="0.28" stroke="#ffffff" strokeWidth="2" />
-              <circle cx="0" cy="0" r="38" fill="#ffffff" opacity="0.15" />
+              <circle cx="0" cy="0" r="46" fill="#ffffff" opacity="0.32" stroke="#ffffff" strokeWidth="2.5" />
+              <circle cx="0" cy="0" r="41" fill="#ffffff" opacity="0.18" />
               
               {/* Starbucks Siren Crown & Star */}
-              <path d="M 0 -28 L 3 -20 L 11 -20 L 5 -15 L 7 -7 L 0 -12 L -7 -7 L -5 -15 L -11 -20 L -3 -20 Z" fill="#ffffff" opacity="0.95" />
-              <path d="M -18 -18 L -12 -12 L -8 -20 L -12 -25 Z" fill="#ffffff" opacity="0.9" />
-              <path d="M 18 -18 L 12 -12 L 8 -20 L 12 -25 Z" fill="#ffffff" opacity="0.9" />
+              <path d="M 0 -30 L 3.5 -22 L 12 -22 L 5.5 -16 L 8 -7 L 0 -13 L -8 -7 L -5.5 -16 L -12 -22 L -3.5 -22 Z" fill="#ffffff" opacity="0.98" />
+              <path d="M -20 -19 L -13 -13 L -9 -22 L -13 -27 Z" fill="#ffffff" opacity="0.95" />
+              <path d="M 20 -19 L 13 -13 L 9 -22 L 13 -27 Z" fill="#ffffff" opacity="0.95" />
 
               {/* Siren Face Silhouette */}
-              <path d="M -7 -6 Q 0 -9 7 -6 Q 7 5 0 9 Q -7 5 -7 -6 Z" fill="#ffffff" opacity="0.95" />
+              <path d="M -8 -6 Q 0 -10 8 -6 Q 8 6 0 10 Q -8 6 -8 -6 Z" fill="#ffffff" opacity="0.98" />
               {/* Siren Hair Waves */}
-              <path d="M -16 -6 Q -22 6 -12 16 Q -22 22 -30 14" stroke="#ffffff" strokeWidth="2.4" fill="none" strokeLinecap="round" opacity="0.95" />
-              <path d="M 16 -6 Q 22 6 12 16 Q 22 22 30 14" stroke="#ffffff" strokeWidth="2.4" fill="none" strokeLinecap="round" opacity="0.95" />
-              <path d="M -8 10 Q -15 20 -24 24" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.9" />
-              <path d="M 8 10 Q 15 20 24 24" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.9" />
+              <path d="M -18 -6 Q -24 6 -13 17 Q -24 24 -33 15" stroke="#ffffff" strokeWidth="2.6" fill="none" strokeLinecap="round" opacity="0.98" />
+              <path d="M 18 -6 Q 24 6 13 17 Q 24 24 33 15" stroke="#ffffff" strokeWidth="2.6" fill="none" strokeLinecap="round" opacity="0.98" />
+              <path d="M -9 11 Q -16 22 -26 26" stroke="#ffffff" strokeWidth="2.2" fill="none" strokeLinecap="round" opacity="0.95" />
+              <path d="M 9 11 Q 16 22 26 26" stroke="#ffffff" strokeWidth="2.2" fill="none" strokeLinecap="round" opacity="0.95" />
               
               {/* Starbucks Wordmark / Registered icon */}
-              <circle cx="28" cy="26" r="2.5" stroke="#ffffff" strokeWidth="0.8" fill="none" opacity="0.8" />
-              <text x="28" y="27.5" fill="#ffffff" fontSize="2.8" textAnchor="middle" fontWeight="bold" opacity="0.8">R</text>
+              <circle cx="30" cy="28" r="2.8" stroke="#ffffff" strokeWidth="0.9" fill="none" opacity="0.9" />
+              <text x="30" y="30" fill="#ffffff" fontSize="3.2" textAnchor="middle" fontWeight="bold" opacity="0.9">R</text>
             </g>
 
             {/* Pumpkin Spice Cold Foam Layer on Top (Rich Creamy Froth) */}
             <path 
-              d="M 18 50 Q 100 62 182 50 L 186 16 Q 100 24 14 16 Z" 
+              d="M 16 50 Q 100 64 184 50 L 188 14 Q 100 22 12 14 Z" 
               fill="url(#sweetCreamColdFoam)" 
             />
             {/* Foam Dripping Texture */}
             <path 
-              d="M 18 50 Q 40 68 60 55 Q 85 70 110 56 Q 140 72 165 54 Q 175 60 182 50" 
+              d="M 16 50 Q 38 70 60 56 Q 85 74 110 58 Q 140 76 165 56 Q 176 62 184 50" 
               fill="url(#sweetCreamColdFoam)" 
             />
 
             {/* Cup Rim & Froth Top Surface */}
-            <ellipse cx="100" cy="18" rx="86" ry="18" fill="url(#sweetCreamColdFoam)" stroke="#ffffff" strokeWidth="2.5" />
-            <ellipse cx="100" cy="17" rx="80" ry="15" fill="url(#cinnamonDust)" />
+            <ellipse cx="100" cy="16" rx="90" ry="20" fill="url(#sweetCreamColdFoam)" stroke="#ffffff" strokeWidth="3" />
+            <ellipse cx="100" cy="15" rx="84" ry="16" fill="url(#cinnamonDust)" />
 
             {/* Cinnamon & Nutmeg Spice Dusting Specks across top */}
             {[
-              { cx: 65, cy: 15, r: 1.6 }, { cx: 80, cy: 12, r: 1.4 }, { cx: 95, cy: 14, r: 1.8 },
-              { cx: 110, cy: 12, r: 1.5 }, { cx: 125, cy: 16, r: 1.4 }, { cx: 140, cy: 18, r: 1.6 },
-              { cx: 75, cy: 20, r: 1.5 }, { cx: 90, cy: 22, r: 1.8 }, { cx: 105, cy: 21, r: 1.6 },
-              { cx: 120, cy: 23, r: 1.4 }, { cx: 100, cy: 18, r: 2.0 }, { cx: 85, cy: 16, r: 1.7 },
-              { cx: 115, cy: 17, r: 1.5 }, { cx: 130, cy: 13, r: 1.3 }, { cx: 55, cy: 18, r: 1.2 },
+              { cx: 60, cy: 14, r: 1.8 }, { cx: 78, cy: 11, r: 1.6 }, { cx: 95, cy: 13, r: 2.2 },
+              { cx: 112, cy: 11, r: 1.7 }, { cx: 128, cy: 15, r: 1.6 }, { cx: 144, cy: 17, r: 1.8 },
+              { cx: 72, cy: 19, r: 1.7 }, { cx: 88, cy: 21, r: 2.0 }, { cx: 105, cy: 20, r: 1.8 },
+              { cx: 122, cy: 22, r: 1.6 }, { cx: 100, cy: 16, r: 2.4 }, { cx: 84, cy: 15, r: 1.9 },
+              { cx: 118, cy: 16, r: 1.7 }, { cx: 134, cy: 12, r: 1.5 }, { cx: 50, cy: 16, r: 1.4 },
             ].map((speck, idx) => (
-              <circle key={idx} cx={speck.cx} cy={speck.cy} r={speck.r} fill="#5c2e0b" opacity="0.85" />
+              <circle key={idx} cx={speck.cx} cy={speck.cy} r={speck.r} fill="#5c2e0b" opacity="0.9" />
             ))}
 
             {/* Glass Highlights & Reflections (Vertical Sheen) */}
             <path 
-              d="M 28 50 L 44 380 Q 48 390 65 390 L 52 50 Z" 
+              d="M 26 50 L 42 380 Q 46 392 64 392 L 50 50 Z" 
               fill="url(#cupGlassSheen)" 
             />
             <path 
-              d="M 160 50 L 148 385 Q 155 385 160 380 L 172 50 Z" 
+              d="M 162 50 L 150 385 Q 157 385 162 380 L 174 50 Z" 
               fill="url(#cupGlassSheen)" 
-              opacity="0.6" 
+              opacity="0.7" 
             />
 
             {/* Frosted clear lid border */}
-            <ellipse cx="100" cy="14" rx="88" ry="12" fill="none" stroke="#ffffff" strokeWidth="3" opacity="0.75" />
-            <path d="M 12 14 L 14 18 Q 100 28 186 18 L 188 14" stroke="#ffffff" strokeWidth="2.5" fill="none" opacity="0.8" />
+            <ellipse cx="100" cy="12" rx="92" ry="14" fill="none" stroke="#ffffff" strokeWidth="3.5" opacity="0.85" />
+            <path d="M 10 12 L 12 16 Q 100 28 188 16 L 190 12" stroke="#ffffff" strokeWidth="3" fill="none" opacity="0.9" />
           </g>
 
           {/* Gentle Aroma Steam Wisps Rising from the Latte */}
           <path 
-            d="M 370 70 Q 355 40 375 15 Q 395 -10 375 -35" 
+            d="M 410 40 Q 390 10 415 -20 Q 440 -50 415 -80" 
+            stroke="#ffffff" 
+            strokeWidth="4" 
+            strokeLinecap="round" 
+            fill="none" 
+            opacity="0.45" 
+            className="animate-pulse"
+          />
+          <path 
+            d="M 480 45 Q 505 15 485 -15 Q 465 -45 490 -75" 
             stroke="#ffffff" 
             strokeWidth="3.5" 
             strokeLinecap="round" 
             fill="none" 
-            opacity="0.35" 
-            className="animate-pulse"
-          />
-          <path 
-            d="M 430 75 Q 450 45 435 20 Q 420 -5 440 -30" 
-            stroke="#ffffff" 
-            strokeWidth="3" 
-            strokeLinecap="round" 
-            fill="none" 
-            opacity="0.3" 
+            opacity="0.4" 
             className="animate-pulse"
           />
         </svg>
       </div>
 
       {/* 3. Golden Cinnamon Spiced Hearth Floor Banner along Bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-28 sm:h-36 pointer-events-none z-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#c2410c]/35 via-[#ea580c]/15 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 pointer-events-none z-0">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#c2410c]/40 via-[#ea580c]/18 to-transparent" />
         
         <svg 
           viewBox="0 0 1200 120" 
           fill="none" 
           xmlns="http://www.w3.org/2000/svg" 
-          className="absolute bottom-0 w-full h-full opacity-55 preserve-3d"
+          className="absolute bottom-0 w-full h-full opacity-60 preserve-3d"
           preserveAspectRatio="none"
         >
-          <path d="M 0 120 Q 300 85 600 95 Q 900 80 1200 90 L 1200 120 L 0 120 Z" fill="#7c2d12" opacity="0.6" />
-          <path d="M 0 120 Q 200 90 500 100 Q 800 85 1200 105 L 1200 120 L 0 120 Z" fill="#9a3412" opacity="0.65" />
-          <path d="M 0 120 Q 400 95 800 102 Q 1050 90 1200 110 L 1200 120 L 0 120 Z" fill="#ea580c" opacity="0.45" />
+          <path d="M 0 120 Q 300 85 600 95 Q 900 80 1200 90 L 1200 120 L 0 120 Z" fill="#7c2d12" opacity="0.65" />
+          <path d="M 0 120 Q 200 90 500 100 Q 800 85 1200 105 L 1200 120 L 0 120 Z" fill="#9a3412" opacity="0.7" />
+          <path d="M 0 120 Q 400 95 800 102 Q 1050 90 1200 110 L 1200 120 L 0 120 Z" fill="#ea580c" opacity="0.5" />
           
           {/* Cinnamon powder & autumn leaves on the table */}
           {[
@@ -482,11 +487,11 @@ export default function PumpkinSpiceBackground() {
       ))}
 
       {/* 5. Cozy Starbucks PSL Emojis Floating Gently */}
-      <div className="absolute top-1/4 left-8 text-2xl opacity-50 animate-bounce" style={{ animationDuration: '5s' }}>☕</div>
-      <div className="absolute top-1/3 right-10 text-3xl opacity-45 animate-bounce" style={{ animationDuration: '6s' }}>🎃</div>
-      <div className="absolute bottom-28 left-12 text-2xl opacity-40 animate-pulse">🍪</div>
-      <div className="absolute bottom-36 right-16 text-2xl opacity-40 animate-pulse">✨</div>
-      <div className="absolute top-1/2 right-6 text-xl opacity-35 animate-bounce" style={{ animationDuration: '7s' }}>🍂</div>
+      <div className="absolute top-1/4 left-8 text-3xl opacity-60 animate-bounce" style={{ animationDuration: '5s' }}>☕</div>
+      <div className="absolute top-1/3 right-10 text-4xl opacity-55 animate-bounce" style={{ animationDuration: '6s' }}>🎃</div>
+      <div className="absolute bottom-28 left-12 text-3xl opacity-50 animate-pulse">🍪</div>
+      <div className="absolute bottom-36 right-16 text-3xl opacity-50 animate-pulse">✨</div>
+      <div className="absolute top-1/2 right-6 text-2xl opacity-45 animate-bounce" style={{ animationDuration: '7s' }}>🍂</div>
     </div>
   );
 }

@@ -1,8 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:ital,wght@0,300;0,450;0,600;0,800;1,450&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Special+Elite&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-mono: "Courier Prime", "JetBrains Mono", monospace;
+  --font-serif: "Fraunces", "Playfair Display", Georgia, serif;
+  --font-vintage: "Special Elite", "Courier Prime", monospace;
+  --font-display: "Playfair Display", "Fraunces", serif;
+}
+
+/* Vintage Paper & Stamp Utilities */
+.vintage-paper {
+  background-color: #F4EFE2;
+  background-image: radial-gradient(rgba(43, 38, 32, 0.045) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+.vintage-card {
+  background-color: #FBF8F0;
+  border: 1px solid rgba(43, 38, 32, 0.14);
+  box-shadow: 0 4px 18px rgba(43, 38, 32, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.vintage-stamp {
+  border: 2px dashed rgba(75, 102, 80, 0.45);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
