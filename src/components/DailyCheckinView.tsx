@@ -341,9 +341,9 @@ export default function DailyCheckinView({
                 className="w-5 h-5 mt-0.5 rounded-md border-[1.5px] border-[#6B6255] text-[#4B6650] focus:ring-0 focus:ring-offset-0 cursor-pointer accent-[#4B6650]"
               />
               <label htmlFor="agreeTerms" className="text-sm cursor-pointer select-none">
-                <b className="block text-[14.5px] text-[#2B2620] mb-0.5">I know how this works</b>
+                <b className="block text-[14.5px] text-[#2B2620] mb-0.5">I Bunny21 Know how this works</b>
                 <span className="text-[#6B6255] text-[13px] leading-snug block">
-                  This log goes to your coach, once a month it's talked through together — not judged, just tracked.
+                  I am aware of all the T&amp;Cs for all of this
                 </span>
               </label>
             </div>
@@ -358,9 +358,9 @@ export default function DailyCheckinView({
                 className="w-5 h-5 mt-0.5 rounded-md border-[1.5px] border-[#6B6255] text-[#4B6650] focus:ring-0 focus:ring-offset-0 cursor-pointer accent-[#4B6650]"
               />
               <label htmlFor="agreeTruth" className="text-sm cursor-pointer select-none">
-                <b className="block text-[14.5px] text-[#2B2620] mb-0.5">Nothing but the truth today</b>
+                <b className="block text-[14.5px] text-[#2B2620] mb-0.5">Nothing But the Truth</b>
                 <span className="text-[#6B6255] text-[13px] leading-snug block">
-                  Even the "I forgot to eat again" kind of true. That's the whole point of this thing.
+                  I Penguin's Bunny agree and swear to say nothing but the truth and i agree not to use the TikTok lies here i will be honest and push myself to do better
                 </span>
               </label>
             </div>

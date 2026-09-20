@@ -87,9 +87,37 @@ function getMontanaTimeInfo() {
   };
 }
 
-// Track sent status per date
-// Structure: { [dateStr]: Set<string> }
-const sentScheduledReminders: Record<string, Set<string>> = {};
+// Track sent status per date with persistent file storage
+// Structure: { [dateStr]: { [type]: { type, sentAt, sentAtMontana, recipient, subject } } }
+const DISPATCH_HISTORY_FILE = path.join(process.cwd(), 'email-dispatch-history.json');
+let dispatchHistory: Record<string, Record<string, {
+  type: string;
+  sentAt: string;
+  sentAtMontana: string;
+  recipient: string;
+  subject: string;
+}>> = {};
+
+function loadDispatchHistory() {
+  try {
+    if (fs.existsSync(DISPATCH_HISTORY_FILE)) {
+      const raw = fs.readFileSync(DISPATCH_HISTORY_FILE, 'utf-8');
+      dispatchHistory = JSON.parse(raw);
+    }
+  } catch (e) {
+    console.warn('Could not read email dispatch history file:', e);
+  }
+}
+
+function saveDispatchHistory() {
+  try {
+    fs.writeFileSync(DISPATCH_HISTORY_FILE, JSON.stringify(dispatchHistory, null, 2), 'utf-8');
+  } catch (e) {
+    console.warn('Could not write email dispatch history file:', e);
+  }
+}
+
+loadDispatchHistory();
 
 // -------------------------------------------------------------
 // VINTAGE EMAIL TEMPLATE BUILDER
@@ -489,8 +517,28 @@ async function sendScheduledReminderType(type: 'morning_6am' | 'hydrated_1pm' | 
     html: merged.html
   });
 
-  console.log(`[Scheduled Email] Sent ${type} to ${toEmail} - Subject: "${merged.subject}" - MessageID: ${info.messageId}`);
-  return { success: true, messageId: info.messageId, type, toEmail, subject: merged.subject };
+  // Record in persistent dispatch history
+  if (!dispatchHistory[timeInfo.dateStr]) {
+    dispatchHistory[timeInfo.dateStr] = {};
+  }
+  dispatchHistory[timeInfo.dateStr][type] = {
+    type,
+    sentAt: new Date().toISOString(),
+    sentAtMontana: timeInfo.timeString,
+    recipient: toEmail,
+    subject: merged.subject
+  };
+  saveDispatchHistory();
+
+  console.log(`[Scheduled Email] Sent ${type} to ${toEmail} at ${timeInfo.timeString} MT - Subject: "${merged.subject}" - MessageID: ${info.messageId}`);
+  return { 
+    success: true, 
+    messageId: info.messageId, 
+    type, 
+    toEmail, 
+    subject: merged.subject,
+    sentAtMontana: timeInfo.timeString
+  };
 }
 
 // -------------------------------------------------------------
@@ -501,37 +549,29 @@ setInterval(async () => {
     const timeInfo = getMontanaTimeInfo();
     const { dateStr, currentHour, currentMinute } = timeInfo;
 
-    if (!sentScheduledReminders[dateStr]) {
-      sentScheduledReminders[dateStr] = new Set<string>();
-    }
+    const dateRecords = dispatchHistory[dateStr] || {};
 
-    const todaySet = sentScheduledReminders[dateStr];
-
-    // 1. 06:00 AM MT (Window: 06:00 - 06:05)
-    if (currentHour === 6 && currentMinute >= 0 && currentMinute <= 5 && !todaySet.has('morning_6am')) {
+    // 1. 06:00 AM MT (Active window: 6:00 AM to 11:59 AM)
+    if (currentHour >= 6 && currentHour < 12 && !dateRecords['morning_6am']) {
       console.log(`[Scheduler] Triggering 06:00 AM Morning reminder for ${dateStr}...`);
-      todaySet.add('morning_6am');
       await sendScheduledReminderType('morning_6am');
     }
 
-    // 2. 01:00 PM MT (Window: 13:00 - 13:05)
-    if (currentHour === 13 && currentMinute >= 0 && currentMinute <= 5 && !todaySet.has('hydrated_1pm')) {
+    // 2. 01:00 PM MT (Active window: 1:00 PM to 3:59 PM)
+    if (currentHour >= 13 && currentHour < 16 && !dateRecords['hydrated_1pm']) {
       console.log(`[Scheduler] Triggering 01:00 PM Hydration reminder for ${dateStr}...`);
-      todaySet.add('hydrated_1pm');
       await sendScheduledReminderType('hydrated_1pm');
     }
 
-    // 3. 04:00 PM MT (Window: 16:00 - 16:05)
-    if (currentHour === 16 && currentMinute >= 0 && currentMinute <= 5 && !todaySet.has('movement_4pm')) {
+    // 3. 04:00 PM MT (Active window: 4:00 PM to 9:29 PM)
+    if (currentHour >= 16 && currentHour < 21 && !dateRecords['movement_4pm']) {
       console.log(`[Scheduler] Triggering 04:00 PM Movement reminder for ${dateStr}...`);
-      todaySet.add('movement_4pm');
       await sendScheduledReminderType('movement_4pm');
     }
 
-    // 4. 09:30 PM MT (Window: 21:30 - 21:35)
-    if (currentHour === 21 && currentMinute >= 30 && currentMinute <= 35 && !todaySet.has('checkin_930pm')) {
+    // 4. 09:30 PM MT (Active window: 9:30 PM to 11:59 PM)
+    if ((currentHour > 21 || (currentHour === 21 && currentMinute >= 30)) && !dateRecords['checkin_930pm']) {
       console.log(`[Scheduler] Triggering 09:30 PM Main Event Check-in reminder for ${dateStr}...`);
-      todaySet.add('checkin_930pm');
       await sendScheduledReminderType('checkin_930pm');
     }
   } catch (err) {
@@ -1005,42 +1045,46 @@ app.post('/api/preview-email-html', (req, res) => {
 // 5. Get current scheduler status and history
 app.get('/api/schedule-status', (req, res) => {
   const timeInfo = getMontanaTimeInfo();
-  const todaySent = sentScheduledReminders[timeInfo.dateStr] 
-    ? Array.from(sentScheduledReminders[timeInfo.dateStr]) 
-    : [];
+  const dateRecords = dispatchHistory[timeInfo.dateStr] || {};
+  const todaySent = Object.keys(dateRecords);
 
   res.json({
     recipientEmail: RECIPIENT_EMAIL,
     montanaTime: timeInfo,
     todaySent,
+    sentDetails: dateRecords,
     schedules: [
       {
         id: 'morning_6am',
         timeLabel: '06:00 AM MT',
         title: 'Morning Energy & Breakfast',
         description: 'Jumping jacks & squats wakeup + reminder to eat breakfast',
-        sentToday: todaySent.includes('morning_6am')
+        sentToday: Boolean(dateRecords['morning_6am']),
+        sentAt: dateRecords['morning_6am']?.sentAtMontana || null
       },
       {
         id: 'hydrated_1pm',
         timeLabel: '01:00 PM MT',
         title: 'Midday Hydration',
         description: 'Drink water and stay crisp throughout the afternoon',
-        sentToday: todaySent.includes('hydrated_1pm')
+        sentToday: Boolean(dateRecords['hydrated_1pm']),
+        sentAt: dateRecords['hydrated_1pm']?.sentAtMontana || null
       },
       {
         id: 'movement_4pm',
         timeLabel: '04:00 PM MT',
         title: 'Afternoon Movement / Gym',
         description: 'Gym session alert (or light jogging/squats if rest day)',
-        sentToday: todaySent.includes('movement_4pm')
+        sentToday: Boolean(dateRecords['movement_4pm']),
+        sentAt: dateRecords['movement_4pm']?.sentAtMontana || null
       },
       {
         id: 'checkin_930pm',
         timeLabel: '09:30 PM MT',
         title: 'The Main Event: Question Box',
         description: 'Link to daily check-in with truth pledge and note to coach',
-        sentToday: todaySent.includes('checkin_930pm')
+        sentToday: Boolean(dateRecords['checkin_930pm']),
+        sentAt: dateRecords['checkin_930pm']?.sentAtMontana || null
       }
     ]
   });

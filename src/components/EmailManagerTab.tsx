@@ -548,11 +548,29 @@ export default function EmailManagerTab({
                     </div>
 
                     <div className="flex items-center gap-2 self-end sm:self-center">
-                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${
-                        isSentToday ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
-                      }`}>
-                        {isSentToday ? '✓ Sent Today' : 'Pending'}
-                      </span>
+                      {(() => {
+                        const schedItem = scheduleStatus?.schedules?.find((s: any) => s.id === tpl.id);
+                        const sentAt = schedItem?.sentAt || scheduleStatus?.sentDetails?.[tpl.id]?.sentAtMontana;
+                        return (
+                          <span className={`text-[11px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 ${
+                            isSentToday 
+                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs' 
+                              : 'bg-amber-50 text-amber-800 border border-amber-200'
+                          }`}>
+                            {isSentToday ? (
+                              <>
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                                <span>✓ Sent Today {sentAt ? `(${sentAt})` : ''}</span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                <span>⏳ Pending ({tpl.timeLabel})</span>
+                              </>
+                            )}
+                          </span>
+                        );
+                      })()}
                       <div className="p-1 rounded-lg text-[#6B6255]">
                         {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </div>
